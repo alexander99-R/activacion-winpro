@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>MACROTEC — Inventario de Licencias Windows 11 Pro</title>
-  <meta name="description" content="Sistema web de gestión e inventario de licencias Windows 11 Pro para MACROTEC El Salvador">
+  <title>Activacion WinPro — Inventario de Licencias Windows 11 Pro</title>
+  <meta name="description" content="Sistema web de gestión e inventario de licencias Windows 11 Pro">
   
   <style>
     /* ==========================================================================
        AGENTE 1: SISTEMA DE DISEÑO VISUAL, VARIABLES & TEMAS (LIGHT / DARK)
        ========================================================================== */
     :root {
-      /* Colores Oficiales MACROTEC */
+      /* Colores Oficiales Activacion WinPro */
       --navy: #0B2A4A;
       --navy-dark: #06182c;
       --navy-light: #184472;
@@ -1519,7 +1519,7 @@
           </svg>
         </div>
         <div class="brand-title">
-          MACROTEC
+          Activacion WinPro
           <span class="brand-badge">WINDOWS 11 PRO</span>
         </div>
         <p class="brand-subtitle">Inventario de Licencias & Activación</p>
@@ -1578,7 +1578,7 @@
             </svg>
           </div>
           <div class="header-titles">
-            <h1>MACROTEC</h1>
+            <h1>Activacion WinPro</h1>
             <span id="header-user-status">Cargando...</span>
           </div>
 
@@ -2049,7 +2049,7 @@
   <div class="modal-overlay" id="modal-daily-summary">
     <div class="modal-box" style="max-width: 440px;">
       <div class="modal-header">
-        <h3 class="modal-title">Resumen del Día MACROTEC</h3>
+        <h3 class="modal-title">Resumen del Día — Activacion WinPro</h3>
         <button type="button" class="btn-icon" id="btn-close-daily-modal">
           <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
@@ -2152,7 +2152,7 @@
        ========================================================================== -->
   <script>
     /**
-     * MACROTEC - Sistema de Gestión de Licencias Windows 11 Pro
+     * Activacion WinPro - Sistema de Gestión de Licencias Windows 11 Pro
      * Arquitectura: Vanilla JS + Reactive State Pattern
      * Compatibilidad: claude.use("db") (Claude Artifacts) + LocalStorage Mock Fallback
      */
@@ -2163,7 +2163,7 @@
     const DB_SERVICE = {
       isClaudeDb: false,
       claudeDb: null,
-      storageKey: 'macrotec_db_v2',
+      storageKey: 'winpro_db_v2',
 
       async init() {
         try {
@@ -2175,9 +2175,14 @@
           console.warn('[DB] Fallback a LocalStorage reactivo activado.');
         }
 
-        // Si no existe almacenamiento local inicial, sembrar datos de inicio
+        // Si no existe almacenamiento local inicial, revisar migración o sembrar datos
         if (!localStorage.getItem(this.storageKey)) {
-          this.seedInitialData();
+          const oldData = localStorage.getItem('macrotec_db_v2');
+          if (oldData) {
+            localStorage.setItem(this.storageKey, oldData);
+          } else {
+            this.seedInitialData();
+          }
         }
       },
 
@@ -2554,7 +2559,7 @@
     // AGENTE 3: SISTEMA DE AUTENTICACIÓN, PIN & SEGURIDAD
     // ==========================================================================
     function checkLockoutStatus() {
-      const lockoutUntil = parseInt(localStorage.getItem('macrotec_lockout_until') || '0', 10);
+      const lockoutUntil = parseInt(localStorage.getItem('winpro_lockout_until') || '0', 10);
       const now = Date.now();
       if (lockoutUntil > now) {
         State.isLockedOut = true;
@@ -2569,7 +2574,7 @@
     function triggerLockout() {
       const lockoutPeriodMs = 30 * 1000;
       const lockoutUntil = Date.now() + lockoutPeriodMs;
-      localStorage.setItem('macrotec_lockout_until', lockoutUntil.toString());
+      localStorage.setItem('winpro_lockout_until', lockoutUntil.toString());
       State.isLockedOut = true;
       State.lockoutSecondsRemaining = 30;
       startLockoutCountdown();
@@ -2591,7 +2596,7 @@
           clearInterval(State.lockoutTimerId);
           State.isLockedOut = false;
           State.failedAttempts = 0;
-          localStorage.removeItem('macrotec_lockout_until');
+          localStorage.removeItem('winpro_lockout_until');
           alertBox.style.display = 'none';
           showToast('Bloqueo levantado. Puedes intentar de nuevo.', 'info');
         } else {
@@ -3375,11 +3380,11 @@
     // ==========================================================================
     function exportLicensesToCsv(onlyInstalled = false) {
       let dataToExport = State.licenses;
-      let filename = `macrotec_licencias_${formatDate()}.csv`;
+      let filename = `winpro_licencias_${formatDate()}.csv`;
 
       if (onlyInstalled) {
         dataToExport = State.licenses.filter(l => l.estado === 'Instalada');
-        filename = `macrotec_instaladas_${formatDate()}.csv`;
+        filename = `winpro_instaladas_${formatDate()}.csv`;
       }
 
       if (dataToExport.length === 0) {
@@ -3419,7 +3424,7 @@
       ]);
 
       const csvContent = '\uFEFF' + [headers.join(','), ...rows.map(r => r.join(','))].join('\r\n');
-      downloadCsvFile(csvContent, `macrotec_auditoria_${formatDate()}.csv`);
+      downloadCsvFile(csvContent, `winpro_auditoria_${formatDate()}.csv`);
     }
 
     function downloadCsvFile(content, fileName) {
@@ -3749,7 +3754,7 @@
         item.querySelector('.btn-del-user').addEventListener('click', () => {
           showConfirmModal({
             title: `¿Eliminar al usuario ${user.nombre}?`,
-            message: 'El usuario ya no podrá iniciar sesión en MACROTEC.',
+            message: 'El usuario ya no podrá iniciar sesión en el sistema.',
             proceedText: 'Eliminar Usuario',
             isDanger: true,
             onProceed: async () => {
@@ -3932,7 +3937,7 @@
     // Modal de Resumen Diario para Admin
     function evaluateDailySummaryModal() {
       const todayStr = formatDate();
-      const hideKey = `macrotec_hide_daily_${todayStr}`;
+      const hideKey = `winpro_hide_daily_${todayStr}`;
       if (localStorage.getItem(hideKey)) return;
 
       const installedToday = State.licenses.filter(l => l.estado === 'Instalada' && l.instaladoEl === todayStr).length;
@@ -3961,7 +3966,7 @@
       const effRate = total > 0 ? ((instCount / total) * 100).toFixed(1) : "0.0";
 
       const messageText = 
-`MACROTEC - REPORTE GENERAL DE LICENCIAS WINDOWS 11 PRO
+`ACTIVACION WINPRO - REPORTE GENERAL DE LICENCIAS WINDOWS 11 PRO
 Fecha: ${todayStr}
 
 ESTADO DEL INVENTARIO:
@@ -3974,7 +3979,7 @@ METRICAS GENERALES:
 - Total de Licencias en Sistema: ${total}
 - Tasa de Efectividad: ${effRate}%
 
-Sistema de Inventario MACROTEC - El Salvador`;
+Sistema de Inventario - Activacion WinPro`;
 
       const encoded = encodeURIComponent(messageText);
       const waUrl = `https://wa.me/?text=${encoded}`;
@@ -3995,7 +4000,7 @@ Sistema de Inventario MACROTEC - El Salvador`;
         if (delBtn) delBtn.disabled = true;
       } else {
         const todayStr = formatDate();
-        let reportText = `MACROTEC - REPORTE DE LICENCIAS DANADAS PARA CAMBIO O GARANTIA\n`;
+        let reportText = `ACTIVACION WINPRO - REPORTE DE LICENCIAS DANADAS PARA CAMBIO O GARANTIA\n`;
         reportText += `Fecha: ${todayStr}\n`;
         reportText += `Total de licencias danadas: ${damagedLicenses.length}\n\n`;
         reportText += `LISTADO DE CLAVES PARA REEMPLAZO:\n`;
@@ -4003,7 +4008,7 @@ Sistema de Inventario MACROTEC - El Salvador`;
           reportText += `${idx + 1}. ${l.clave}\n`;
         });
         reportText += `\nSolicitud: Se solicita el reemplazo o reactivacion de las claves anteriores debido a que presentaron error durante el proceso de activacion en equipos nuevos.\n`;
-        reportText += `Empresa: MACROTEC El Salvador`;
+        reportText += `Empresa: Activacion WinPro`;
 
         txtArea.value = reportText;
         if (delBtn) delBtn.disabled = false;
@@ -4107,7 +4112,7 @@ Sistema de Inventario MACROTEC - El Salvador`;
     // AGENTE 1: TEMA CLARO / OSCURO (PREFERS-COLOR-SCHEME & MANUAL)
     // ==========================================================================
     function initTheme() {
-      const savedTheme = localStorage.getItem('macrotec_theme');
+      const savedTheme = localStorage.getItem('winpro_theme') || localStorage.getItem('macrotec_theme');
       if (savedTheme) {
         document.documentElement.setAttribute('data-theme', savedTheme);
       } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -4122,7 +4127,7 @@ Sistema de Inventario MACROTEC - El Salvador`;
       const current = document.documentElement.getAttribute('data-theme') || 'light';
       const next = current === 'dark' ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', next);
-      localStorage.setItem('macrotec_theme', next);
+      localStorage.setItem('winpro_theme', next);
       updateThemeButtonsUi();
       // Re-renderizar gráficos SVG para colores de tema
       if (State.currentRole === 'Admin') renderStatsCharts();
@@ -4138,7 +4143,7 @@ Sistema de Inventario MACROTEC - El Salvador`;
     // ==========================================================================
     // AGENTE INTEGRADOR: INICIALIZADOR MAESTRO & REGISTRO DE EVENTOS
     // ==========================================================================
-    async function initMacrotecApp() {
+    async function initWinProApp() {
       // 1. Inicializar tema visual
       initTheme();
 
@@ -4251,7 +4256,7 @@ Sistema de Inventario MACROTEC - El Salvador`;
         waShareLinkBtn.addEventListener('click', () => {
           const inputLink = document.getElementById('input-system-link');
           const url = (inputLink && inputLink.value) ? inputLink.value : window.location.href;
-          const msg = `Hola, accede al sistema de inventario de licencias MACROTEC a traves del siguiente enlace:\n${url}\n\nIngresa seleccionando tu nombre e introduciendo tu PIN asignado.`;
+          const msg = `Hola, accede al sistema de inventario de licencias Activacion WinPro a traves del siguiente enlace:\n${url}\n\nIngresa seleccionando tu nombre e introduciendo tu PIN asignado.`;
           window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
         });
       }
@@ -4306,7 +4311,7 @@ Sistema de Inventario MACROTEC - El Salvador`;
         const chk = document.getElementById('chk-no-daily-today');
         if (chk.checked) {
           const todayStr = formatDate();
-          localStorage.setItem(`macrotec_hide_daily_${todayStr}`, 'true');
+          localStorage.setItem(`winpro_hide_daily_${todayStr}`, 'true');
         }
         document.getElementById('modal-daily-summary').classList.remove('active');
       });
@@ -4314,11 +4319,11 @@ Sistema de Inventario MACROTEC - El Salvador`;
       // Modal de Extensión de Sesión
       document.getElementById('btn-extend-session').addEventListener('click', extendSession);
 
-      console.log('✅ MACROTEC Inicializado con éxito. Versión Multi-Agente 2.0.');
+      console.log('✅ Activacion WinPro Inicializado con éxito. Versión Multi-Agente 2.0.');
     }
 
     // Arrancar la aplicación al cargar el DOM
-    document.addEventListener('DOMContentLoaded', initMacrotecApp);
+    document.addEventListener('DOMContentLoaded', initWinProApp);
   </script>
 </body>
 </html>

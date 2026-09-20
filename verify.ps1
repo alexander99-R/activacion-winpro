@@ -1,7 +1,7 @@
 $lines = Get-Content -Path "C:\Users\alexa\.gemini\antigravity\scratch\macrotec\index.html"
 $totalLines = $lines.Count
 
-Write-Host "=== VERIFICACIÓN ESTRICTA SISTEMA MACROTEC ==="
+Write-Host "=== VERIFICACIÓN ESTRICTA SISTEMA ACTIVACION WINPRO ==="
 Write-Host "Total de líneas:" $totalLines
 
 $b64InOnclick = 0
@@ -39,7 +39,7 @@ for ($i = 0; $i -lt $totalLines; $i++) {
 
     if ($line -match 'slmgr -ipk') { $slmgrMatches++ }
     if ($line -match 'Windows 11 Pro') { $win11Matches++ }
-    if ($line -match 'claude\.use|macrotec_db') { $dualDbMatches++ }
+    if ($line -match 'claude\.use|winpro_db') { $dualDbMatches++ }
 }
 
 Write-Host "1. Ocurrencias de Base64 en onclick: $b64InOnclick (Esperado: 0)"

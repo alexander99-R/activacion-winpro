@@ -1,8 +1,8 @@
 @echo off
 chcp 65001 >nul
-title Subir Cambios a GitHub - MACROTEC
+title Subir Cambios a GitHub - Activacion WinPro
 echo ========================================================
-echo   MACROTEC - Subir / Sincronizar con GitHub
+echo   Activacion WinPro - Subir / Sincronizar con GitHub
 echo ========================================================
 echo.
 git add .

@@ -1,4 +1,4 @@
-# Servidor HTTP local ligero en PowerShell para MACROTEC
+# Servidor HTTP local ligero en PowerShell para Activacion WinPro
 $port = 8080
 $listener = New-Object System.Net.HttpListener
 $listener.Prefixes.Add("http://localhost:$port/")
@@ -6,7 +6,7 @@ $listener.Prefixes.Add("http://127.0.0.1:$port/")
 
 try {
     $listener.Start()
-    Write-Host "Servidor MACROTEC iniciado en: http://localhost:$port/"
+    Write-Host "Servidor Activacion WinPro iniciado en: http://localhost:$port/"
     Write-Host "Presiona Ctrl+C para detener el servidor."
 } catch {
     Write-Host "El puerto $port ya está en uso o requiere permisos adicionales: $_"
