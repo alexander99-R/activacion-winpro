@@ -1627,6 +1627,11 @@
             <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
           </button>
 
+          <!-- Cambiar Mi PIN / Contraseña -->
+          <button type="button" class="btn-icon" id="btn-change-pin-header" title="Cambiar mi PIN de acceso">
+            <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </button>
+
           <!-- Cerrar Sesión -->
           <button type="button" class="btn-icon" id="btn-logout" title="Cerrar Sesión">
             <svg class="icon" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
@@ -1663,6 +1668,14 @@
             <div class="tech-metric-number dam" id="tech-num-dam">0</div>
             <div class="tech-metric-sub">En garantía</div>
           </div>
+        </div>
+
+        <!-- Barra de acción rápida de técnico -->
+        <div style="display: flex; justify-content: flex-end; margin-bottom: 12px;">
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-change-pin-tech">
+            <svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <span>Cambiar mi PIN</span>
+          </button>
         </div>
 
         <!-- Barra de Búsqueda y Filtros (Búsqueda solo visible para Admin) -->
@@ -1826,6 +1839,29 @@
             <div class="admin-card-title">Usuarios Registrados</div>
             <div id="users-management-list">
               <!-- Render dinámico con botones para resetear PIN o eliminar -->
+            </div>
+          </div>
+
+          <!-- Seguridad y PIN de Administrador -->
+          <div class="admin-card" style="margin-top: 16px;">
+            <div class="admin-card-title">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <span>Seguridad y Contraseña de Administrador</span>
+              </div>
+            </div>
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 12px;">
+              Protege el control total del inventario. Puedes modificar tu PIN de Administrador en cualquier momento o restablecerlo al valor predeterminado (3210).
+            </p>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <button type="button" class="btn btn-primary btn-sm" id="btn-admin-change-own-pin">
+                <svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <span>Cambiar PIN de Administrador</span>
+              </button>
+              <button type="button" class="btn btn-secondary btn-sm" id="btn-admin-reset-own-pin">
+                <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M2.5 2v6h6M21.5 22v-6h-6"/><path d="M22 11.5A10 10 0 0 0 3.2 7.2M2 12.5a10 10 0 0 0 18.8 4.2"/></svg>
+                <span>Restablecer PIN de Admin a 3210</span>
+              </button>
             </div>
           </div>
 
@@ -2144,6 +2180,79 @@
     </div>
   </div>
 
+  <!-- 6. Modal para Cambiar Mi Contraseña / PIN (Todos los usuarios y Administrador) -->
+  <div class="modal-overlay" id="modal-change-my-pin">
+    <div class="modal-box" style="max-width: 400px;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="title-change-my-pin">Cambiar Mi PIN</h3>
+        <button type="button" class="btn-icon" id="btn-close-change-my-pin">
+          <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px;" id="desc-change-my-pin">
+        Ingresa tu PIN actual y define tu nuevo PIN de 4 dígitos para proteger tu cuenta.
+      </p>
+
+      <form id="form-change-my-pin" onsubmit="return false;">
+        <div class="form-group">
+          <label class="form-label" for="input-curr-pin">PIN Actual</label>
+          <input type="password" id="input-curr-pin" class="form-control" placeholder="••••" maxlength="4" inputmode="numeric" autocomplete="off" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="input-new-pin">Nuevo PIN (4 dígitos numéricos)</label>
+          <input type="password" id="input-new-pin" class="form-control" placeholder="••••" maxlength="4" inputmode="numeric" autocomplete="off" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="input-confirm-pin">Confirmar Nuevo PIN</label>
+          <input type="password" id="input-confirm-pin" class="form-control" placeholder="••••" maxlength="4" inputmode="numeric" autocomplete="off" required>
+        </div>
+
+        <div id="change-my-pin-feedback" style="font-size: 0.82rem; font-weight: 600; color: var(--red); min-height: 18px; margin-bottom: 12px;"></div>
+
+        <div class="modal-footer" style="padding-top: 8px;">
+          <button type="button" class="btn btn-secondary" id="btn-cancel-change-my-pin">Cancelar</button>
+          <button type="button" class="btn btn-primary" id="btn-submit-change-my-pin">Actualizar PIN</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 7. Modal de Administrador para Asignar PIN a un Usuario -->
+  <div class="modal-overlay" id="modal-admin-set-pin">
+    <div class="modal-box" style="max-width: 400px;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="title-admin-set-pin">Asignar PIN de Usuario</h3>
+        <button type="button" class="btn-icon" id="btn-close-admin-set-pin">
+          <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px;">
+        Como Administrador puedes establecer un PIN personalizado para <strong id="admin-target-user-name">este usuario</strong> sin necesidad de conocer su clave actual.
+      </p>
+
+      <form id="form-admin-set-pin" onsubmit="return false;">
+        <div class="form-group">
+          <label class="form-label" for="input-admin-new-user-pin">Nuevo PIN (4 dígitos numéricos)</label>
+          <input type="text" id="input-admin-new-user-pin" class="form-control" placeholder="4 dígitos ej: 1234" maxlength="4" inputmode="numeric" autocomplete="off" required>
+        </div>
+
+        <div id="admin-set-pin-feedback" style="font-size: 0.82rem; font-weight: 600; color: var(--red); min-height: 18px; margin-bottom: 12px;"></div>
+
+        <div class="modal-footer" style="padding-top: 8px; justify-content: space-between;">
+          <button type="button" class="btn btn-secondary" id="btn-admin-set-default-pin">Restablecer a 3210</button>
+          <div style="display: flex; gap: 8px;">
+            <button type="button" class="btn btn-secondary" id="btn-cancel-admin-set-pin">Cancelar</button>
+            <button type="button" class="btn btn-primary" id="btn-submit-admin-set-pin">Guardar PIN</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- Contenedor Flotante de Notificaciones Toast -->
   <div id="toast-container"></div>
 
@@ -2376,6 +2485,20 @@
         return (data && data.config && data.config.admin && data.config.admin.pin) || "3210";
       },
 
+      async saveAdminPin(pin) {
+        const data = this.getLocalData();
+        if (!data.config) data.config = {};
+        if (!data.config.admin) data.config.admin = {};
+        data.config.admin.pin = pin;
+        this.saveLocalData(data);
+
+        if (this.isClaudeDb && this.claudeDb.collection) {
+          try {
+            await this.claudeDb.collection('config').doc('admin').set({ pin });
+          } catch(e) {}
+        }
+      },
+
       // Logs de Auditoría
       async addActivityLog(log) {
         const data = this.getLocalData();
@@ -2424,6 +2547,7 @@
       // Seguridad (Agente 3)
       adminPin: '3210',
       pinTargetUser: null,     // Referencia de usuario actual solicitando PIN
+      adminTargetUserForPin: null, // Usuario objetivo para asignación de PIN por el Admin
       pinInput: '',
       failedAttempts: 0,
       isLockedOut: false,
@@ -2681,11 +2805,13 @@
 
       if (State.pinTargetUser === 'admin') {
         const adminPin = await DB_SERVICE.getAdminPin();
-        // Admite PIN de 4 dígitos o retrocompatibilidad con '321'
-        valid = (enteredPin === adminPin) || (adminPin === '321' && enteredPin === '321') || (enteredPin === '3210');
+        State.adminPin = adminPin;
+        valid = (enteredPin === adminPin) || (adminPin === '3210' && enteredPin === '321');
       } else if (State.pinTargetUser) {
-        const userPin = State.pinTargetUser.pin || '3210';
-        valid = (enteredPin === userPin) || (userPin === '321' && enteredPin === '321') || (enteredPin === '3210');
+        const freshUsers = await DB_SERVICE.getUsers();
+        const freshUser = freshUsers.find(u => u.id === State.pinTargetUser.id) || State.pinTargetUser;
+        const userPin = freshUser.pin || '3210';
+        valid = (enteredPin === userPin) || (userPin === '3210' && enteredPin === '321');
       }
 
       if (valid) {
@@ -2832,6 +2958,12 @@
       const techBanner = document.getElementById('tech-summary-banner');
       if (techBanner) {
         techBanner.style.display = (State.currentRole === 'Técnico' || State.currentRole === 'Visor') ? 'grid' : 'none';
+      }
+
+      // Botón de cambiar PIN en vista de técnico
+      const techChangePinBtn = document.getElementById('btn-change-pin-tech');
+      if (techChangePinBtn) {
+        techChangePinBtn.style.display = (State.currentRole === 'Técnico' || State.currentRole === 'Visor') ? 'inline-flex' : 'none';
       }
 
       // Si el rol es Técnico, asegurar pestaña tab-licencias y filtro en Disponible
@@ -3715,16 +3847,25 @@
               <div style="font-size: 0.75rem; color: var(--text-muted);">Rol: <strong>${user.rol || 'Técnico'}</strong> | PIN: ****</div>
             </div>
           </div>
-          <div style="display: flex; gap: 6px;">
-            <button type="button" class="btn btn-secondary btn-sm btn-reset-pin" title="Restablecer PIN a 3210">
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+            <button type="button" class="btn btn-secondary btn-sm btn-set-user-pin" title="Asignar un PIN nuevo a este usuario">
+              <svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <span>Cambiar PIN</span>
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm btn-reset-pin" title="Restablecer PIN a 3210 de fábrica">
               <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M2.5 2v6h6M21.5 22v-6h-6"/><path d="M22 11.5A10 10 0 0 0 3.2 7.2M2 12.5a10 10 0 0 0 18.8 4.2"/></svg>
-              <span>Restablecer PIN</span>
+              <span>Restablecer a 3210</span>
             </button>
             <button type="button" class="btn btn-danger btn-sm btn-del-user" title="Eliminar usuario">
               <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
             </button>
           </div>
         `;
+
+        // Asignar PIN por Administrador
+        item.querySelector('.btn-set-user-pin').addEventListener('click', () => {
+          openAdminSetUserPinModal(user);
+        });
 
         // Restablecer PIN a 3210 con confirmación
         item.querySelector('.btn-reset-pin').addEventListener('click', () => {
@@ -3827,6 +3968,211 @@
         reader.onload = () => resolve(reader.result);
         reader.onerror = error => reject(error);
         reader.readAsDataURL(file);
+      });
+    }
+
+    // ==========================================================================
+    // AGENTE 3: SEGURIDAD — MODIFICACIÓN Y RESTABLECIMIENTO DE PIN / CONTRASEÑAS
+    // ==========================================================================
+    function openChangeMyPinModal() {
+      if (!State.currentUser) return;
+      const modal = document.getElementById('modal-change-my-pin');
+      const titleEl = document.getElementById('title-change-my-pin');
+      const descEl = document.getElementById('desc-change-my-pin');
+      const feedback = document.getElementById('change-my-pin-feedback');
+
+      titleEl.innerText = `Cambiar Mi PIN — ${State.currentUser.nombre}`;
+      descEl.innerText = `Actualiza tu PIN numérico de 4 dígitos para proteger tu acceso como ${State.currentRole}.`;
+
+      document.getElementById('input-curr-pin').value = '';
+      document.getElementById('input-new-pin').value = '';
+      document.getElementById('input-confirm-pin').value = '';
+      feedback.innerText = '';
+
+      modal.classList.add('active');
+      setTimeout(() => {
+        const inp = document.getElementById('input-curr-pin');
+        if (inp) inp.focus();
+      }, 100);
+    }
+
+    function closeChangeMyPinModal() {
+      const modal = document.getElementById('modal-change-my-pin');
+      if (modal) modal.classList.remove('active');
+    }
+
+    async function submitChangeMyPin() {
+      const currInput = document.getElementById('input-curr-pin').value.trim();
+      const newInput = document.getElementById('input-new-pin').value.trim();
+      const confirmInput = document.getElementById('input-confirm-pin').value.trim();
+      const feedback = document.getElementById('change-my-pin-feedback');
+      feedback.innerText = '';
+
+      if (!currInput || !newInput || !confirmInput) {
+        feedback.innerText = 'Por favor completa todos los campos.';
+        return;
+      }
+
+      // Validar PIN actual
+      let isCurrValid = false;
+      if (State.currentRole === 'Admin') {
+        const adminPin = await DB_SERVICE.getAdminPin();
+        isCurrValid = (currInput === adminPin) || (adminPin === '3210' && currInput === '321');
+      } else {
+        const userPin = State.currentUser.pin || '3210';
+        isCurrValid = (currInput === userPin) || (userPin === '3210' && currInput === '321');
+      }
+
+      if (!isCurrValid) {
+        feedback.innerText = 'El PIN actual ingresado es incorrecto.';
+        return;
+      }
+
+      // Validar nuevo PIN
+      if (!/^\d{4}$/.test(newInput)) {
+        feedback.innerText = 'El nuevo PIN debe tener exactamente 4 dígitos numéricos.';
+        return;
+      }
+
+      if (newInput === currInput) {
+        feedback.innerText = 'El nuevo PIN no puede ser igual al actual.';
+        return;
+      }
+
+      if (newInput !== confirmInput) {
+        feedback.innerText = 'El nuevo PIN y su confirmación no coinciden.';
+        return;
+      }
+
+      // Guardar cambio
+      if (State.currentRole === 'Admin') {
+        await DB_SERVICE.saveAdminPin(newInput);
+        State.adminPin = newInput;
+        await DB_SERVICE.addActivityLog({
+          id: generateId('log'),
+          fecha: formatDateTime(),
+          usuario: 'Administrador',
+          accion: 'Seguridad',
+          detalle: 'Cambio de PIN de Administrador',
+          cambio: 'PIN Admin modificado'
+        });
+      } else {
+        State.currentUser.pin = newInput;
+        await DB_SERVICE.saveUser(State.currentUser);
+        const idx = State.users.findIndex(u => u.id === State.currentUser.id);
+        if (idx >= 0) State.users[idx].pin = newInput;
+        await DB_SERVICE.addActivityLog({
+          id: generateId('log'),
+          fecha: formatDateTime(),
+          usuario: State.currentUser.nombre,
+          accion: 'Seguridad',
+          detalle: `Cambio de PIN por ${State.currentUser.nombre}`,
+          cambio: 'PIN de usuario modificado'
+        });
+      }
+
+      closeChangeMyPinModal();
+      showToast('¡Tu PIN de seguridad ha sido modificado con éxito!', 'success', 4000);
+    }
+
+    // Funciones de Administrador para gestionar PIN de otros usuarios
+    function openAdminSetUserPinModal(user) {
+      if (State.currentRole !== 'Admin') return;
+      State.adminTargetUserForPin = user;
+      const modal = document.getElementById('modal-admin-set-pin');
+      const targetNameEl = document.getElementById('admin-target-user-name');
+      const feedback = document.getElementById('admin-set-pin-feedback');
+      const input = document.getElementById('input-admin-new-user-pin');
+
+      targetNameEl.innerText = `${user.nombre} (${user.rol || 'Técnico'})`;
+      input.value = '';
+      feedback.innerText = '';
+
+      modal.classList.add('active');
+      setTimeout(() => {
+        if (input) input.focus();
+      }, 100);
+    }
+
+    function closeAdminSetUserPinModal() {
+      const modal = document.getElementById('modal-admin-set-pin');
+      if (modal) modal.classList.remove('active');
+      State.adminTargetUserForPin = null;
+    }
+
+    async function submitAdminSetUserPin() {
+      if (!State.adminTargetUserForPin) return;
+      const user = State.adminTargetUserForPin;
+      const input = document.getElementById('input-admin-new-user-pin').value.trim();
+      const feedback = document.getElementById('admin-set-pin-feedback');
+      feedback.innerText = '';
+
+      if (!/^\d{4}$/.test(input)) {
+        feedback.innerText = 'El nuevo PIN debe tener exactamente 4 dígitos numéricos.';
+        return;
+      }
+
+      user.pin = input;
+      await DB_SERVICE.saveUser(user);
+      const idx = State.users.findIndex(u => u.id === user.id);
+      if (idx >= 0) State.users[idx].pin = input;
+
+      await DB_SERVICE.addActivityLog({
+        id: generateId('log'),
+        fecha: formatDateTime(),
+        usuario: State.currentUser.nombre,
+        accion: 'Seguridad',
+        detalle: `Asignación de PIN para ${user.nombre} por Administrador`,
+        cambio: `PIN ➔ ${input}`
+      });
+
+      closeAdminSetUserPinModal();
+      showToast(`PIN de ${user.nombre} actualizado a: ${input}`, 'success', 4000);
+      renderUserManagementList();
+    }
+
+    async function adminResetUserPinToDefault() {
+      if (!State.adminTargetUserForPin) return;
+      const user = State.adminTargetUserForPin;
+      user.pin = '3210';
+      await DB_SERVICE.saveUser(user);
+      const idx = State.users.findIndex(u => u.id === user.id);
+      if (idx >= 0) State.users[idx].pin = '3210';
+
+      await DB_SERVICE.addActivityLog({
+        id: generateId('log'),
+        fecha: formatDateTime(),
+        usuario: State.currentUser.nombre,
+        accion: 'Seguridad',
+        detalle: `Restablecimiento de PIN para ${user.nombre} a valor de fábrica`,
+        cambio: 'PIN ➔ 3210'
+      });
+
+      closeAdminSetUserPinModal();
+      showToast(`PIN de ${user.nombre} restablecido al valor de fábrica: 3210.`, 'success');
+      renderUserManagementList();
+    }
+
+    function handleAdminResetOwnPin() {
+      if (State.currentRole !== 'Admin') return;
+      showConfirmModal({
+        title: '¿Restablecer PIN de Administrador?',
+        message: 'El PIN de Administrador volverá a ser el predeterminado de fábrica (3210).',
+        proceedText: 'Restablecer a 3210',
+        isDanger: true,
+        onProceed: async () => {
+          await DB_SERVICE.saveAdminPin('3210');
+          State.adminPin = '3210';
+          await DB_SERVICE.addActivityLog({
+            id: generateId('log'),
+            fecha: formatDateTime(),
+            usuario: 'Administrador',
+            accion: 'Seguridad',
+            detalle: 'Restablecimiento de PIN de Administrador a valor de fábrica',
+            cambio: 'PIN Admin ➔ 3210'
+          });
+          showToast('PIN de Administrador restablecido a 3210 con éxito.', 'success');
+        }
       });
     }
 
@@ -4318,6 +4664,42 @@ Sistema de Inventario - Activacion WinPro`;
 
       // Modal de Extensión de Sesión
       document.getElementById('btn-extend-session').addEventListener('click', extendSession);
+
+      // Modales y Acciones de Seguridad y PIN
+      const headerChangePinBtn = document.getElementById('btn-change-pin-header');
+      if (headerChangePinBtn) headerChangePinBtn.addEventListener('click', openChangeMyPinModal);
+
+      const techChangePinBtn = document.getElementById('btn-change-pin-tech');
+      if (techChangePinBtn) techChangePinBtn.addEventListener('click', openChangeMyPinModal);
+
+      const closeChangeMyPinBtn = document.getElementById('btn-close-change-my-pin');
+      if (closeChangeMyPinBtn) closeChangeMyPinBtn.addEventListener('click', closeChangeMyPinModal);
+
+      const cancelChangeMyPinBtn = document.getElementById('btn-cancel-change-my-pin');
+      if (cancelChangeMyPinBtn) cancelChangeMyPinBtn.addEventListener('click', closeChangeMyPinModal);
+
+      const submitChangeMyPinBtn = document.getElementById('btn-submit-change-my-pin');
+      if (submitChangeMyPinBtn) submitChangeMyPinBtn.addEventListener('click', submitChangeMyPin);
+
+      // Gestión de PIN de otros usuarios por el Administrador
+      const closeAdminSetPinBtn = document.getElementById('btn-close-admin-set-pin');
+      if (closeAdminSetPinBtn) closeAdminSetPinBtn.addEventListener('click', closeAdminSetUserPinModal);
+
+      const cancelAdminSetPinBtn = document.getElementById('btn-cancel-admin-set-pin');
+      if (cancelAdminSetPinBtn) cancelAdminSetPinBtn.addEventListener('click', closeAdminSetUserPinModal);
+
+      const submitAdminSetPinBtn = document.getElementById('btn-submit-admin-set-pin');
+      if (submitAdminSetPinBtn) submitAdminSetPinBtn.addEventListener('click', submitAdminSetUserPin);
+
+      const adminDefaultPinBtn = document.getElementById('btn-admin-set-default-pin');
+      if (adminDefaultPinBtn) adminDefaultPinBtn.addEventListener('click', adminResetUserPinToDefault);
+
+      // Acciones de PIN de Administrador propio
+      const adminChangeOwnPinBtn = document.getElementById('btn-admin-change-own-pin');
+      if (adminChangeOwnPinBtn) adminChangeOwnPinBtn.addEventListener('click', openChangeMyPinModal);
+
+      const adminResetOwnPinBtn = document.getElementById('btn-admin-reset-own-pin');
+      if (adminResetOwnPinBtn) adminResetOwnPinBtn.addEventListener('click', handleAdminResetOwnPin);
 
       console.log('✅ Activacion WinPro Inicializado con éxito. Versión Multi-Agente 2.0.');
     }
