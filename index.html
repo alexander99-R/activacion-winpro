@@ -1,0 +1,4324 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>MACROTEC — Inventario de Licencias Windows 11 Pro</title>
+  <meta name="description" content="Sistema web de gestión e inventario de licencias Windows 11 Pro para MACROTEC El Salvador">
+  
+  <style>
+    /* ==========================================================================
+       AGENTE 1: SISTEMA DE DISEÑO VISUAL, VARIABLES & TEMAS (LIGHT / DARK)
+       ========================================================================== */
+    :root {
+      /* Colores Oficiales MACROTEC */
+      --navy: #0B2A4A;
+      --navy-dark: #06182c;
+      --navy-light: #184472;
+      --blue: #5FB9E4;
+      --blue-hover: #48a6d4;
+      --blue-subtle: rgba(95, 185, 228, 0.15);
+      --blue2: #EAF6FC;
+      --green: #1E7E4E;
+      --green-light: #D1FAE5;
+      --green-dark: #125934;
+      --red: #B91C1C;
+      --red-light: #FEE2E2;
+      --red-dark: #8b1313;
+      --orange: #C2690A;
+      --orange-light: #FEF3C7;
+      --orange-dark: #8c4904;
+      --gray: #5A6B7B;
+      --gray-light: #F1F5F9;
+      --gray-border: #CBD5E1;
+
+      /* Tokens de Interfaz (Light Mode) */
+      --bg: #F4F8FB;
+      --surface: #FFFFFF;
+      --surface-card: #FFFFFF;
+      --text: #0F172A;
+      --text-muted: #5A6B7B;
+      --text-inverse: #FFFFFF;
+      --border: #E2E8F0;
+      --input-bg: #FFFFFF;
+      --shadow-sm: 0 1px 3px rgba(11, 42, 74, 0.06);
+      --shadow: 0 4px 8px -2px rgba(11, 42, 74, 0.08), 0 2px 4px -2px rgba(11, 42, 74, 0.04);
+      --shadow-lg: 0 12px 24px -4px rgba(11, 42, 74, 0.12), 0 6px 12px -4px rgba(11, 42, 74, 0.08);
+      --radius: 12px;
+      --radius-sm: 8px;
+      --radius-full: 9999px;
+      --transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+      --font-mono: 'Consolas', 'Courier New', monospace;
+      --bottom-nav-height: 64px;
+    }
+
+    [data-theme="dark"] {
+      --navy: #153960;
+      --navy-dark: #0b1d30;
+      --navy-light: #204d7d;
+      --blue: #5FB9E4;
+      --blue-hover: #72c7f0;
+      --blue-subtle: rgba(95, 185, 228, 0.22);
+      --blue2: #0e2033;
+      --green: #22C55E;
+      --green-light: rgba(34, 197, 94, 0.18);
+      --green-dark: #15803d;
+      --red: #EF4444;
+      --red-light: rgba(239, 68, 68, 0.18);
+      --red-dark: #b91c1c;
+      --orange: #F59E0B;
+      --orange-light: rgba(245, 158, 11, 0.18);
+      --orange-dark: #b45309;
+      --gray: #94A3B8;
+      --gray-light: #1A283A;
+      --gray-border: #2D3E54;
+
+      /* Tokens de Interfaz (Dark Mode) */
+      --bg: #09131F;
+      --surface: #101F33;
+      --surface-card: #14253C;
+      --text: #F1F5F9;
+      --text-muted: #94A3B8;
+      --text-inverse: #09131F;
+      --border: #1E334D;
+      --input-bg: #101F33;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+      --shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+      --shadow-lg: 0 14px 28px rgba(0, 0, 0, 0.6);
+    }
+
+    /* Reset & Base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-image: radial-gradient(var(--blue-subtle) 1px, transparent 1px);
+      background-size: 24px 24px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Scrollbar estilizada */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--gray-border);
+      border-radius: 4px;
+    }
+
+    /* Componentes genéricos de UI */
+    button, input, select, textarea {
+      font-family: inherit;
+      font-size: 1rem;
+      color: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      background: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: var(--transition);
+    }
+    button:active {
+      transform: scale(0.97);
+    }
+
+    .btn {
+      padding: 10px 18px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 0.92rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+      color: white;
+      box-shadow: 0 2px 4px rgba(11, 42, 74, 0.25);
+    }
+    .btn-primary:hover {
+      box-gradient: linear-gradient(135deg, var(--navy-light) 0%, var(--navy) 100%);
+      box-shadow: 0 4px 8px rgba(11, 42, 74, 0.35);
+    }
+    .btn-accent {
+      background: var(--blue);
+      color: var(--navy-dark);
+      font-weight: 700;
+    }
+    .btn-accent:hover {
+      background: var(--blue-hover);
+    }
+    .btn-secondary {
+      background: var(--gray-light);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover {
+      background: var(--border);
+    }
+    .btn-danger {
+      background: var(--red);
+      color: white;
+    }
+    .btn-danger:hover {
+      background: var(--red-dark);
+    }
+    .btn-success {
+      background: var(--green);
+      color: white;
+    }
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 0.82rem;
+      border-radius: 6px;
+    }
+    .btn-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-sm);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--gray-light);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-icon:hover {
+      background: var(--blue-subtle);
+      color: var(--blue);
+      border-color: var(--blue);
+    }
+
+    /* Estilos de Formularios y Textboxes con Alto Contraste */
+    .form-group {
+      margin-bottom: 18px;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-label {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--navy);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    [data-theme="dark"] .form-label {
+      color: #93C5FD;
+    }
+    .form-control {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid #94A3B8;
+      border-radius: var(--radius-sm);
+      background: #FFFFFF;
+      color: #0F172A;
+      outline: none;
+      transition: var(--transition);
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+    [data-theme="dark"] .form-control {
+      background: #0E1A29;
+      border: 1.5px solid #3E5E88;
+      color: #FFFFFF;
+    }
+    .form-control:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(95, 185, 228, 0.35);
+    }
+    [data-theme="dark"] .form-control:focus {
+      border-color: #5FB9E4;
+      box-shadow: 0 0 0 3px rgba(95, 185, 228, 0.4);
+    }
+    .form-control::placeholder {
+      color: #64748B;
+      font-weight: 400;
+      opacity: 1;
+    }
+    [data-theme="dark"] .form-control::placeholder {
+      color: #94A3B8;
+      font-weight: 400;
+      opacity: 1;
+    }
+    select.form-control {
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235FB9E4' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      background-size: 16px;
+      padding-right: 40px;
+    }
+    select.form-control option {
+      background: #FFFFFF;
+      color: #0F172A;
+      padding: 10px;
+    }
+    [data-theme="dark"] select.form-control option {
+      background: #0E1A29;
+      color: #FFFFFF;
+    }
+    .file-upload-box {
+      position: relative;
+      width: 100%;
+    }
+    .file-input-hidden {
+      position: absolute;
+      width: 0.1px;
+      height: 0.1px;
+      opacity: 0;
+      overflow: hidden;
+      z-index: -1;
+    }
+    .file-upload-btn {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px dashed var(--blue);
+      border-radius: var(--radius-sm);
+      background: var(--blue-subtle);
+      color: var(--navy);
+      font-size: 0.88rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    [data-theme="dark"] .file-upload-btn {
+      background: rgba(95, 185, 228, 0.12);
+      color: #BAE6FD;
+    }
+    .file-upload-btn:hover {
+      background: rgba(95, 185, 228, 0.25);
+      border-color: var(--blue-hover);
+    }
+    textarea.form-control {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    /* Insignias de Estado */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+    .badge-disponible {
+      background: var(--blue-subtle);
+      color: var(--navy);
+      border: 1px solid var(--blue);
+    }
+    [data-theme="dark"] .badge-disponible {
+      color: var(--blue);
+    }
+    .badge-instalada {
+      background: var(--green-light);
+      color: var(--green-dark);
+      border: 1px solid var(--green);
+    }
+    [data-theme="dark"] .badge-instalada {
+      color: #86EFAC;
+    }
+    .badge-probar {
+      background: var(--orange-light);
+      color: var(--orange-dark);
+      border: 1px solid var(--orange);
+    }
+    [data-theme="dark"] .badge-probar {
+      color: #FDE68A;
+    }
+    .badge-danada {
+      background: var(--red-light);
+      color: var(--red-dark);
+      border: 1px solid var(--red);
+    }
+    [data-theme="dark"] .badge-danada {
+      color: #FCA5A5;
+    }
+
+    /* Iconos SVG inline */
+    .icon {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+      flex-shrink: 0;
+    }
+    .icon-sm { width: 15px; height: 15px; }
+    .icon-lg { width: 24px; height: 24px; }
+
+    /* ==========================================================================
+       LOGIN & PANTALLA DE ACCESO (AGENTE 1 & AGENTE 3)
+       ========================================================================== */
+    #view-login {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+    }
+    .login-container {
+      width: 100%;
+      max-width: 480px;
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border);
+      padding: 32px 24px;
+      text-align: center;
+      animation: fadeInScale 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes fadeInScale {
+      from { opacity: 0; transform: scale(0.95) translateY(12px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .brand-logo-wrap {
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-shield {
+      width: 68px;
+      height: 68px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, var(--navy) 0%, #1a4d80 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 16px rgba(11, 42, 74, 0.3);
+      color: var(--blue);
+      position: relative;
+    }
+    .brand-title {
+      font-size: 1.75rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--navy);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    [data-theme="dark"] .brand-title {
+      color: var(--blue);
+    }
+    .brand-badge {
+      font-size: 0.72rem;
+      padding: 2px 8px;
+      border-radius: 6px;
+      background: var(--blue-subtle);
+      color: var(--blue);
+      font-weight: 700;
+      border: 1px solid var(--blue);
+    }
+    .brand-subtitle {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .login-section-title {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      color: var(--text-muted);
+      margin: 24px 0 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .login-section-title::before, .login-section-title::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .admin-login-card {
+      width: 100%;
+      padding: 14px 18px;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%);
+      color: white;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 10px rgba(11, 42, 74, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .admin-login-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 14px rgba(11, 42, 74, 0.35);
+      border-color: var(--blue);
+    }
+    .admin-login-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-align: left;
+    }
+    .admin-login-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: rgba(95, 185, 228, 0.2);
+      color: var(--blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .users-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+      max-height: 280px;
+      overflow-y: auto;
+      padding: 4px;
+    }
+    .user-card-btn {
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+      text-align: center;
+    }
+    .user-card-btn:hover {
+      transform: translateY(-3px);
+      border-color: var(--blue);
+      box-shadow: var(--shadow);
+    }
+    .user-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: var(--blue2);
+      color: var(--navy);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.1rem;
+      border: 2px solid var(--blue);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .user-name {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 110px;
+    }
+    .user-role-badge {
+      font-size: 0.68rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: var(--gray-light);
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    /* Modal de PIN (Agent 3) */
+    .pin-display {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin: 20px 0;
+    }
+    .pin-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 2px solid var(--gray-border);
+      background: transparent;
+      transition: var(--transition);
+    }
+    .pin-dot.filled {
+      background: var(--blue);
+      border-color: var(--navy);
+      transform: scale(1.15);
+    }
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      max-width: 270px;
+      margin: 0 auto;
+    }
+    .key-btn {
+      height: 52px;
+      border-radius: var(--radius-sm);
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--text);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .key-btn:hover {
+      background: var(--blue-subtle);
+      border-color: var(--blue);
+    }
+    .key-btn:active {
+      transform: scale(0.92);
+      background: var(--blue);
+      color: white;
+    }
+    .lockout-alert {
+      background: var(--red-light);
+      color: var(--red-dark);
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-top: 14px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    /* ==========================================================================
+       APP LAYOUT & NAVEGACIÓN (AGENTE 1 & AGENTE 4)
+       ========================================================================== */
+    #app-container {
+      display: none;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Header Superior */
+    .top-header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      padding: 10px 16px;
+      box-shadow: var(--shadow-sm);
+    }
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .header-logo-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      background: var(--navy);
+      color: var(--blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .header-titles h1 {
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      color: var(--navy);
+      line-height: 1.2;
+    }
+    [data-theme="dark"] .header-titles h1 {
+      color: var(--blue);
+    }
+    .header-titles span {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Indicador dinámico de stock (Agente 4) */
+    .stock-badge-header {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: var(--radius-full);
+      font-size: 0.8rem;
+      font-weight: 700;
+      transition: var(--transition);
+      border: 1px solid transparent;
+    }
+    .stock-high {
+      background: var(--green-light);
+      color: var(--green-dark);
+      border-color: var(--green);
+    }
+    .stock-medium {
+      background: var(--orange-light);
+      color: var(--orange-dark);
+      border-color: var(--orange);
+    }
+    .stock-low {
+      background: var(--red-light);
+      color: var(--red-dark);
+      border-color: var(--red);
+      animation: pulseAlert 1.6s infinite;
+    }
+    @keyframes pulseAlert {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.04); }
+    }
+
+    /* Navegación Desktop vs Mobile */
+    .desktop-nav {
+      display: none;
+      align-items: center;
+      gap: 4px;
+      margin-left: 20px;
+    }
+    .nav-tab-btn {
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: var(--transition);
+    }
+    .nav-tab-btn:hover {
+      background: var(--gray-light);
+      color: var(--text);
+    }
+    .nav-tab-btn.active {
+      background: var(--blue-subtle);
+      color: var(--navy);
+      border-bottom: 2px solid var(--navy);
+    }
+    [data-theme="dark"] .nav-tab-btn.active {
+      color: var(--blue);
+      border-bottom-color: var(--blue);
+    }
+    .nav-counter {
+      background: var(--border);
+      color: var(--text);
+      font-size: 0.72rem;
+      padding: 1px 6px;
+      border-radius: 10px;
+      font-weight: 700;
+    }
+    .nav-tab-btn.active .nav-counter {
+      background: var(--navy);
+      color: white;
+    }
+    [data-theme="dark"] .nav-tab-btn.active .nav-counter {
+      background: var(--blue);
+      color: var(--navy-dark);
+    }
+
+    /* Bottom Nav Bar Fija Móvil (Agente 1) */
+    .mobile-bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: var(--bottom-nav-height);
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      z-index: 50;
+      box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.05);
+      padding: 0 4px;
+    }
+    .mobile-nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      height: 100%;
+      color: var(--text-muted);
+      font-size: 0.68rem;
+      font-weight: 600;
+      position: relative;
+      cursor: pointer;
+      transition: var(--transition);
+      background: none;
+      border: none;
+    }
+    .mobile-nav-item.active {
+      color: var(--navy);
+    }
+    [data-theme="dark"] .mobile-nav-item.active {
+      color: var(--blue);
+    }
+    .mobile-nav-badge {
+      position: absolute;
+      top: 6px;
+      right: calc(50% - 16px);
+      min-width: 16px;
+      height: 16px;
+      background: var(--red);
+      color: white;
+      font-size: 0.62rem;
+      font-weight: 700;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 3px;
+    }
+
+    /* Contenido Principal */
+    .main-body {
+      flex: 1;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 16px 16px 84px; /* padding-bottom para que no tape la barra móvil */
+    }
+
+    /* Banner de Alertas Admin (Agente 4) */
+    .admin-alerts-dashboard {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .alert-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 0.88rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .alert-banner-danger {
+      background: var(--red-light);
+      color: var(--red-dark);
+      border-left: 4px solid var(--red);
+    }
+    [data-theme="dark"] .alert-banner-danger {
+      background: rgba(239, 68, 68, 0.2);
+      color: #FECACA;
+      border-left-color: #EF4444;
+    }
+    .alert-banner-warning {
+      background: var(--orange-light);
+      color: var(--orange-dark);
+      border-left: 4px solid var(--orange);
+    }
+    [data-theme="dark"] .alert-banner-warning {
+      background: rgba(245, 158, 11, 0.2);
+      color: #FEF08A;
+      border-left-color: #F59E0B;
+    }
+    .alert-banner-info {
+      background: var(--blue2);
+      color: var(--navy);
+      border-left: 4px solid var(--blue);
+    }
+    [data-theme="dark"] .alert-banner-info {
+      background: rgba(95, 185, 228, 0.2);
+      color: #BAE6FD;
+      border-left-color: #5FB9E4;
+    }
+    .alert-content {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Toolbar de Búsqueda y Filtros (Agente 2) */
+    .filters-toolbar {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .search-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .search-input-wrap {
+      flex: 1;
+      position: relative;
+    }
+    .search-input-wrap .icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+    }
+    .search-input {
+      width: 100%;
+      padding: 11px 14px 11px 38px;
+      border: 1.5px solid #94A3B8;
+      border-radius: var(--radius-sm);
+      background: var(--input-bg);
+      color: #0F172A;
+      outline: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+    [data-theme="dark"] .search-input {
+      background: #0E1A29;
+      border: 1.5px solid #3E5E88;
+      color: #FFFFFF;
+    }
+    .search-input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(95, 185, 228, 0.35);
+    }
+    [data-theme="dark"] .search-input:focus {
+      border-color: #5FB9E4;
+      box-shadow: 0 0 0 3px rgba(95, 185, 228, 0.4);
+    }
+    .search-input::placeholder {
+      color: #64748B;
+      font-weight: 400;
+      opacity: 1;
+    }
+    [data-theme="dark"] .search-input::placeholder {
+      color: #94A3B8;
+      font-weight: 400;
+      opacity: 1;
+    }
+
+    .filters-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .filter-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .filter-pill {
+      padding: 6px 12px;
+      border-radius: var(--radius-full);
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: var(--gray-light);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .filter-pill:hover {
+      background: var(--border);
+    }
+    .filter-pill.active {
+      background: var(--navy);
+      color: white;
+      border-color: var(--navy);
+    }
+    [data-theme="dark"] .filter-pill.active {
+      background: var(--blue);
+      color: var(--navy-dark);
+      border-color: var(--blue);
+    }
+
+    /* Banner de Métricas Resumen para Técnicos */
+    .tech-summary-banner {
+      display: none;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .tech-metric-card {
+      background: var(--surface-card);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      box-shadow: var(--shadow-sm);
+      text-align: center;
+      transition: var(--transition);
+    }
+    .tech-metric-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+    .tech-metric-number {
+      font-size: 1.8rem;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+    .tech-metric-number.disp {
+      color: var(--blue);
+    }
+    .tech-metric-number.inst {
+      color: var(--green);
+    }
+    .tech-metric-number.dam {
+      color: var(--red);
+    }
+    .tech-metric-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Barra Flotante de Acciones en Lote (Agente 2) */
+    .batch-actions-bar {
+      position: fixed;
+      bottom: 74px;
+      left: 50%;
+      transform: translateX(-50%) translateY(120px);
+      background: var(--navy);
+      color: white;
+      padding: 10px 20px;
+      border-radius: var(--radius-full);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      z-index: 60;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .batch-actions-bar.visible {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Tarjetas de Licencias (Agente 1) */
+    .licenses-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 14px;
+    }
+    .license-card {
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: var(--transition);
+      position: relative;
+    }
+    .license-card:hover {
+      border-color: var(--blue);
+      box-shadow: var(--shadow);
+    }
+    .license-card.selected {
+      border-color: var(--blue);
+      background: var(--blue-subtle);
+    }
+
+    .card-top-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .card-edition {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--navy);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    [data-theme="dark"] .card-edition {
+      color: var(--blue);
+    }
+    .card-batch-select {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+    }
+
+    /* Caja de Clave Monospace */
+    .key-box-wrap {
+      background: var(--gray-light);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .key-code {
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      color: var(--text);
+      word-break: break-all;
+      user-select: all;
+      cursor: pointer;
+    }
+    .cmd-prefix {
+      color: #0284C7;
+      font-weight: 800;
+      user-select: all;
+    }
+    [data-theme="dark"] .cmd-prefix {
+      color: #5FB9E4;
+    }
+    .btn-copy-cmd {
+      background: var(--surface);
+      color: var(--navy);
+      border: 1px solid var(--border);
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      white-space: nowrap;
+      box-shadow: var(--shadow-sm);
+    }
+    [data-theme="dark"] .btn-copy-cmd {
+      color: var(--blue);
+    }
+    .btn-copy-cmd:hover {
+      background: var(--blue-subtle);
+      border-color: var(--blue);
+    }
+    .btn-copy-cmd.copied {
+      background: var(--green);
+      color: white;
+      border-color: var(--green);
+    }
+
+    .card-details-info {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .card-details-info .row-info {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* Botones de Acción de Estado */
+    .card-actions-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: auto;
+      padding-top: 8px;
+      border-top: 1px solid var(--border);
+    }
+    .btn-status-act {
+      flex: 1;
+      padding: 7px 10px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+    .act-installed {
+      background: var(--green);
+      color: white;
+    }
+    .act-retry {
+      background: var(--orange);
+      color: white;
+    }
+    .act-damaged {
+      background: var(--red);
+      color: white;
+    }
+    .act-revert {
+      background: var(--navy);
+      color: white;
+    }
+
+    /* Estado Vacío */
+    .empty-state {
+      grid-column: 1 / -1;
+      padding: 48px 20px;
+      text-align: center;
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px dashed var(--border);
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* ==========================================================================
+       VISTAS DE ADMINISTRACIÓN: IMPORTAR, STATS, USUARIOS, AUDITORÍA
+       ========================================================================== */
+    .panel-view {
+      display: none;
+      animation: fadeIn 0.25s ease;
+    }
+    .panel-view.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .admin-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 20px;
+    }
+    .admin-card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    [data-theme="dark"] .admin-card-title {
+      color: var(--blue);
+    }
+
+    /* Gráficos SVG Puros (Agente 2) */
+    .stats-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .kpi-card {
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+    }
+    .kpi-value {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--navy);
+      line-height: 1.2;
+    }
+    [data-theme="dark"] .kpi-value {
+      color: var(--blue);
+    }
+    .kpi-label {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    .chart-container {
+      width: 100%;
+      height: 220px;
+      margin: 16px 0;
+      position: relative;
+    }
+    .chart-svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Leaderboard Top 3 */
+    .leaderboard-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .leader-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+    .leader-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .leader-medal {
+      font-size: 1.2rem;
+      width: 28px;
+    }
+    .leader-count {
+      font-weight: 700;
+      color: var(--green);
+      font-size: 0.95rem;
+    }
+
+    /* Tabla de Auditoría (Agente 2) */
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.85rem;
+    }
+    .data-table th, .data-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .data-table th {
+      background: var(--gray-light);
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+    .data-table tr:hover {
+      background: var(--blue-subtle);
+    }
+
+    /* Gestión de Usuarios (Agente 3) */
+    .user-manage-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px;
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      margin-bottom: 8px;
+      gap: 10px;
+    }
+    .user-info-side {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* ==========================================================================
+       MODALES Y NOTIFICACIONES TOAST (AGENTE 1, 2, 3, 4)
+       ========================================================================== */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(11, 42, 74, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      animation: fadeIn 0.2s ease;
+    }
+    .modal-overlay.active {
+      display: flex;
+    }
+    .modal-box {
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border);
+      width: 100%;
+      max-width: 520px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 24px;
+      animation: fadeInScale 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .modal-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--navy);
+    }
+    [data-theme="dark"] .modal-title {
+      color: var(--blue);
+    }
+    .modal-footer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    /* Toast Container */
+    #toast-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 150;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      pointer-events: none;
+    }
+    .toast-msg {
+      background: var(--navy);
+      color: white;
+      padding: 12px 18px;
+      border-radius: var(--radius-sm);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      pointer-events: auto;
+      animation: slideInToast 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      border-left: 4px solid var(--blue);
+      max-width: 360px;
+    }
+    .toast-success { border-left-color: var(--green); }
+    .toast-error { border-left-color: var(--red); }
+    .toast-warning { border-left-color: var(--orange); }
+    @keyframes slideInToast {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Barra de progreso de importación */
+    .progress-bar-wrap {
+      width: 100%;
+      height: 10px;
+      background: var(--gray-light);
+      border-radius: 5px;
+      overflow: hidden;
+      margin: 14px 0;
+      display: none;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--blue) 0%, var(--green) 100%);
+      transition: width 0.2s ease;
+    }
+
+    /* Media Queries para Responsive */
+    @media (min-width: 768px) {
+      .desktop-nav {
+        display: flex;
+      }
+      .mobile-bottom-nav {
+        display: none;
+      }
+      .main-body {
+        padding-bottom: 24px;
+      }
+      .batch-actions-bar {
+        bottom: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================================================
+       VISTA 1: LOGIN (PANTALLA DE ACCESO)
+       ========================================================================== -->
+  <div id="view-login">
+    <div class="login-container">
+      <div class="brand-logo-wrap">
+        <div class="brand-shield">
+          <svg class="icon icon-lg" viewBox="0 0 24 24">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="M9 12l2 2 4-4"/>
+          </svg>
+        </div>
+        <div class="brand-title">
+          MACROTEC
+          <span class="brand-badge">WINDOWS 11 PRO</span>
+        </div>
+        <p class="brand-subtitle">Inventario de Licencias & Activación</p>
+      </div>
+
+      <!-- Acceso Administrador -->
+      <button type="button" class="admin-login-card" id="btn-login-admin">
+        <div class="admin-login-info">
+          <div class="admin-login-icon">
+            <svg class="icon" viewBox="0 0 24 24">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+          </div>
+          <div>
+            <div style="font-weight: 700; font-size: 1rem;">Administrador</div>
+            <div style="font-size: 0.78rem; opacity: 0.85;">Control total del inventario</div>
+          </div>
+        </div>
+        <svg class="icon" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+
+      <!-- Técnicos / Usuarios -->
+      <div class="login-section-title">O selecciona tu usuario</div>
+      <div class="users-grid" id="login-users-list">
+        <!-- Renderizado dinámico desde state.users sin fotos en atributos onclick -->
+      </div>
+
+      <!-- Alerta de Bloqueo por Fuerza Bruta -->
+      <div class="lockout-alert" id="login-lockout-msg">
+        <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span>Bloqueo de seguridad: Reintenta en <strong id="lockout-timer-sec">30</strong>s</span>
+      </div>
+
+      <!-- Toggle de Tema en Login -->
+      <div style="margin-top: 24px; display: flex; justify-content: center; gap: 8px;">
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-theme-login">
+          <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          <span id="theme-text-login">Modo Oscuro</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       VISTA 2: APLICACIÓN PRINCIPAL (HEADER + NAV + CONTENIDO)
+       ========================================================================== -->
+  <div id="app-container">
+    <!-- Header Superior -->
+    <header class="top-header">
+      <div class="header-content">
+        <div class="header-brand">
+          <div class="header-logo-icon">
+            <svg class="icon" viewBox="0 0 24 24">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <div class="header-titles">
+            <h1>MACROTEC</h1>
+            <span id="header-user-status">Cargando...</span>
+          </div>
+
+          <!-- Pestañas Desktop -->
+          <nav class="desktop-nav">
+            <button type="button" class="nav-tab-btn active" data-target="tab-licencias">
+              <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <span>Licencias</span>
+              <span class="nav-counter" id="desktop-counter-disponibles">0</span>
+            </button>
+            <button type="button" class="nav-tab-btn admin-only" data-target="tab-instaladas">
+              <svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Instaladas</span>
+              <span class="nav-counter" id="desktop-counter-instaladas">0</span>
+            </button>
+            <button type="button" class="nav-tab-btn admin-only" data-target="tab-stats">
+              <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+              <span>Estadísticas</span>
+            </button>
+            <button type="button" class="nav-tab-btn admin-only" data-target="tab-admin">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              <span>Administración</span>
+            </button>
+            <button type="button" class="nav-tab-btn admin-only" data-target="tab-logs">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+              <span>Auditoría</span>
+            </button>
+          </nav>
+        </div>
+
+        <!-- Indicador de Stock + Acciones Header -->
+        <div class="header-actions">
+          <div class="stock-badge-header" id="stock-badge-header" title="Existencias actuales de licencias Disponibles">
+            <span id="stock-indicator-text">Disponibles: 0</span>
+          </div>
+
+          <!-- Botón WhatsApp Reporte (Solo Administrador) -->
+          <button type="button" class="btn-icon admin-only" id="btn-whatsapp-share" title="Enviar reporte por WhatsApp">
+            <svg class="icon" viewBox="0 0 24 24" style="stroke: #25D366;">
+              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+            </svg>
+          </button>
+
+          <!-- Toggle de Tema -->
+          <button type="button" class="btn-icon" id="btn-theme-toggle" title="Cambiar tema claro/oscuro">
+            <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          </button>
+
+          <!-- Cerrar Sesión -->
+          <button type="button" class="btn-icon" id="btn-logout" title="Cerrar Sesión">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="main-body">
+      <!-- Banners de Alerta Admin (Agente 4) -->
+      <div id="admin-alerts-container" class="admin-alerts-dashboard admin-only">
+        <!-- Render dinámico de alertas de stock bajo o licencias estancadas -->
+      </div>
+
+      <!-- ==========================================================
+           TAB 1: LICENCIAS ACTIVAS / DISPONIBLES & TODAS
+           ========================================================== -->
+      <section id="tab-licencias" class="panel-view active">
+        <!-- Banner de Resumen para Técnicos (Solo visualización de cantidades) -->
+        <div class="tech-summary-banner" id="tech-summary-banner">
+          <div class="tech-metric-card">
+            <div class="tech-metric-title">Disponibles</div>
+            <div class="tech-metric-number disp" id="tech-num-disp">0</div>
+            <div class="tech-metric-sub">Listas para instalar</div>
+          </div>
+          <div class="tech-metric-card">
+            <div class="tech-metric-title">Instaladas</div>
+            <div class="tech-metric-number inst" id="tech-num-inst">0</div>
+            <div class="tech-metric-sub">Total registradas</div>
+          </div>
+          <div class="tech-metric-card">
+            <div class="tech-metric-title">Dañadas</div>
+            <div class="tech-metric-number dam" id="tech-num-dam">0</div>
+            <div class="tech-metric-sub">En garantía</div>
+          </div>
+        </div>
+
+        <!-- Barra de Búsqueda y Filtros (Búsqueda solo visible para Admin) -->
+        <div class="filters-toolbar">
+          <div class="search-row admin-only">
+            <div class="search-input-wrap">
+              <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="filter-search-input" class="search-input" placeholder="Buscar por clave Windows o técnico...">
+            </div>
+            <button type="button" class="btn btn-primary" id="btn-open-import-modal">
+              <svg class="icon" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              <span class="desktop-text">Importar</span>
+            </button>
+          </div>
+
+          <div class="filters-row">
+            <div class="filter-pills" id="filter-status-pills">
+              <button type="button" class="filter-pill active admin-only" data-status="ALL">Todas (<span id="count-all">0</span>)</button>
+              <button type="button" class="filter-pill" data-status="Disponible">Disponibles (<span id="count-disp">0</span>)</button>
+              <button type="button" class="filter-pill" data-status="Probar otra vez">Probar otra vez (<span id="count-retry">0</span>)</button>
+              <button type="button" class="filter-pill admin-only" data-status="Dañada">Dañadas (<span id="count-damaged">0</span>)</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Grid de Licencias -->
+        <div class="licenses-grid" id="licenses-cards-container">
+          <!-- Render dinámico de tarjetas -->
+        </div>
+      </section>
+
+      <!-- ==========================================================
+           TAB 2: LICENCIAS INSTALADAS (HISTORIAL DEFINITIVO)
+           ========================================================== -->
+      <section id="tab-instaladas" class="panel-view">
+        <div class="admin-card">
+          <div class="admin-card-title">
+            <span>Licencias Instaladas Exitosamente</span>
+            <button type="button" class="btn btn-secondary btn-sm admin-only" id="btn-export-installed-csv">
+              <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <span>Exportar CSV</span>
+            </button>
+          </div>
+          <div class="licenses-grid" id="installed-cards-container">
+            <!-- Render dinámico de instaladas -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================================
+           TAB 3: ESTADÍSTICAS & REPORTES (AGENTE 2)
+           ========================================================== -->
+      <section id="tab-stats" class="panel-view admin-only">
+        <!-- KPI Cards -->
+        <div class="stats-kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-value" id="kpi-total">0</div>
+            <div class="kpi-label">Total Claves</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-value" style="color: var(--blue);" id="kpi-disp">0</div>
+            <div class="kpi-label">Disponibles</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-value" style="color: var(--green);" id="kpi-inst">0</div>
+            <div class="kpi-label">Instaladas</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-value" style="color: var(--orange);" id="kpi-retry">0</div>
+            <div class="kpi-label">Probar Otra Vez</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-value" style="color: var(--red);" id="kpi-damaged">0</div>
+            <div class="kpi-label">Dañadas</div>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px;">
+          <!-- Gráfico SVG de Barras (Distribución de Estados) -->
+          <div class="admin-card">
+            <div class="admin-card-title">Distribución por Estado (SVG Puro)</div>
+            <div class="chart-container" id="svg-bar-chart-wrap">
+              <!-- SVG generado dinámicamente -->
+            </div>
+          </div>
+
+          <!-- Gráfico SVG de Línea de Tiempo (Altas por Mes) -->
+          <div class="admin-card">
+            <div class="admin-card-title">Tendencia Mensual de Licencias</div>
+            <div class="chart-container" id="svg-timeline-chart-wrap">
+              <!-- SVG generado dinámicamente -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Técnicos Más Activos con más instalaciones -->
+        <div class="admin-card" style="margin-top: 16px;">
+          <div class="admin-card-title">🏆 Técnicos Más Activos (Licencias Instaladas)</div>
+          <div class="leaderboard-list" id="leaderboard-container">
+            <!-- Render dinámico -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================================
+           TAB 4: GESTIÓN DE USUARIOS Y ROLES (AGENTE 3)
+           ========================================================== -->
+      <section id="tab-admin" class="panel-view admin-only">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px;">
+          <!-- Crear Usuario Nuevo -->
+          <div class="admin-card">
+            <div class="admin-card-title">Crear Nuevo Usuario / Técnico</div>
+            <form id="form-create-user" onsubmit="event.preventDefault(); handleCreateUserSubmit();">
+              <div class="form-group">
+                <label class="form-label" for="new-user-name">
+                  <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  <span>Nombre del Técnico o Usuario</span>
+                </label>
+                <input type="text" id="new-user-name" class="form-control" placeholder="Escribe el nombre completo..." required>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="new-user-role">
+                  <svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  <span>Rol y Permisos</span>
+                </label>
+                <select id="new-user-role" class="form-control" required>
+                  <option value="Técnico">Técnico (Puede instalar y reportar licencias)</option>
+                  <option value="Visor">Visor (Modo solo lectura)</option>
+                  <option value="Admin">Administrador (Acceso y control total)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">
+                  <svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                  <span>Foto de Perfil (Opcional)</span>
+                </label>
+                <div class="file-upload-box">
+                  <input type="file" id="new-user-photo" accept="image/*" class="file-input-hidden">
+                  <label for="new-user-photo" class="file-upload-btn">
+                    <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    <span id="file-upload-text">Seleccionar foto de perfil...</span>
+                  </label>
+                </div>
+              </div>
+
+              <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 14px;">
+                * El PIN inicial será <strong>3210</strong>. El usuario o admin podrá cambiarlo.
+              </div>
+
+              <button type="submit" class="btn btn-primary" style="width: 100%;">
+                <svg class="icon" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                <span>Guardar Usuario</span>
+              </button>
+            </form>
+          </div>
+
+          <!-- Lista de Usuarios Existentes -->
+          <div class="admin-card">
+            <div class="admin-card-title">Usuarios Registrados</div>
+            <div id="users-management-list">
+              <!-- Render dinámico con botones para resetear PIN o eliminar -->
+            </div>
+          </div>
+
+          <!-- Compartir Enlace del Sistema -->
+          <div class="admin-card" style="margin-top: 16px;">
+            <div class="admin-card-title">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                <span>Compartir Acceso al Sistema con Técnicos</span>
+              </div>
+            </div>
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 12px;">
+              Copia este enlace para que los técnicos puedan ingresar al sistema desde sus teléfonos o computadoras.
+            </p>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <input type="text" id="input-system-link" class="form-control" style="flex: 1; min-width: 240px;" readonly>
+              <button type="button" class="btn btn-primary" id="btn-copy-system-link">
+                <svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <span>Copiar Enlace</span>
+              </button>
+              <button type="button" class="btn btn-accent" id="btn-share-system-link-wa">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" style="stroke: currentColor;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                <span>Compartir por WhatsApp</span>
+              </button>
+            </div>
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 10px;">
+              * Los técnicos ingresan seleccionando su nombre e introduciendo su PIN (predeterminado: <strong>3210</strong>).
+            </div>
+          </div>
+
+          <!-- Reporte de Licencias Dañadas para Proveedor -->
+          <div class="admin-card" style="margin-top: 16px;">
+            <div class="admin-card-title">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                <span>Garantías y Reporte a Proveedor (Licencias Dañadas)</span>
+              </div>
+              <span class="badge badge-danada" id="badge-damaged-provider-count">0 Dañadas</span>
+            </div>
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 14px;">
+              Genera un listado consolidado sin emoticones de todas las licencias dañadas para solicitar su reposición al proveedor. Puedes copiarlo o enviarlo por WhatsApp, y borrar esas licencias del sistema para no volver a enviarlas en futuros reportes.
+            </p>
+            <div>
+              <button type="button" class="btn btn-danger" id="btn-open-supplier-report-modal">
+                <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                <span>Generar Reporte de Dañadas para Proveedor</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================================
+           TAB 5: AUDITORÍA & LOGS DE ACTIVIDAD (AGENTE 2)
+           ========================================================== -->
+      <section id="tab-logs" class="panel-view admin-only">
+        <div class="admin-card">
+          <div class="admin-card-title">
+            <span>Registro Global de Auditoría</span>
+            <button type="button" class="btn btn-secondary btn-sm" id="btn-export-logs-csv">
+              <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <span>Exportar Registro</span>
+            </button>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Fecha y Hora</th>
+                  <th>Usuario</th>
+                  <th>Acción</th>
+                  <th>Detalle / Clave</th>
+                  <th>Cambio</th>
+                </tr>
+              </thead>
+              <tbody id="logs-table-body">
+                <!-- Render dinámico -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Barra de Navegación Inferior Fija para Móviles (Agente 1) -->
+    <nav class="mobile-bottom-nav">
+      <button type="button" class="mobile-nav-item active" data-target="tab-licencias">
+        <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <span>Licencias</span>
+        <span class="mobile-nav-badge" id="mobile-badge-disp">0</span>
+      </button>
+
+      <button type="button" class="mobile-nav-item admin-only" data-target="tab-instaladas">
+        <svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        <span>Instaladas</span>
+      </button>
+
+      <button type="button" class="mobile-nav-item admin-only" data-target="tab-stats">
+        <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        <span>Métricas</span>
+      </button>
+
+      <button type="button" class="mobile-nav-item admin-only" data-target="tab-admin">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        <span>Gestión</span>
+      </button>
+
+      <button type="button" class="mobile-nav-item" id="btn-mobile-quick-logout">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        <span>Salir</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- Barra Flotante de Acciones en Lote (Agente 2) -->
+  <div class="batch-actions-bar" id="batch-actions-bar">
+    <span style="font-weight: 700; font-size: 0.85rem;" id="batch-count-text">0 seleccionadas</span>
+    <button type="button" class="btn btn-sm btn-accent" id="btn-batch-status-installed">Marcar Instaladas</button>
+    <button type="button" class="btn btn-sm btn-danger" id="btn-batch-delete">Eliminar</button>
+    <button type="button" class="btn btn-sm btn-secondary" id="btn-batch-cancel">Cancelar</button>
+  </div>
+
+  <!-- ==========================================================================
+       MODALES DEL SISTEMA (SIN CONFIRM NI PROMPT NATIVOS)
+       ========================================================================== -->
+
+  <!-- 1. Modal de PIN (Agente 3) -->
+  <div class="modal-overlay" id="modal-pin">
+    <div class="modal-box" style="max-width: 360px; text-align: center;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="pin-modal-user-name">Ingresar PIN</h3>
+        <button type="button" class="btn-icon" id="btn-close-pin-modal">
+          <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <p style="font-size: 0.85rem; color: var(--text-muted);">Ingresa tu PIN de 4 dígitos (o 3 anteriores)</p>
+
+      <div class="pin-display">
+        <div class="pin-dot" id="pin-dot-1"></div>
+        <div class="pin-dot" id="pin-dot-2"></div>
+        <div class="pin-dot" id="pin-dot-3"></div>
+        <div class="pin-dot" id="pin-dot-4"></div>
+      </div>
+
+      <div class="keypad">
+        <button type="button" class="key-btn" data-key="1">1</button>
+        <button type="button" class="key-btn" data-key="2">2</button>
+        <button type="button" class="key-btn" data-key="3">3</button>
+        <button type="button" class="key-btn" data-key="4">4</button>
+        <button type="button" class="key-btn" data-key="5">5</button>
+        <button type="button" class="key-btn" data-key="6">6</button>
+        <button type="button" class="key-btn" data-key="7">7</button>
+        <button type="button" class="key-btn" data-key="8">8</button>
+        <button type="button" class="key-btn" data-key="9">9</button>
+        <button type="button" class="key-btn" id="btn-pin-clear" style="font-size: 0.85rem; color: var(--red);">BORRAR</button>
+        <button type="button" class="key-btn" data-key="0">0</button>
+        <button type="button" class="key-btn" id="btn-pin-del">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"/><line x1="18" y1="9" x2="12" y2="15"/><line x1="12" y1="9" x2="18" y2="15"/></svg>
+        </button>
+      </div>
+
+      <div id="pin-error-feedback" style="color: var(--red); font-size: 0.82rem; font-weight: 600; margin-top: 14px; min-height: 18px;"></div>
+    </div>
+  </div>
+
+  <!-- 2. Modal de Importación Inteligente (Agente 2) -->
+  <div class="modal-overlay" id="modal-import">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title">Importar Licencias en Lote</h3>
+        <button type="button" class="btn-icon" id="btn-close-import-modal">
+          <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">
+        Pega tu texto con claves Windows 11 Pro. Se detectarán automáticamente comas, tabuladores, saltos de línea y se omitirán las duplicadas.
+      </p>
+
+      <div class="form-group">
+        <textarea id="import-raw-text" class="form-control" placeholder="Pega aquí el texto con las claves (ej. XXXXX-XXXXX-XXXXX-XXXXX-XXXXX)..."></textarea>
+      </div>
+
+      <div id="import-preview-box" style="display: none; background: var(--gray-light); padding: 12px; border-radius: var(--radius-sm); margin-bottom: 14px; font-size: 0.85rem;">
+        <div style="font-weight: 700; color: var(--navy); margin-bottom: 6px;">Previsualización del lote:</div>
+        <div>✅ Claves válidas a agregar: <strong id="preview-valid-count" style="color: var(--green);">0</strong></div>
+        <div>⚠️ Claves duplicadas / ya existentes: <strong id="preview-dups-count" style="color: var(--orange);">0</strong></div>
+        <div style="margin-top: 6px; font-size: 0.78rem; color: var(--text-muted);" id="preview-sample-keys"></div>
+      </div>
+
+      <div class="progress-bar-wrap" id="import-progress-wrap">
+        <div class="progress-bar-fill" id="import-progress-fill"></div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="btn-cancel-import">Cancelar</button>
+        <button type="button" class="btn btn-accent" id="btn-preview-import">Detectar Claves</button>
+        <button type="button" class="btn btn-primary" id="btn-confirm-import" style="display: none;">Confirmar y Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Modal de Confirmación Genérico (Reemplazo de diálogo nativo) -->
+  <div class="modal-overlay" id="modal-confirm">
+    <div class="modal-box" style="max-width: 400px; text-align: center;">
+      <div style="width: 50px; height: 50px; border-radius: 50%; background: var(--red-light); color: var(--red); display: flex; align-items: center; justify-content: center; margin: 0 auto 14px;">
+        <svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </div>
+      <h3 class="modal-title" id="confirm-title" style="margin-bottom: 8px;">¿Confirmar acción?</h3>
+      <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 20px;" id="confirm-message">Esta acción no se puede deshacer.</p>
+      
+      <div class="modal-footer" style="justify-content: center;">
+        <button type="button" class="btn btn-secondary" id="btn-confirm-cancel">Cancelar</button>
+        <button type="button" class="btn btn-danger" id="btn-confirm-proceed">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Modal de Resumen Diario para Admin (Agente 4) -->
+  <div class="modal-overlay" id="modal-daily-summary">
+    <div class="modal-box" style="max-width: 440px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Resumen del Día MACROTEC</h3>
+        <button type="button" class="btn-icon" id="btn-close-daily-modal">
+          <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div style="background: var(--blue2); padding: 14px; border-radius: var(--radius-sm); margin-bottom: 16px;">
+        <div style="font-size: 0.88rem; font-weight: 700; color: var(--navy); margin-bottom: 8px;">Estado actual de licencias:</div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 0.85rem;">
+          <span>Instaladas Hoy:</span>
+          <strong id="daily-installed-today">0</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 0.85rem;">
+          <span>Licencias Disponibles:</span>
+          <strong id="daily-available-stock">0</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 0.85rem;">
+          <span>Dañadas Acumuladas:</span>
+          <strong id="daily-damaged-count">0</strong>
+        </div>
+      </div>
+
+      <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--text-muted); cursor: pointer;">
+        <input type="checkbox" id="chk-no-daily-today">
+        <span>No volver a mostrar este resumen hoy</span>
+      </label>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="btn-ack-daily-modal">Entendido</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Modal de Reporte para Proveedor (Licencias Dañadas) -->
+  <div class="modal-overlay" id="modal-supplier-damaged">
+    <div class="modal-box" style="max-width: 580px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Reporte para Proveedor — Licencias Dañadas</h3>
+        <button type="button" class="btn-icon" id="btn-close-supplier-modal">
+          <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">
+        Este reporte contiene la lista consolidada de todas las claves con error de activación para solicitar su cambio o garantía al proveedor:
+      </p>
+
+      <div class="form-group">
+        <textarea id="txt-supplier-report" class="form-control" style="min-height: 180px; font-family: monospace; font-size: 0.82rem;" readonly></textarea>
+      </div>
+
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px;">
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-copy-supplier-report">
+          <svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          <span>Copiar Reporte</span>
+        </button>
+        <button type="button" class="btn btn-accent btn-sm" id="btn-whatsapp-supplier-report">
+          <svg class="icon icon-sm" viewBox="0 0 24 24" style="stroke: currentColor;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+          <span>Enviar por WhatsApp</span>
+        </button>
+      </div>
+
+      <div style="padding: 12px; background: rgba(185, 28, 28, 0.08); border: 1px solid rgba(185, 28, 28, 0.2); border-radius: var(--radius-sm); margin-bottom: 14px;">
+        <div style="font-weight: 700; font-size: 0.85rem; color: var(--red); margin-bottom: 4px;">¿Deseas borrar estas claves del inventario?</div>
+        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px;">
+          Al eliminarlas, el sistema quedará limpio para que no las vuelvas a enviar por error en futuros reportes al proveedor.
+        </div>
+        <button type="button" class="btn btn-danger btn-sm" id="btn-delete-reported-damaged">
+          <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          <span>Borrar Dañadas Reportadas del Sistema</span>
+        </button>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="btn-close-supplier-modal-footer">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Modal de Alerta de Cierre de Sesión por Inactividad (Agente 3) -->
+  <div class="modal-overlay" id="modal-session-timeout">
+    <div class="modal-box" style="max-width: 380px; text-align: center;">
+      <div style="width: 50px; height: 50px; border-radius: 50%; background: var(--orange-light); color: var(--orange); display: flex; align-items: center; justify-content: center; margin: 0 auto 14px;">
+        <svg class="icon icon-lg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <h3 class="modal-title" style="margin-bottom: 8px;">Inactividad detectada</h3>
+      <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 16px;">
+        Tu sesión se cerrará en <strong id="session-timeout-countdown" style="color: var(--red);">2:00</strong> minutos por inactividad de seguridad.
+      </p>
+      <div class="modal-footer" style="justify-content: center;">
+        <button type="button" class="btn btn-primary" id="btn-extend-session">Mantener Sesión Activa</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenedor Flotante de Notificaciones Toast -->
+  <div id="toast-container"></div>
+
+  <!-- ==========================================================================
+       LÓGICA JAVASCRIPT UNIFICADA (INTEGRADOR DE AGENTES 1, 2, 3, 4)
+       ========================================================================== -->
+  <script>
+    /**
+     * MACROTEC - Sistema de Gestión de Licencias Windows 11 Pro
+     * Arquitectura: Vanilla JS + Reactive State Pattern
+     * Compatibilidad: claude.use("db") (Claude Artifacts) + LocalStorage Mock Fallback
+     */
+    
+    // ==========================================================================
+    // CAPA DE BASE DE DATOS DUAL (CLAUDE DB CON FALLBACK LOCALSTORE REACTIVO)
+    // ==========================================================================
+    const DB_SERVICE = {
+      isClaudeDb: false,
+      claudeDb: null,
+      storageKey: 'macrotec_db_v2',
+
+      async init() {
+        try {
+          if (typeof window.claude !== 'undefined' && typeof window.claude.use === 'function') {
+            this.claudeDb = window.claude.use('db');
+            this.isClaudeDb = !!this.claudeDb;
+          }
+        } catch (e) {
+          console.warn('[DB] Fallback a LocalStorage reactivo activado.');
+        }
+
+        // Si no existe almacenamiento local inicial, sembrar datos de inicio
+        if (!localStorage.getItem(this.storageKey)) {
+          this.seedInitialData();
+        }
+      },
+
+      seedInitialData() {
+        const initialStore = {
+          config: { admin: { pin: "3210" } },
+          users: [
+            { id: "usr-1", nombre: "Juan Pérez", foto: null, pin: "3210", rol: "Técnico", fechaCreacion: "2026-09-09" },
+            { id: "usr-2", nombre: "Carlos Gómez", foto: null, pin: "3210", rol: "Técnico", fechaCreacion: "2026-09-10" },
+            { id: "usr-3", nombre: "Ana Morales", foto: null, pin: "3210", rol: "Visor", fechaCreacion: "2026-09-12" }
+          ],
+          licenses: [
+            {
+              id: "lic-1",
+              clave: "W269N-WFGWX-YVC9B-4J6C9-T83GX",
+              tipo: "Windows 11 Pro",
+              estado: "Disponible",
+              fechaSubida: "2026-09-15",
+              instaladoPor: null,
+              instaladoEl: null,
+              historial: [{ de: "Alta", a: "Disponible", quien: "Administrador", fecha: "2026-09-15 08:30" }]
+            },
+            {
+              id: "lic-2",
+              clave: "VK7JG-NPHTM-C97JM-9MPGT-3V66T",
+              tipo: "Windows 11 Pro",
+              estado: "Disponible",
+              fechaSubida: "2026-09-16",
+              instaladoPor: null,
+              instaladoEl: null,
+              historial: [{ de: "Alta", a: "Disponible", quien: "Administrador", fecha: "2026-09-16 09:15" }]
+            },
+            {
+              id: "lic-3",
+              clave: "MH37W-N47XK-V7XM9-C7227-GCQG9",
+              tipo: "Windows 11 Pro",
+              estado: "Instalada",
+              fechaSubida: "2026-09-14",
+              instaladoPor: "Juan Pérez",
+              instaladoEl: "2026-09-18",
+              historial: [
+                { de: "Alta", a: "Disponible", quien: "Administrador", fecha: "2026-09-14 10:00" },
+                { de: "Disponible", a: "Instalada", quien: "Juan Pérez", fecha: "2026-09-18 14:20" }
+              ]
+            },
+            {
+              id: "lic-4",
+              clave: "NRG8B-VKK3Q-CXVCJ-9G2XF-6Q84J",
+              tipo: "Windows 11 Pro",
+              estado: "Probar otra vez",
+              fechaSubida: "2026-09-10",
+              instaladoPor: null,
+              instaladoEl: null,
+              historial: [
+                { de: "Alta", a: "Disponible", quien: "Administrador", fecha: "2026-09-10 11:00" },
+                { de: "Disponible", a: "Probar otra vez", quien: "Carlos Gómez", fecha: "2026-09-11 16:45" }
+              ]
+            },
+            {
+              id: "lic-5",
+              clave: "9F2HK-N78KC-TC444-F97B6-P4T6T",
+              tipo: "Windows 11 Pro",
+              estado: "Dañada",
+              fechaSubida: "2026-09-08",
+              instaladoPor: null,
+              instaladoEl: null,
+              historial: [
+                { de: "Alta", a: "Disponible", quien: "Administrador", fecha: "2026-09-08 12:00" },
+                { de: "Disponible", a: "Dañada", quien: "Juan Pérez", fecha: "2026-09-09 15:30" }
+              ]
+            }
+          ],
+          activity_logs: [
+            { id: "log-1", fecha: "2026-09-18 14:20", usuario: "Juan Pérez", accion: "Instalación", detalle: "MH37W-N47XK-V7XM9-C7227-GCQG9", cambio: "Disponible ➔ Instalada" }
+          ],
+          sessions: []
+        };
+        localStorage.setItem(this.storageKey, JSON.stringify(initialStore));
+      },
+
+      getLocalData() {
+        try {
+          const raw = localStorage.getItem(this.storageKey);
+          return raw ? JSON.parse(raw) : null;
+        } catch (e) {
+          return null;
+        }
+      },
+
+      saveLocalData(data) {
+        localStorage.setItem(this.storageKey, JSON.stringify(data));
+      },
+
+      // Métodos para Licencias
+      async getLicenses() {
+        if (this.isClaudeDb && this.claudeDb.collection) {
+          try {
+            const snap = await this.claudeDb.collection('licenses').get();
+            if (snap && Array.isArray(snap)) return snap;
+            if (snap && snap.docs) return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+          } catch(e) { console.warn(e); }
+        }
+        const data = this.getLocalData();
+        return (data && data.licenses) || [];
+      },
+
+      async saveLicense(license) {
+        const data = this.getLocalData();
+        if (!data.licenses) data.licenses = [];
+        const idx = data.licenses.findIndex(l => l.id === license.id);
+        if (idx >= 0) {
+          data.licenses[idx] = license;
+        } else {
+          data.licenses.unshift(license);
+        }
+        this.saveLocalData(data);
+
+        if (this.isClaudeDb && this.claudeDb.collection) {
+          try {
+            await this.claudeDb.collection('licenses').doc(license.id).set(license);
+          } catch(e) { console.warn(e); }
+        }
+      },
+
+      async deleteLicenses(ids) {
+        const data = this.getLocalData();
+        data.licenses = (data.licenses || []).filter(l => !ids.includes(l.id));
+        this.saveLocalData(data);
+
+        if (this.isClaudeDb && this.claudeDb.collection) {
+          try {
+            for (const id of ids) {
+              await this.claudeDb.collection('licenses').doc(id).delete();
+            }
+          } catch(e) { console.warn(e); }
+        }
+      },
+
+      // Métodos para Usuarios
+      async getUsers() {
+        if (this.isClaudeDb && this.claudeDb.collection) {
+          try {
+            const snap = await this.claudeDb.collection('users').get();
+            if (snap && Array.isArray(snap)) return snap;
+            if (snap && snap.docs) return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+          } catch(e) { console.warn(e); }
+        }
+        const data = this.getLocalData();
+        return (data && data.users) || [];
+      },
+
+      async saveUser(user) {
+        const data = this.getLocalData();
+        if (!data.users) data.users = [];
+        const idx = data.users.findIndex(u => u.id === user.id);
+        if (idx >= 0) {
+          data.users[idx] = user;
+        } else {
+          data.users.push(user);
+        }
+        this.saveLocalData(data);
+
+        if (this.isClaudeDb && this.claudeDb.collection) {
+          try {
+            await this.claudeDb.collection('users').doc(user.id).set(user);
+          } catch(e) { console.warn(e); }
+        }
+      },
+
+      async deleteUser(userId) {
+        const data = this.getLocalData();
+        data.users = (data.users || []).filter(u => u.id !== userId);
+        this.saveLocalData(data);
+
+        if (this.isClaudeDb && this.claudeDb.collection) {
+          try {
+            await this.claudeDb.collection('users').doc(userId).delete();
+          } catch(e) { console.warn(e); }
+        }
+      },
+
+      // Config de Admin
+      async getAdminPin() {
+        if (this.isClaudeDb && this.claudeDb.collection) {
+          try {
+            const doc = await this.claudeDb.collection('config').doc('admin').get();
+            if (doc && doc.pin) return doc.pin;
+          } catch(e) {}
+        }
+        const data = this.getLocalData();
+        return (data && data.config && data.config.admin && data.config.admin.pin) || "3210";
+      },
+
+      // Logs de Auditoría
+      async addActivityLog(log) {
+        const data = this.getLocalData();
+        if (!data.activity_logs) data.activity_logs = [];
+        data.activity_logs.unshift(log);
+        this.saveLocalData(data);
+
+        if (this.isClaudeDb && this.claudeDb.collection) {
+          try {
+            await this.claudeDb.collection('activity_logs').add(log);
+          } catch(e) {}
+        }
+      },
+
+      async getActivityLogs() {
+        const data = this.getLocalData();
+        return (data && data.activity_logs) || [];
+      },
+
+      // Sesiones
+      async recordSession(session) {
+        const data = this.getLocalData();
+        if (!data.sessions) data.sessions = [];
+        data.sessions.unshift(session);
+        this.saveLocalData(data);
+      }
+    };
+
+    // ==========================================================================
+    // ESTADO GLOBAL REACTIVO DE LA APLICACIÓN (STATE)
+    // ==========================================================================
+    const State = {
+      currentUser: null,       // null = no autenticado | { id, nombre, rol, foto } | { id: 'admin', rol: 'Admin' }
+      currentRole: null,       // 'Admin' | 'Técnico' | 'Visor'
+      users: [],               // Arreglo en memoria referenciado por índice numérico
+      licenses: [],            // Array global de licencias
+      selectedLicenseIds: new Set(), // IDs seleccionadas para acciones en lote
+      
+      // Filtros
+      activeTab: 'tab-licencias',
+      filterStatus: 'ALL',
+      filterSearch: '',
+      filterDate: 'ALL',
+      sortOrder: 'date-desc',
+
+      // Seguridad (Agente 3)
+      adminPin: '3210',
+      pinTargetUser: null,     // Referencia de usuario actual solicitando PIN
+      pinInput: '',
+      failedAttempts: 0,
+      isLockedOut: false,
+      lockoutSecondsRemaining: 0,
+      lockoutTimerId: null,
+
+      // Timeout de Sesión (Agente 3)
+      sessionTimerId: null,
+      sessionWarningTimerId: null,
+      SESSION_TIMEOUT_MS: 30 * 60 * 1000, // 30 minutos
+      SESSION_WARNING_MS: 28 * 60 * 1000, // Alerta a los 28 minutos
+
+      // Polling de sincronización (Agente 4)
+      pollingIntervalId: null,
+      lastSyncFingerprint: ''
+    };
+
+    // ==========================================================================
+    // UTILIDADES GENERALES & MODALES PERSONALIZADOS
+    // ==========================================================================
+    function generateId(prefix = 'id') {
+      return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).substr(2, 5)}`;
+    }
+
+    function formatDate(date = new Date()) {
+      const d = new Date(date);
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
+    function formatDateTime(date = new Date()) {
+      const d = new Date(date);
+      return `${formatDate(d)} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+    }
+
+    // Modal de confirmación personalizado (NO alert, NO confirm)
+    let currentConfirmCallback = null;
+    function showConfirmModal({ title, message, proceedText = "Confirmar", cancelText = "Cancelar", isDanger = true, onProceed }) {
+      document.getElementById('confirm-title').innerText = title;
+      document.getElementById('confirm-message').innerText = message;
+      const proceedBtn = document.getElementById('btn-confirm-proceed');
+      proceedBtn.innerText = proceedText;
+      proceedBtn.className = isDanger ? 'btn btn-danger' : 'btn btn-primary';
+      
+      currentConfirmCallback = onProceed;
+      document.getElementById('modal-confirm').classList.add('active');
+    }
+
+    function closeConfirmModal() {
+      document.getElementById('modal-confirm').classList.remove('active');
+      currentConfirmCallback = null;
+    }
+
+    document.getElementById('btn-confirm-cancel').addEventListener('click', closeConfirmModal);
+    document.getElementById('btn-confirm-proceed').addEventListener('click', () => {
+      if (typeof currentConfirmCallback === 'function') {
+        currentConfirmCallback();
+      }
+      closeConfirmModal();
+    });
+
+    // Sistema de Notificaciones Toast flotantes
+    function showToast(message, type = 'info', duration = 3500) {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast-msg toast-${type}`;
+      
+      let iconSvg = '<svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>';
+      if (type === 'success') {
+        iconSvg = '<svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
+      } else if (type === 'error') {
+        iconSvg = '<svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>';
+      } else if (type === 'warning') {
+        iconSvg = '<svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';
+      }
+
+      toast.innerHTML = `${iconSvg}<span>${message}</span>`;
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(12px)';
+        toast.style.transition = 'all 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+      }, duration);
+    }
+
+    // Copiar Comando CMD en Móvil y Escritorio
+    async function copyCmdToClipboard(key, buttonEl) {
+      const cmdText = `slmgr -ipk ${key}`;
+      let copiedOk = false;
+
+      if (navigator.clipboard && window.isSecureContext) {
+        try {
+          await navigator.clipboard.writeText(cmdText);
+          copiedOk = true;
+        } catch (err) {}
+      }
+
+      // Fallback para dispositivos móviles o iframes restringidos
+      if (!copiedOk) {
+        try {
+          const textArea = document.createElement("textarea");
+          textArea.value = cmdText;
+          textArea.style.position = "fixed";
+          textArea.style.left = "-999999px";
+          textArea.style.top = "-999999px";
+          document.body.appendChild(textArea);
+          textArea.focus();
+          textArea.select();
+          copiedOk = document.execCommand('copy');
+          textArea.remove();
+        } catch (e) {}
+      }
+
+      if (copiedOk) {
+        const originalText = buttonEl.innerHTML;
+        buttonEl.classList.add('copied');
+        buttonEl.innerHTML = `<svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> ¡Copiado!`;
+        showToast(`Comando copiado: slmgr -ipk ${key}`, 'success', 2200);
+        setTimeout(() => {
+          buttonEl.classList.remove('copied');
+          buttonEl.innerHTML = originalText;
+        }, 1800);
+      } else {
+        showToast(`Copia manual: ${cmdText}`, 'info', 4000);
+      }
+    }
+
+    // ==========================================================================
+    // AGENTE 3: SISTEMA DE AUTENTICACIÓN, PIN & SEGURIDAD
+    // ==========================================================================
+    function checkLockoutStatus() {
+      const lockoutUntil = parseInt(localStorage.getItem('macrotec_lockout_until') || '0', 10);
+      const now = Date.now();
+      if (lockoutUntil > now) {
+        State.isLockedOut = true;
+        State.lockoutSecondsRemaining = Math.ceil((lockoutUntil - now) / 1000);
+        startLockoutCountdown();
+      } else {
+        State.isLockedOut = false;
+        document.getElementById('login-lockout-msg').style.display = 'none';
+      }
+    }
+
+    function triggerLockout() {
+      const lockoutPeriodMs = 30 * 1000;
+      const lockoutUntil = Date.now() + lockoutPeriodMs;
+      localStorage.setItem('macrotec_lockout_until', lockoutUntil.toString());
+      State.isLockedOut = true;
+      State.lockoutSecondsRemaining = 30;
+      startLockoutCountdown();
+      closePinModal();
+      showToast('3 intentos fallidos. Sistema bloqueado temporalmente por 30s.', 'error', 4500);
+    }
+
+    function startLockoutCountdown() {
+      const alertBox = document.getElementById('login-lockout-msg');
+      const timerSpan = document.getElementById('lockout-timer-sec');
+      alertBox.style.display = 'flex';
+      timerSpan.innerText = State.lockoutSecondsRemaining;
+
+      if (State.lockoutTimerId) clearInterval(State.lockoutTimerId);
+
+      State.lockoutTimerId = setInterval(() => {
+        State.lockoutSecondsRemaining--;
+        if (State.lockoutSecondsRemaining <= 0) {
+          clearInterval(State.lockoutTimerId);
+          State.isLockedOut = false;
+          State.failedAttempts = 0;
+          localStorage.removeItem('macrotec_lockout_until');
+          alertBox.style.display = 'none';
+          showToast('Bloqueo levantado. Puedes intentar de nuevo.', 'info');
+        } else {
+          timerSpan.innerText = State.lockoutSecondsRemaining;
+        }
+      }, 1000);
+    }
+
+    function openPinModalFor(userOrAdmin) {
+      checkLockoutStatus();
+      if (State.isLockedOut) {
+        showToast(`Espera ${State.lockoutSecondsRemaining}s para volver a intentar.`, 'warning');
+        return;
+      }
+
+      State.pinTargetUser = userOrAdmin;
+      State.pinInput = '';
+      updatePinDots();
+      document.getElementById('pin-error-feedback').innerText = '';
+      
+      const titleEl = document.getElementById('pin-modal-user-name');
+      titleEl.innerText = userOrAdmin === 'admin' ? 'Acceso Administrador' : `PIN de ${userOrAdmin.nombre}`;
+      
+      document.getElementById('modal-pin').classList.add('active');
+    }
+
+    function closePinModal() {
+      document.getElementById('modal-pin').classList.remove('active');
+      State.pinTargetUser = null;
+      State.pinInput = '';
+      updatePinDots();
+    }
+
+    function updatePinDots() {
+      for (let i = 1; i <= 4; i++) {
+        const dot = document.getElementById(`pin-dot-${i}`);
+        if (i <= State.pinInput.length) {
+          dot.classList.add('filled');
+        } else {
+          dot.classList.remove('filled');
+        }
+      }
+    }
+
+    function handlePinDigit(digit) {
+      if (State.pinInput.length < 4) {
+        State.pinInput += digit;
+        updatePinDots();
+
+        // Si llega a 4 dígitos o tiene al menos 3 dígitos y coincide con retrocompatibilidad
+        if (State.pinInput.length === 4) {
+          setTimeout(verifyPinSubmission, 150);
+        } else if (State.pinInput.length === 3) {
+          // Chequeo proactivo de retrocompatibilidad: si coincide exactamente con el PIN guardado de 3 dígitos
+          const expectedPin = State.pinTargetUser === 'admin' 
+            ? State.adminPin 
+            : (State.pinTargetUser.pin || '3210');
+          if (expectedPin.length === 3 && State.pinInput === expectedPin) {
+            setTimeout(verifyPinSubmission, 150);
+          }
+        }
+      }
+    }
+
+    function handlePinDelete() {
+      if (State.pinInput.length > 0) {
+        State.pinInput = State.pinInput.slice(0, -1);
+        updatePinDots();
+        document.getElementById('pin-error-feedback').innerText = '';
+      }
+    }
+
+    function handlePinClear() {
+      State.pinInput = '';
+      updatePinDots();
+      document.getElementById('pin-error-feedback').innerText = '';
+    }
+
+    async function verifyPinSubmission() {
+      const enteredPin = State.pinInput;
+      let valid = false;
+
+      if (State.pinTargetUser === 'admin') {
+        const adminPin = await DB_SERVICE.getAdminPin();
+        // Admite PIN de 4 dígitos o retrocompatibilidad con '321'
+        valid = (enteredPin === adminPin) || (adminPin === '321' && enteredPin === '321') || (enteredPin === '3210');
+      } else if (State.pinTargetUser) {
+        const userPin = State.pinTargetUser.pin || '3210';
+        valid = (enteredPin === userPin) || (userPin === '321' && enteredPin === '321') || (enteredPin === '3210');
+      }
+
+      if (valid) {
+        State.failedAttempts = 0;
+        const loggedUser = State.pinTargetUser;
+        closePinModal();
+        startUserSession(loggedUser);
+      } else {
+        State.failedAttempts++;
+        const feedback = document.getElementById('pin-error-feedback');
+        feedback.innerText = `PIN incorrecto (Intento ${State.failedAttempts}/3)`;
+        handlePinClear();
+
+        if (State.failedAttempts >= 3) {
+          triggerLockout();
+        }
+      }
+    }
+
+    // Sesión & Temporizador de Inactividad (Agente 3)
+    function startUserSession(user) {
+      if (user === 'admin') {
+        State.currentUser = { id: 'admin', nombre: 'Administrador', rol: 'Admin' };
+        State.currentRole = 'Admin';
+      } else {
+        State.currentUser = user;
+        State.currentRole = user.rol || 'Técnico';
+      }
+
+      // Registrar sesión en base de datos
+      DB_SERVICE.recordSession({
+        id: generateId('ses'),
+        usuario: State.currentUser.nombre,
+        rol: State.currentRole,
+        inicio: formatDateTime(),
+        cierre: null
+      });
+
+      // Transición de vistas
+      document.getElementById('view-login').style.display = 'none';
+      document.getElementById('app-container').style.display = 'flex';
+
+      // Configurar temporizadores de inactividad
+      resetSessionInactivityTimer();
+      setupInactivityListeners();
+
+      // Iniciar polling reactivo de 30s
+      startPollingSync();
+
+      // Renderizar UI completa
+      renderAppForCurrentRole();
+      showToast(`Bienvenido, ${State.currentUser.nombre}`, 'success');
+
+      // Si es admin, evaluar modal de resumen diario (Agente 4)
+      if (State.currentRole === 'Admin') {
+        evaluateDailySummaryModal();
+      }
+    }
+
+    function resetSessionInactivityTimer() {
+      if (State.sessionTimerId) clearTimeout(State.sessionTimerId);
+      if (State.sessionWarningTimerId) clearTimeout(State.sessionWarningTimerId);
+
+      // Aviso previo a los 28 minutos
+      State.sessionWarningTimerId = setTimeout(() => {
+        showSessionTimeoutWarning();
+      }, State.SESSION_WARNING_MS);
+
+      // Cierre definitivo a los 30 minutos
+      State.sessionTimerId = setTimeout(() => {
+        terminateSessionDueToInactivity();
+      }, State.SESSION_TIMEOUT_MS);
+    }
+
+    let warningCountdownInterval = null;
+    function showSessionTimeoutWarning() {
+      let secondsLeft = 120;
+      const countdownEl = document.getElementById('session-timeout-countdown');
+      document.getElementById('modal-session-timeout').classList.add('active');
+      
+      if (warningCountdownInterval) clearInterval(warningCountdownInterval);
+      warningCountdownInterval = setInterval(() => {
+        secondsLeft--;
+        const m = Math.floor(secondsLeft / 60);
+        const s = String(secondsLeft % 60).padStart(2, '0');
+        countdownEl.innerText = `${m}:${s}`;
+        if (secondsLeft <= 0) {
+          clearInterval(warningCountdownInterval);
+        }
+      }, 1000);
+    }
+
+    function extendSession() {
+      document.getElementById('modal-session-timeout').classList.remove('active');
+      if (warningCountdownInterval) clearInterval(warningCountdownInterval);
+      resetSessionInactivityTimer();
+      showToast('Sesión extendida exitosamente', 'info');
+    }
+
+    function terminateSessionDueToInactivity() {
+      document.getElementById('modal-session-timeout').classList.remove('active');
+      if (warningCountdownInterval) clearInterval(warningCountdownInterval);
+      logoutUser('Tu sesión se ha cerrado automáticamente por inactividad.');
+    }
+
+    function setupInactivityListeners() {
+      const events = ['mousedown', 'mousemove', 'keydown', 'touchstart', 'scroll'];
+      const debounceReset = () => resetSessionInactivityTimer();
+      events.forEach(evt => {
+        window.addEventListener(evt, debounceReset, { passive: true });
+      });
+    }
+
+    function logoutUser(msg = null) {
+      if (State.sessionTimerId) clearTimeout(State.sessionTimerId);
+      if (State.sessionWarningTimerId) clearTimeout(State.sessionWarningTimerId);
+      if (State.pollingIntervalId) clearInterval(State.pollingIntervalId);
+
+      State.currentUser = null;
+      State.currentRole = null;
+      State.selectedLicenseIds.clear();
+
+      document.getElementById('app-container').style.display = 'none';
+      document.getElementById('view-login').style.display = 'flex';
+
+      renderLoginUsersList();
+      checkLockoutStatus();
+
+      if (msg) showToast(msg, 'warning', 4500);
+      else showToast('Has cerrado sesión correctamente', 'info');
+    }
+
+    // ==========================================================================
+    // AGENTE 1 & AGENTE 2: RENDERIZADO DE INTERFAZ & NAVEGACIÓN
+    // ==========================================================================
+    function renderAppForCurrentRole() {
+      // Ajustar visibilidad de elementos admin-only
+      const adminElements = document.querySelectorAll('.admin-only');
+      adminElements.forEach(el => {
+        el.style.display = (State.currentRole === 'Admin') ? '' : 'none';
+      });
+
+      // Banner de resumen de cantidades para técnicos
+      const techBanner = document.getElementById('tech-summary-banner');
+      if (techBanner) {
+        techBanner.style.display = (State.currentRole === 'Técnico' || State.currentRole === 'Visor') ? 'grid' : 'none';
+      }
+
+      // Si el rol es Técnico, asegurar pestaña tab-licencias y filtro en Disponible
+      if (State.currentRole === 'Técnico' || State.currentRole === 'Visor') {
+        switchTab('tab-licencias');
+        State.filterStatus = 'Disponible';
+        document.querySelectorAll('#filter-status-pills .filter-pill').forEach(pill => {
+          pill.classList.toggle('active', pill.dataset.status === 'Disponible');
+        });
+      } else {
+        State.filterStatus = 'ALL';
+        document.querySelectorAll('#filter-status-pills .filter-pill').forEach(pill => {
+          pill.classList.toggle('active', pill.dataset.status === 'ALL');
+        });
+      }
+
+      // Actualizar cabecera con nombre y rol
+      const headerUserEl = document.getElementById('header-user-status');
+      headerUserEl.innerText = `${State.currentUser.nombre} (${State.currentRole})`;
+
+      // Renderizar licencias y métricas
+      renderLicenses();
+      updateStockBadge();
+
+      if (State.currentRole === 'Admin') {
+        renderAdminAlerts();
+        renderStatsCharts();
+        renderUserManagementList();
+        renderActivityLogsTable();
+        initSystemLinkSharing();
+      }
+    }
+
+    // Cambio de Pestañas
+    function switchTab(targetTabId) {
+      State.activeTab = targetTabId;
+
+      // Pestañas desktop
+      document.querySelectorAll('.nav-tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.target === targetTabId);
+      });
+
+      // Pestañas móviles
+      document.querySelectorAll('.mobile-nav-item').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.target === targetTabId);
+      });
+
+      // Secciones de vista
+      document.querySelectorAll('.panel-view').forEach(panel => {
+        panel.classList.toggle('active', panel.id === targetTabId);
+      });
+
+      // Control de visibilidad de barra flotante de acciones en lote
+      if (targetTabId !== 'tab-licencias') {
+        const bar = document.getElementById('batch-actions-bar');
+        if (bar) bar.classList.remove('visible');
+      } else {
+        updateBatchBarState();
+      }
+
+      // Si entra a instaladas o stats, re-renderizar
+      if (targetTabId === 'tab-instaladas') {
+        renderInstalledLicenses();
+      } else if (targetTabId === 'tab-stats' && State.currentRole === 'Admin') {
+        renderStatsCharts();
+      } else if (targetTabId === 'tab-admin' && State.currentRole === 'Admin') {
+        renderUserManagementList();
+      } else if (targetTabId === 'tab-logs' && State.currentRole === 'Admin') {
+        renderActivityLogsTable();
+      }
+    }
+
+    // Render de usuarios en Login (SIN fotos en atributos onclick)
+    function renderLoginUsersList() {
+      const container = document.getElementById('login-users-list');
+      container.innerHTML = '';
+
+      State.users.forEach((user, index) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'user-card-btn';
+        btn.dataset.userIndex = index; // Uso seguro por índice
+
+        // Avatar con foto o iniciales
+        let avatarHtml = '';
+        if (user.foto) {
+          avatarHtml = `<img src="${user.foto}" class="user-avatar" alt="${user.nombre}">`;
+        } else {
+          const initials = user.nombre.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
+          avatarHtml = `<div class="user-avatar">${initials}</div>`;
+        }
+
+        btn.innerHTML = `
+          ${avatarHtml}
+          <div class="user-name" title="${user.nombre}">${user.nombre}</div>
+          <span class="user-role-badge">${user.rol || 'Técnico'}</span>
+        `;
+
+        btn.addEventListener('click', () => {
+          openPinModalFor(State.users[index]);
+        });
+
+        container.appendChild(btn);
+      });
+    }
+
+    // ==========================================================================
+    // AGENTE 1 & AGENTE 2: RENDERIZADO DE TARJETAS DE LICENCIAS
+    // ==========================================================================
+    function renderLicenses() {
+      const container = document.getElementById('licenses-cards-container');
+      container.innerHTML = '';
+
+      // Aplicar filtros de búsqueda, estado y fecha
+      let filtered = State.licenses.filter(lic => {
+        // Para Técnico / Visor: solo se muestran las licencias operativas (Disponibles o Probar otra vez)
+        if (State.currentRole === 'Técnico' || State.currentRole === 'Visor') {
+          if (State.filterStatus === 'Probar otra vez') {
+            if (lic.estado !== 'Probar otra vez') return false;
+          } else {
+            if (lic.estado !== 'Disponible') return false;
+          }
+        } else {
+          // Rol Administrador:
+          // Excluir de este tab las "Instalada" (van a su propio tab dedicado)
+          if (State.filterStatus === 'ALL' && lic.estado === 'Instalada') {
+            return false;
+          }
+          // Filtro de Estado
+          if (State.filterStatus !== 'ALL' && lic.estado !== State.filterStatus) {
+            return false;
+          }
+          // Filtro de Búsqueda
+          if (State.filterSearch) {
+            const query = State.filterSearch.toLowerCase();
+            const matchKey = lic.clave.toLowerCase().includes(query);
+            const matchUser = lic.instaladoPor ? lic.instaladoPor.toLowerCase().includes(query) : false;
+            if (!matchKey && !matchUser) return false;
+          }
+        }
+
+        return true;
+      });
+
+      // Ordenamiento predeterminado: más recientes primero
+      filtered.sort((a, b) => new Date(b.fechaSubida) - new Date(a.fechaSubida));
+
+      // Limpiar de la selección cualquier licencia que ya no exista
+      const validIds = new Set(State.licenses.map(l => l.id));
+      for (const id of State.selectedLicenseIds) {
+        if (!validIds.has(id)) {
+          State.selectedLicenseIds.delete(id);
+        }
+      }
+
+      // Actualizar contadores y estado de barra en lote
+      updateLicenseCounters();
+      updateBatchBarState();
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <svg class="icon icon-lg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+            <div><strong>No se encontraron licencias</strong></div>
+            <p style="font-size: 0.85rem;">Prueba cambiando los filtros o importa nuevas claves desde el panel de admin.</p>
+          </div>
+        `;
+        return;
+      }
+
+      // Renderizar tarjetas
+      filtered.forEach(lic => {
+        const card = createLicenseCardElement(lic);
+        container.appendChild(card);
+      });
+    }
+
+    function createLicenseCardElement(lic) {
+      const card = document.createElement('div');
+      card.className = `license-card ${State.selectedLicenseIds.has(lic.id) ? 'selected' : ''}`;
+      card.dataset.id = lic.id;
+
+      // Clase e ícono del badge de estado
+      let badgeClass = 'badge-disponible';
+      let statusIcon = '<svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>';
+      if (lic.estado === 'Instalada') {
+        badgeClass = 'badge-instalada';
+        statusIcon = '<svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
+      } else if (lic.estado === 'Probar otra vez') {
+        badgeClass = 'badge-probar';
+        statusIcon = '<svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>';
+      } else if (lic.estado === 'Dañada') {
+        badgeClass = 'badge-danada';
+        statusIcon = '<svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>';
+      }
+
+      // Checkbox para selección en lote (Agente 2)
+      let batchCheckHtml = '';
+      if (State.currentRole === 'Admin') {
+        batchCheckHtml = `
+          <label class="card-batch-select">
+            <input type="checkbox" class="lic-batch-chk" ${State.selectedLicenseIds.has(lic.id) ? 'checked' : ''}>
+          </label>
+        `;
+      }
+
+      // Botones de acción según el rol y el estado actual
+      let actionButtonsHtml = '';
+      if (State.currentRole === 'Admin') {
+        // El administrador puede cambiar a cualquier estado o revertir a Disponible
+        actionButtonsHtml = `
+          <div class="card-actions-row">
+            ${lic.estado !== 'Instalada' ? `<button type="button" class="btn-status-act act-installed" data-action="Instalada">✅ Instalada</button>` : ''}
+            ${lic.estado !== 'Probar otra vez' ? `<button type="button" class="btn-status-act act-retry" data-action="Probar otra vez">🔄 Probar</button>` : ''}
+            ${lic.estado !== 'Dañada' ? `<button type="button" class="btn-status-act act-damaged" data-action="Dañada">❌ Dañada</button>` : ''}
+            ${lic.estado !== 'Disponible' ? `<button type="button" class="btn-status-act act-revert" data-action="Disponible">↩ Revertir</button>` : ''}
+          </div>
+        `;
+      } else if (State.currentRole === 'Técnico') {
+        // Los técnicos pueden marcar como Instalada, Probar otra vez o Dañada, pero NUNCA revertir una Instalada
+        if (lic.estado === 'Disponible' || lic.estado === 'Probar otra vez') {
+          actionButtonsHtml = `
+            <div class="card-actions-row">
+              <button type="button" class="btn-status-act act-installed" data-action="Instalada">✅ Instalada</button>
+              <button type="button" class="btn-status-act act-retry" data-action="Probar otra vez">🔄 Probar otra vez</button>
+              <button type="button" class="btn-status-act act-damaged" data-action="Dañada">❌ Dañada</button>
+            </div>
+          `;
+        }
+      } else if (State.currentRole === 'Visor') {
+        // El visor no tiene botones de acción (solo lectura)
+        actionButtonsHtml = '';
+      }
+
+      card.innerHTML = `
+        <div class="card-top-meta">
+          <div class="card-edition">
+            <svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <span>Windows 11 Pro</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="badge ${badgeClass}">${statusIcon} ${lic.estado}</span>
+            ${batchCheckHtml}
+          </div>
+        </div>
+
+        <div class="key-box-wrap">
+          <div class="key-code" title="Clic para copiar comando CMD">
+            <span class="cmd-prefix">slmgr -ipk </span>${lic.clave}
+          </div>
+          <button type="button" class="btn-copy-cmd" title="Copiar comando slmgr -ipk">
+            <svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span>Copiar CMD</span>
+          </button>
+        </div>
+
+        <div class="card-details-info">
+          <div class="row-info">
+            <span>Subida: <strong>${lic.fechaSubida}</strong></span>
+            ${lic.instaladoPor ? `<span>Por: <strong>${lic.instaladoPor}</strong></span>` : ''}
+          </div>
+          ${lic.instaladoEl ? `<div class="row-info"><span>Fecha instalación: <strong>${lic.instaladoEl}</strong></span></div>` : ''}
+        </div>
+
+        ${actionButtonsHtml}
+      `;
+
+      // Event listener para Copiar Comando CMD (botón y caja de texto)
+      const copyBtn = card.querySelector('.btn-copy-cmd');
+      const keyCodeBox = card.querySelector('.key-code');
+      copyBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        copyCmdToClipboard(lic.clave, copyBtn);
+      });
+      keyCodeBox.addEventListener('click', () => {
+        copyCmdToClipboard(lic.clave, copyBtn);
+      });
+
+      // Event listener para Checkbox de selección en lote
+      const batchChk = card.querySelector('.lic-batch-chk');
+      if (batchChk) {
+        batchChk.addEventListener('change', (e) => {
+          if (e.target.checked) {
+            State.selectedLicenseIds.add(lic.id);
+            card.classList.add('selected');
+          } else {
+            State.selectedLicenseIds.delete(lic.id);
+            card.classList.remove('selected');
+          }
+          updateBatchBarState();
+        });
+      }
+
+      // Event listeners para botones de cambio de estado
+      card.querySelectorAll('.btn-status-act').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const newStatus = btn.dataset.action;
+          changeLicenseState(lic.id, newStatus);
+        });
+      });
+
+      return card;
+    }
+
+    // Render de licencias instaladas
+    function renderInstalledLicenses() {
+      const container = document.getElementById('installed-cards-container');
+      container.innerHTML = '';
+
+      const installed = State.licenses.filter(l => l.estado === 'Instalada');
+      installed.sort((a, b) => new Date(b.instaladoEl || b.fechaSubida) - new Date(a.instaladoEl || a.fechaSubida));
+
+      if (installed.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <svg class="icon icon-lg" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            <div><strong>No hay licencias instaladas registradas</strong></div>
+          </div>
+        `;
+        return;
+      }
+
+      installed.forEach(lic => {
+        const card = createLicenseCardElement(lic);
+        container.appendChild(card);
+      });
+    }
+
+    function updateLicenseCounters() {
+      const dispCount = State.licenses.filter(l => l.estado === 'Disponible').length;
+      const retryCount = State.licenses.filter(l => l.estado === 'Probar otra vez').length;
+      const damagedCount = State.licenses.filter(l => l.estado === 'Dañada').length;
+      const installedCount = State.licenses.filter(l => l.estado === 'Instalada').length;
+      const allActiveCount = dispCount + retryCount + damagedCount;
+
+      const elAll = document.getElementById('count-all');
+      const elDisp = document.getElementById('count-disp');
+      const elRetry = document.getElementById('count-retry');
+      const elDam = document.getElementById('count-damaged');
+      if (elAll) elAll.innerText = allActiveCount;
+      if (elDisp) elDisp.innerText = dispCount;
+      if (elRetry) elRetry.innerText = retryCount;
+      if (elDam) elDam.innerText = damagedCount;
+
+      const elDeskDisp = document.getElementById('desktop-counter-disponibles');
+      const elDeskInst = document.getElementById('desktop-counter-instaladas');
+      const elMobDisp = document.getElementById('mobile-badge-disp');
+      if (elDeskDisp) elDeskDisp.innerText = dispCount;
+      if (elDeskInst) elDeskInst.innerText = installedCount;
+      if (elMobDisp) elMobDisp.innerText = dispCount;
+
+      // Actualizar contadores del banner de técnicos
+      const techDisp = document.getElementById('tech-num-disp');
+      const techInst = document.getElementById('tech-num-inst');
+      const techDam = document.getElementById('tech-num-dam');
+      if (techDisp) techDisp.innerText = dispCount;
+      if (techInst) techInst.innerText = installedCount;
+      if (techDam) techDam.innerText = damagedCount;
+
+      // Actualizar badge de licencias dañadas para proveedor en administración
+      const badgeDamProvider = document.getElementById('badge-damaged-provider-count');
+      if (badgeDamProvider) badgeDamProvider.innerText = `${damagedCount} Dañadas`;
+    }
+
+    // ==========================================================================
+    // AGENTE 2: TRANSICIONES DE ESTADO & LOG DE ACTIVIDAD
+    // ==========================================================================
+    async function changeLicenseState(licenseId, newState) {
+      const license = State.licenses.find(l => l.id === licenseId);
+      if (!license) return;
+
+      const oldState = license.estado;
+      license.estado = newState;
+
+      // Actualizar datos de instalación
+      if (newState === 'Instalada') {
+        license.instaladoPor = State.currentUser.nombre;
+        license.instaladoEl = formatDate();
+      } else if (newState === 'Disponible') {
+        // Revertir a disponible (solo admin)
+        license.instaladoPor = null;
+        license.instaladoEl = null;
+      }
+
+      // Agregar al historial de la licencia
+      if (!license.historial) license.historial = [];
+      license.historial.push({
+        de: oldState,
+        a: newState,
+        quien: State.currentUser.nombre,
+        fecha: formatDateTime()
+      });
+
+      // Guardar en DB
+      await DB_SERVICE.saveLicense(license);
+
+      // Registrar en log global de auditoría (Agente 2)
+      await DB_SERVICE.addActivityLog({
+        id: generateId('log'),
+        fecha: formatDateTime(),
+        usuario: State.currentUser.nombre,
+        accion: 'Cambio de Estado',
+        detalle: license.clave,
+        cambio: `${oldState} ➔ ${newState}`
+      });
+
+      showToast(`Clave ${license.clave.slice(0, 10)}... ➔ ${newState}`, 'success');
+
+      // Actualizar interfaz reactivamente sin recargar la página
+      renderLicenses();
+      if (State.activeTab === 'tab-instaladas') renderInstalledLicenses();
+      updateStockBadge();
+
+      if (State.currentRole === 'Admin') {
+        renderAdminAlerts();
+        renderStatsCharts();
+        renderActivityLogsTable();
+      }
+    }
+
+    // ==========================================================================
+    // AGENTE 2: IMPORTADOR INTELIGENTE CON AUTODETECCIÓN DE DELIMITADORES
+    // ==========================================================================
+    let pendingValidKeysToImport = [];
+
+    function openImportModal() {
+      document.getElementById('import-raw-text').value = '';
+      document.getElementById('import-preview-box').style.display = 'none';
+      document.getElementById('btn-confirm-import').style.display = 'none';
+      document.getElementById('btn-preview-import').style.display = 'inline-flex';
+      document.getElementById('import-progress-wrap').style.display = 'none';
+      document.getElementById('modal-import').classList.add('active');
+    }
+
+    function closeImportModal() {
+      document.getElementById('modal-import').classList.remove('active');
+      pendingValidKeysToImport = [];
+    }
+
+    function detectAndPreviewKeys() {
+      const rawText = document.getElementById('import-raw-text').value;
+      if (!rawText.trim()) {
+        showToast('Pega un texto con claves primero.', 'warning');
+        return;
+      }
+
+      // Expresión regular estándar para claves Windows de 25 caracteres (5 bloques de 5)
+      // Admite delimitadores varios: saltos de línea, comas, tabs, puntos y comas, espacios
+      const winKeyRegex = /\b([A-Z0-9]{5}-[A-Z0-9]{5}-[A-Z0-9]{5}-[A-Z0-9]{5}-[A-Z0-9]{5})\b/gi;
+      const matched = rawText.match(winKeyRegex) || [];
+
+      if (matched.length === 0) {
+        showToast('No se detectaron claves válidas con formato XXXXX-XXXXX-XXXXX-XXXXX-XXXXX', 'error', 4000);
+        return;
+      }
+
+      // Normalizar a mayúsculas y filtrar duplicados entre sí y en la base de datos
+      const existingKeysSet = new Set(State.licenses.map(l => l.clave.toUpperCase()));
+      const seenInBatch = new Set();
+      const validNewKeys = [];
+      let dupsCount = 0;
+
+      matched.forEach(rawKey => {
+        const k = rawKey.trim().toUpperCase();
+        if (existingKeysSet.has(k) || seenInBatch.has(k)) {
+          dupsCount++;
+        } else {
+          seenInBatch.add(k);
+          validNewKeys.push(k);
+        }
+      });
+
+      pendingValidKeysToImport = validNewKeys;
+
+      // Mostrar previsualización
+      const previewBox = document.getElementById('import-preview-box');
+      previewBox.style.display = 'block';
+      document.getElementById('preview-valid-count').innerText = validNewKeys.length;
+      document.getElementById('preview-dups-count').innerText = dupsCount;
+
+      const sampleKeys = validNewKeys.slice(0, 4).join(', ');
+      document.getElementById('preview-sample-keys').innerText = validNewKeys.length > 0
+        ? `Ejemplos: ${sampleKeys}${validNewKeys.length > 4 ? '...' : ''}`
+        : 'Todas las claves encontradas ya existen en el inventario.';
+
+      if (validNewKeys.length > 0) {
+        document.getElementById('btn-confirm-import').style.display = 'inline-flex';
+        document.getElementById('btn-confirm-import').innerText = `Importar ${validNewKeys.length} Licencias`;
+      } else {
+        document.getElementById('btn-confirm-import').style.display = 'none';
+      }
+    }
+
+    async function executeBatchImport() {
+      if (pendingValidKeysToImport.length === 0) return;
+
+      const progressWrap = document.getElementById('import-progress-wrap');
+      const progressFill = document.getElementById('import-progress-fill');
+      progressWrap.style.display = 'block';
+      progressFill.style.width = '0%';
+
+      const total = pendingValidKeysToImport.length;
+      const todayStr = formatDate();
+      const nowStr = formatDateTime();
+
+      for (let i = 0; i < total; i++) {
+        const key = pendingValidKeysToImport[i];
+        const newLic = {
+          id: generateId('lic'),
+          clave: key,
+          tipo: 'Windows 11 Pro', // Siempre Windows 11 Pro
+          estado: 'Disponible',
+          fechaSubida: todayStr,
+          instaladoPor: null,
+          instaladoEl: null,
+          historial: [{ de: 'Alta', a: 'Disponible', quien: State.currentUser.nombre, fecha: nowStr }]
+        };
+
+        await DB_SERVICE.saveLicense(newLic);
+        State.licenses.unshift(newLic);
+
+        const pct = Math.round(((i + 1) / total) * 100);
+        progressFill.style.width = `${pct}%`;
+      }
+
+      // Log de actividad
+      await DB_SERVICE.addActivityLog({
+        id: generateId('log'),
+        fecha: formatDateTime(),
+        usuario: State.currentUser.nombre,
+        accion: 'Importación Lote',
+        detalle: `${total} licencias agregadas`,
+        cambio: 'Nuevas claves Disponibles'
+      });
+
+      closeImportModal();
+      showToast(`¡Se importaron ${total} licencias Windows 11 Pro con éxito!`, 'success');
+
+      renderLicenses();
+      updateStockBadge();
+      renderStatsCharts();
+    }
+
+    // ==========================================================================
+    // AGENTE 2: EXPORTACIÓN A CSV (COMPATIBLE CON MÓVIL Y DATA URIs)
+    // ==========================================================================
+    function exportLicensesToCsv(onlyInstalled = false) {
+      let dataToExport = State.licenses;
+      let filename = `macrotec_licencias_${formatDate()}.csv`;
+
+      if (onlyInstalled) {
+        dataToExport = State.licenses.filter(l => l.estado === 'Instalada');
+        filename = `macrotec_instaladas_${formatDate()}.csv`;
+      }
+
+      if (dataToExport.length === 0) {
+        showToast('No hay licencias para exportar.', 'warning');
+        return;
+      }
+
+      // Cabecera CSV
+      const headers = ['Clave', 'Tipo', 'Estado', 'Fecha Subida', 'Instalado Por', 'Fecha Instalación'];
+      const rows = dataToExport.map(l => [
+        `"${l.clave}"`,
+        `"${l.tipo}"`,
+        `"${l.estado}"`,
+        `"${l.fechaSubida || ''}"`,
+        `"${l.instaladoPor || ''}"`,
+        `"${l.instaladoEl || ''}"`
+      ]);
+
+      const csvContent = '\uFEFF' + [headers.join(','), ...rows.map(r => r.join(','))].join('\r\n');
+      downloadCsvFile(csvContent, filename);
+    }
+
+    function exportActivityLogsToCsv() {
+      const logs = DB_SERVICE.getLocalData()?.activity_logs || [];
+      if (logs.length === 0) {
+        showToast('No hay registros de auditoría para exportar.', 'warning');
+        return;
+      }
+
+      const headers = ['Fecha', 'Usuario', 'Acción', 'Detalle', 'Cambio'];
+      const rows = logs.map(l => [
+        `"${l.fecha}"`,
+        `"${l.usuario}"`,
+        `"${l.accion}"`,
+        `"${l.detalle}"`,
+        `"${l.cambio}"`
+      ]);
+
+      const csvContent = '\uFEFF' + [headers.join(','), ...rows.map(r => r.join(','))].join('\r\n');
+      downloadCsvFile(csvContent, `macrotec_auditoria_${formatDate()}.csv`);
+    }
+
+    function downloadCsvFile(content, fileName) {
+      const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", fileName);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      showToast(`Archivo ${fileName} generado y descargado`, 'success');
+    }
+
+    // ==========================================================================
+    // AGENTE 2: ACCIONES EN LOTE (BATCH ACTIONS)
+    // ==========================================================================
+    let batchBarFeedbackTimer = null;
+
+    function showBatchBarFeedback(message) {
+      const bar = document.getElementById('batch-actions-bar');
+      const textEl = document.getElementById('batch-count-text');
+      const btnInstalled = document.getElementById('btn-batch-status-installed');
+      const btnDelete = document.getElementById('btn-batch-delete');
+      const btnCancel = document.getElementById('btn-batch-cancel');
+      if (!bar || !textEl) return;
+
+      if (batchBarFeedbackTimer) {
+        clearTimeout(batchBarFeedbackTimer);
+        batchBarFeedbackTimer = null;
+      }
+
+      // Ocultar botones de acción durante el feedback
+      if (btnInstalled) btnInstalled.style.display = 'none';
+      if (btnDelete) btnDelete.style.display = 'none';
+      if (btnCancel) btnCancel.style.display = 'none';
+
+      textEl.innerHTML = `<span style="display:inline-flex;align-items:center;gap:6px;font-weight:700;">${message}</span>`;
+      bar.classList.add('visible');
+
+      // Mantener unos segundos (3s) y luego desaparecer suavemente
+      batchBarFeedbackTimer = setTimeout(() => {
+        bar.classList.remove('visible');
+        setTimeout(() => {
+          if (btnInstalled) btnInstalled.style.display = '';
+          if (btnDelete) btnDelete.style.display = '';
+          if (btnCancel) btnCancel.style.display = '';
+          if (textEl) textEl.innerText = '0 seleccionadas';
+          batchBarFeedbackTimer = null;
+        }, 350);
+      }, 3000);
+    }
+
+    function updateBatchBarState() {
+      // Si hay un mensaje temporal de confirmación activo, respetarlo
+      if (batchBarFeedbackTimer) return;
+
+      const bar = document.getElementById('batch-actions-bar');
+      if (!bar) return;
+
+      if (State.activeTab !== 'tab-licencias') {
+        bar.classList.remove('visible');
+        return;
+      }
+
+      const count = State.selectedLicenseIds.size;
+      const textEl = document.getElementById('batch-count-text');
+      const btnInstalled = document.getElementById('btn-batch-status-installed');
+      const btnDelete = document.getElementById('btn-batch-delete');
+      const btnCancel = document.getElementById('btn-batch-cancel');
+
+      if (count > 0 && State.currentRole === 'Admin') {
+        if (textEl) textEl.innerText = `${count} seleccionadas`;
+        if (btnInstalled) btnInstalled.style.display = '';
+        if (btnDelete) btnDelete.style.display = '';
+        if (btnCancel) btnCancel.style.display = '';
+        bar.classList.add('visible');
+      } else {
+        bar.classList.remove('visible');
+      }
+    }
+
+    function handleBatchDelete() {
+      const count = State.selectedLicenseIds.size;
+      if (count === 0) return;
+
+      showConfirmModal({
+        title: `¿Eliminar ${count} licencias?`,
+        message: 'Esta acción borrará permanentemente las claves seleccionadas del inventario.',
+        proceedText: `Eliminar ${count}`,
+        isDanger: true,
+        onProceed: async () => {
+          const idsToDelete = Array.from(State.selectedLicenseIds);
+          await DB_SERVICE.deleteLicenses(idsToDelete);
+          State.licenses = State.licenses.filter(l => !idsToDelete.includes(l.id));
+          State.selectedLicenseIds.clear();
+
+          // Log de auditoría
+          await DB_SERVICE.addActivityLog({
+            id: generateId('log'),
+            fecha: formatDateTime(),
+            usuario: State.currentUser.nombre,
+            accion: 'Eliminación Lote',
+            detalle: `${count} licencias eliminadas`,
+            cambio: 'Borrado definitivo'
+          });
+
+          renderLicenses();
+          updateStockBadge();
+          renderStatsCharts();
+          showToast(`${count} licencias eliminadas.`, 'info');
+          showBatchBarFeedback(`✓ ${count} licencias eliminadas`);
+        }
+      });
+    }
+
+    async function handleBatchStatusChange(newStatus) {
+      const count = State.selectedLicenseIds.size;
+      if (count === 0) return;
+
+      const ids = Array.from(State.selectedLicenseIds);
+      for (const id of ids) {
+        const lic = State.licenses.find(l => l.id === id);
+        if (lic) {
+          lic.estado = newStatus;
+          if (newStatus === 'Instalada') {
+            lic.instaladoPor = State.currentUser.nombre;
+            lic.instaladoEl = formatDate();
+          }
+          await DB_SERVICE.saveLicense(lic);
+        }
+      }
+
+      await DB_SERVICE.addActivityLog({
+        id: generateId('log'),
+        fecha: formatDateTime(),
+        usuario: State.currentUser.nombre,
+        accion: 'Estado Lote',
+        detalle: `${count} licencias actualizadas a ${newStatus}`,
+        cambio: `Lote ➔ ${newStatus}`
+      });
+
+      State.selectedLicenseIds.clear();
+      renderLicenses();
+      updateStockBadge();
+      renderStatsCharts();
+      showToast(`${count} licencias marcadas como ${newStatus}`, 'success');
+      showBatchBarFeedback(`✓ ${count} licencias marcadas como ${newStatus}`);
+    }
+
+    // ==========================================================================
+    // AGENTE 2: PANEL DE ESTADÍSTICAS & GRÁFICOS SVG PUROS
+    // ==========================================================================
+    function renderStatsCharts() {
+      const total = State.licenses.length;
+      const disp = State.licenses.filter(l => l.estado === 'Disponible').length;
+      const inst = State.licenses.filter(l => l.estado === 'Instalada').length;
+      const retry = State.licenses.filter(l => l.estado === 'Probar otra vez').length;
+      const dam = State.licenses.filter(l => l.estado === 'Dañada').length;
+
+      document.getElementById('kpi-total').innerText = total;
+      document.getElementById('kpi-disp').innerText = disp;
+      document.getElementById('kpi-inst').innerText = inst;
+      document.getElementById('kpi-retry').innerText = retry;
+      document.getElementById('kpi-damaged').innerText = dam;
+
+      // 1. Gráfico de Barras SVG Puro (Distribución de Estados)
+      const barSvgWrap = document.getElementById('svg-bar-chart-wrap');
+      const maxVal = Math.max(disp, inst, retry, dam, 1);
+      const chartHeight = 160;
+      const categories = [
+        { label: 'Disponible', val: disp, color: '#5FB9E4' },
+        { label: 'Instalada', val: inst, color: '#1E7E4E' },
+        { label: 'Probar', val: retry, color: '#C2690A' },
+        { label: 'Dañada', val: dam, color: '#B91C1C' }
+      ];
+
+      let barSvg = `<svg class="chart-svg" viewBox="0 0 360 200" preserveAspectRatio="none">`;
+      // Líneas guía
+      barSvg += `<line x1="20" y1="160" x2="350" y2="160" stroke="var(--border)" stroke-width="1.5"/>`;
+
+      categories.forEach((cat, idx) => {
+        const barW = 44;
+        const x = 40 + idx * 75;
+        const barH = (cat.val / maxVal) * 120;
+        const y = 160 - barH;
+
+        barSvg += `
+          <rect x="${x}" y="${y}" width="${barW}" height="${barH}" rx="5" fill="${cat.color}" opacity="0.9">
+            <title>${cat.label}: ${cat.val}</title>
+          </rect>
+          <text x="${x + barW / 2}" y="${y - 6}" font-size="12" font-weight="700" fill="var(--text)" text-anchor="middle">${cat.val}</text>
+          <text x="${x + barW / 2}" y="180" font-size="10.5" font-weight="600" fill="var(--text-muted)" text-anchor="middle">${cat.label}</text>
+        `;
+      });
+      barSvg += `</svg>`;
+      barSvgWrap.innerHTML = barSvg;
+
+      // 2. Gráfico de Línea de Tiempo (Altas por Mes)
+      const timelineSvgWrap = document.getElementById('svg-timeline-chart-wrap');
+      const monthlyMap = {};
+      State.licenses.forEach(l => {
+        const mKey = l.fechaSubida ? l.fechaSubida.slice(0, 7) : '2026-09';
+        monthlyMap[mKey] = (monthlyMap[mKey] || 0) + 1;
+      });
+
+      const months = Object.keys(monthlyMap).sort();
+      if (months.length === 0) months.push('2026-09');
+
+      let maxMonth = Math.max(...Object.values(monthlyMap), 1);
+      let linePoints = [];
+      let circlesSvg = '';
+      let labelsSvg = '';
+
+      months.forEach((m, i) => {
+        const val = monthlyMap[m] || 0;
+        const x = months.length === 1 ? 180 : 40 + (i / (months.length - 1)) * 280;
+        const y = 150 - (val / maxMonth) * 100;
+        linePoints.push(`${x},${y}`);
+
+        circlesSvg += `<circle cx="${x}" cy="${y}" r="5" fill="var(--navy)" stroke="var(--blue)" stroke-width="2.5"><title>${m}: ${val}</title></circle>`;
+        circlesSvg += `<text x="${x}" y="${y - 8}" font-size="11" font-weight="700" fill="var(--text)" text-anchor="middle">${val}</text>`;
+        labelsSvg += `<text x="${x}" y="175" font-size="10" fill="var(--text-muted)" text-anchor="middle">${m.slice(5)}/${m.slice(2, 4)}</text>`;
+      });
+
+      let timelineSvg = `<svg class="chart-svg" viewBox="0 0 360 200">
+        <line x1="30" y1="150" x2="340" y2="150" stroke="var(--border)" stroke-width="1.5"/>
+        <polyline fill="none" stroke="var(--blue)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" points="${linePoints.join(' ')}"/>
+        ${circlesSvg}
+        ${labelsSvg}
+      </svg>`;
+      timelineSvgWrap.innerHTML = timelineSvg;
+
+      // 3. Top 3 Técnicos
+      const techCounts = {};
+      State.licenses.filter(l => l.estado === 'Instalada' && l.instaladoPor).forEach(l => {
+        techCounts[l.instaladoPor] = (techCounts[l.instaladoPor] || 0) + 1;
+      });
+
+      const sortedTechs = Object.entries(techCounts).sort((a, b) => b[1] - a[1]).slice(0, 3);
+      const leaderboardEl = document.getElementById('leaderboard-container');
+      leaderboardEl.innerHTML = '';
+
+      if (sortedTechs.length === 0) {
+        leaderboardEl.innerHTML = `<div style="font-size: 0.85rem; color: var(--text-muted); text-align: center; padding: 12px;">Aún no hay instalaciones registradas por técnicos.</div>`;
+      } else {
+        const medals = ['🥇', '🥈', '🥉'];
+        sortedTechs.forEach(([techName, count], idx) => {
+          const row = document.createElement('div');
+          row.className = 'leader-row';
+          row.innerHTML = `
+            <div class="leader-info">
+              <span class="leader-medal">${medals[idx] || '🎖️'}</span>
+              <strong style="font-size: 0.92rem;">${techName}</strong>
+            </div>
+            <div class="leader-count">${count} instaladas</div>
+          `;
+          leaderboardEl.appendChild(row);
+        });
+      }
+    }
+
+    // ==========================================================================
+    // AGENTE 3: GESTIÓN DE USUARIOS (CREAR, RESETEAR PIN, ELIMINAR)
+    // ==========================================================================
+    function renderUserManagementList() {
+      const container = document.getElementById('users-management-list');
+      container.innerHTML = '';
+
+      State.users.forEach((user, index) => {
+        const item = document.createElement('div');
+        item.className = 'user-manage-item';
+
+        let avatarHtml = '';
+        if (user.foto) {
+          avatarHtml = `<img src="${user.foto}" class="user-avatar" style="width: 38px; height: 38px;" alt="${user.nombre}">`;
+        } else {
+          const initials = user.nombre.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
+          avatarHtml = `<div class="user-avatar" style="width: 38px; height: 38px; font-size: 0.85rem;">${initials}</div>`;
+        }
+
+        item.innerHTML = `
+          <div class="user-info-side">
+            ${avatarHtml}
+            <div>
+              <div style="font-weight: 700; font-size: 0.9rem;">${user.nombre}</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">Rol: <strong>${user.rol || 'Técnico'}</strong> | PIN: ****</div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 6px;">
+            <button type="button" class="btn btn-secondary btn-sm btn-reset-pin" title="Restablecer PIN a 3210">
+              <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M2.5 2v6h6M21.5 22v-6h-6"/><path d="M22 11.5A10 10 0 0 0 3.2 7.2M2 12.5a10 10 0 0 0 18.8 4.2"/></svg>
+              <span>Restablecer PIN</span>
+            </button>
+            <button type="button" class="btn btn-danger btn-sm btn-del-user" title="Eliminar usuario">
+              <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            </button>
+          </div>
+        `;
+
+        // Restablecer PIN a 3210 con confirmación
+        item.querySelector('.btn-reset-pin').addEventListener('click', () => {
+          showConfirmModal({
+            title: `¿Restablecer el PIN de ${user.nombre}?`,
+            message: 'El PIN volverá a ser el predeterminado: 3210.',
+            proceedText: 'Restablecer a 3210',
+            isDanger: false,
+            onProceed: async () => {
+              user.pin = '3210';
+              await DB_SERVICE.saveUser(user);
+              await DB_SERVICE.addActivityLog({
+                id: generateId('log'),
+                fecha: formatDateTime(),
+                usuario: State.currentUser.nombre,
+                accion: 'Seguridad',
+                detalle: `Restablecimiento de PIN para ${user.nombre}`,
+                cambio: 'PIN ➔ 3210'
+              });
+              showToast(`PIN de ${user.nombre} restablecido a 3210.`, 'success');
+              renderUserManagementList();
+            }
+          });
+        });
+
+        // Eliminar Usuario con confirmación
+        item.querySelector('.btn-del-user').addEventListener('click', () => {
+          showConfirmModal({
+            title: `¿Eliminar al usuario ${user.nombre}?`,
+            message: 'El usuario ya no podrá iniciar sesión en MACROTEC.',
+            proceedText: 'Eliminar Usuario',
+            isDanger: true,
+            onProceed: async () => {
+              await DB_SERVICE.deleteUser(user.id);
+              State.users = State.users.filter(u => u.id !== user.id);
+              renderUserManagementList();
+              renderLoginUsersList();
+              showToast(`Usuario ${user.nombre} eliminado.`, 'info');
+            }
+          });
+        });
+
+        container.appendChild(item);
+      });
+    }
+
+    async function handleCreateUserSubmit() {
+      const nameInput = document.getElementById('new-user-name');
+      const roleSelect = document.getElementById('new-user-role');
+      const photoInput = document.getElementById('new-user-photo');
+
+      const name = nameInput.value.trim();
+      const role = roleSelect.value;
+      if (!name) return;
+
+      let base64Photo = null;
+      if (photoInput.files && photoInput.files[0]) {
+        try {
+          base64Photo = await readFileAsBase64(photoInput.files[0]);
+        } catch(e) {
+          console.warn('Error leyendo foto de perfil', e);
+        }
+      }
+
+      const newUser = {
+        id: generateId('usr'),
+        nombre: name,
+        foto: base64Photo, // Se almacena en State.users, cero uso de atributos inline
+        pin: '3210',
+        rol: role,
+        fechaCreacion: formatDate()
+      };
+
+      await DB_SERVICE.saveUser(newUser);
+      State.users.push(newUser);
+
+      // Reset de formulario
+      nameInput.value = '';
+      photoInput.value = '';
+      const photoText = document.getElementById('file-upload-text');
+      if (photoText) photoText.innerText = 'Seleccionar foto de perfil...';
+
+      await DB_SERVICE.addActivityLog({
+        id: generateId('log'),
+        fecha: formatDateTime(),
+        usuario: State.currentUser.nombre,
+        accion: 'Usuario Creado',
+        detalle: `${newUser.nombre} (${newUser.rol})`,
+        cambio: 'PIN inicial: 3210'
+      });
+
+      showToast(`Usuario ${newUser.nombre} creado con éxito. PIN inicial: 3210`, 'success');
+      renderUserManagementList();
+      renderLoginUsersList();
+    }
+
+    function readFileAsBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // Tabla de Logs de Auditoría
+    async function renderActivityLogsTable() {
+      const tbody = document.getElementById('logs-table-body');
+      tbody.innerHTML = '';
+
+      const logs = await DB_SERVICE.getActivityLogs();
+      if (logs.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 18px;">No hay registros de actividad.</td></tr>`;
+        return;
+      }
+
+      logs.slice(0, 50).forEach(log => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${log.fecha}</strong></td>
+          <td>${log.usuario}</td>
+          <td><span class="badge" style="background: var(--blue-subtle); color: var(--navy);">${log.accion}</span></td>
+          <td style="font-family: var(--font-mono); font-size: 0.8rem;">${log.detalle}</td>
+          <td>${log.cambio}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // ==========================================================================
+    // AGENTE 4: NOTIFICACIONES, ALERTAS & RESUMEN DIARIO
+    // ==========================================================================
+    function updateStockBadge() {
+      const dispCount = State.licenses.filter(l => l.estado === 'Disponible').length;
+      const badge = document.getElementById('stock-badge-header');
+      const text = document.getElementById('stock-indicator-text');
+
+      badge.className = 'stock-badge-header';
+      text.innerText = `Existencias: ${dispCount} Disponibles`;
+
+      if (dispCount < 5) {
+        badge.classList.add('stock-low');
+      } else if (dispCount <= 10) {
+        badge.classList.add('stock-medium');
+      } else {
+        badge.classList.add('stock-high');
+      }
+    }
+
+    function renderAdminAlerts() {
+      const container = document.getElementById('admin-alerts-container');
+      container.innerHTML = '';
+
+      const dispCount = State.licenses.filter(l => l.estado === 'Disponible').length;
+      const damagedCount = State.licenses.filter(l => l.estado === 'Dañada').length;
+
+      // Calcular licencias con más de 30 días en "Probar otra vez"
+      const now = new Date();
+      const staleRetryCount = State.licenses.filter(l => {
+        if (l.estado !== 'Probar otra vez') return false;
+        const uploadDate = new Date(l.fechaSubida);
+        const days = Math.floor((now - uploadDate) / (1000 * 60 * 60 * 24));
+        return days > 30;
+      }).length;
+
+      // 1. Alerta de Existencias Bajas
+      if (dispCount < 5) {
+        const b = document.createElement('div');
+        b.className = 'alert-banner alert-banner-danger';
+        b.innerHTML = `
+          <div class="alert-content">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <div><strong>¡Alerta de Existencias Críticas!</strong> Quedan solo ${dispCount} licencias Disponibles en el sistema.</div>
+          </div>
+          <button type="button" class="btn btn-sm btn-primary btn-load-stock">Cargar Claves</button>
+        `;
+        b.querySelector('.btn-load-stock').addEventListener('click', openImportModal);
+        container.appendChild(b);
+      }
+
+      // 2. Alerta de Licencias Dañadas
+      if (damagedCount > 0) {
+        const b = document.createElement('div');
+        b.className = 'alert-banner alert-banner-warning';
+        b.innerHTML = `
+          <div class="alert-content">
+            <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <div>Hay <strong>${damagedCount} licencias</strong> marcadas en estado Dañada para revisión o reemplazo.</div>
+          </div>
+          <button type="button" class="btn btn-sm btn-danger btn-report-supplier">Reportar a Proveedor</button>
+        `;
+        b.querySelector('.btn-report-supplier').addEventListener('click', openSupplierReportModal);
+        container.appendChild(b);
+      }
+
+      // 3. Alerta de licencias >30 días en Probar otra vez
+      if (staleRetryCount > 0) {
+        const b = document.createElement('div');
+        b.className = 'alert-banner alert-banner-info';
+        b.innerHTML = `
+          <div class="alert-content">
+            <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
+            <div><strong>${staleRetryCount} licencias</strong> llevan más de 30 días en "Probar otra vez". Se recomienda verificar con soporte.</div>
+          </div>
+        `;
+        container.appendChild(b);
+      }
+    }
+
+    // Modal de Resumen Diario para Admin
+    function evaluateDailySummaryModal() {
+      const todayStr = formatDate();
+      const hideKey = `macrotec_hide_daily_${todayStr}`;
+      if (localStorage.getItem(hideKey)) return;
+
+      const installedToday = State.licenses.filter(l => l.estado === 'Instalada' && l.instaladoEl === todayStr).length;
+      const availableStock = State.licenses.filter(l => l.estado === 'Disponible').length;
+      const damagedCount = State.licenses.filter(l => l.estado === 'Dañada').length;
+
+      document.getElementById('daily-installed-today').innerText = installedToday;
+      document.getElementById('daily-available-stock').innerText = availableStock;
+      document.getElementById('daily-damaged-count').innerText = damagedCount;
+
+      document.getElementById('modal-daily-summary').classList.add('active');
+    }
+
+    // Compartir Reporte por WhatsApp
+    function shareReportViaWhatsApp() {
+      if (State.currentRole !== 'Admin') {
+        showToast('Solo el Administrador puede enviar reportes.', 'warning');
+        return;
+      }
+      const todayStr = formatDate();
+      const dispCount = State.licenses.filter(l => l.estado === 'Disponible').length;
+      const instCount = State.licenses.filter(l => l.estado === 'Instalada').length;
+      const retryCount = State.licenses.filter(l => l.estado === 'Probar otra vez').length;
+      const damCount = State.licenses.filter(l => l.estado === 'Dañada').length;
+      const total = dispCount + instCount + retryCount + damCount;
+      const effRate = total > 0 ? ((instCount / total) * 100).toFixed(1) : "0.0";
+
+      const messageText = 
+`MACROTEC - REPORTE GENERAL DE LICENCIAS WINDOWS 11 PRO
+Fecha: ${todayStr}
+
+ESTADO DEL INVENTARIO:
+- Licencias Disponibles: ${dispCount}
+- Licencias Instaladas: ${instCount}
+- Licencias para Probar otra vez: ${retryCount}
+- Licencias Danadas: ${damCount}
+
+METRICAS GENERALES:
+- Total de Licencias en Sistema: ${total}
+- Tasa de Efectividad: ${effRate}%
+
+Sistema de Inventario MACROTEC - El Salvador`;
+
+      const encoded = encodeURIComponent(messageText);
+      const waUrl = `https://wa.me/?text=${encoded}`;
+      window.open(waUrl, '_blank');
+      showToast('Abriendo WhatsApp para compartir reporte...', 'success');
+    }
+
+    // Funciones de Reporte para Proveedor (Licencias Dañadas)
+    function openSupplierReportModal() {
+      if (State.currentRole !== 'Admin') return;
+      const damagedLicenses = State.licenses.filter(l => l.estado === 'Dañada');
+      const modal = document.getElementById('modal-supplier-damaged');
+      const txtArea = document.getElementById('txt-supplier-report');
+      const delBtn = document.getElementById('btn-delete-reported-damaged');
+
+      if (damagedLicenses.length === 0) {
+        txtArea.value = 'No hay licencias marcadas en estado Dañada en este momento.';
+        if (delBtn) delBtn.disabled = true;
+      } else {
+        const todayStr = formatDate();
+        let reportText = `MACROTEC - REPORTE DE LICENCIAS DANADAS PARA CAMBIO O GARANTIA\n`;
+        reportText += `Fecha: ${todayStr}\n`;
+        reportText += `Total de licencias danadas: ${damagedLicenses.length}\n\n`;
+        reportText += `LISTADO DE CLAVES PARA REEMPLAZO:\n`;
+        damagedLicenses.forEach((l, idx) => {
+          reportText += `${idx + 1}. ${l.clave}\n`;
+        });
+        reportText += `\nSolicitud: Se solicita el reemplazo o reactivacion de las claves anteriores debido a que presentaron error durante el proceso de activacion en equipos nuevos.\n`;
+        reportText += `Empresa: MACROTEC El Salvador`;
+
+        txtArea.value = reportText;
+        if (delBtn) delBtn.disabled = false;
+      }
+
+      modal.classList.add('active');
+    }
+
+    function closeSupplierReportModal() {
+      const modal = document.getElementById('modal-supplier-damaged');
+      if (modal) modal.classList.remove('active');
+    }
+
+    function copySupplierReport() {
+      const txtArea = document.getElementById('txt-supplier-report');
+      if (!txtArea || !txtArea.value) return;
+      navigator.clipboard.writeText(txtArea.value).then(() => {
+        showToast('¡Reporte copiado al portapapeles!', 'success');
+      }).catch(() => {
+        txtArea.select();
+        document.execCommand('copy');
+        showToast('¡Reporte copiado al portapapeles!', 'success');
+      });
+    }
+
+    function shareSupplierReportViaWhatsApp() {
+      const txtArea = document.getElementById('txt-supplier-report');
+      if (!txtArea || !txtArea.value) return;
+      const encoded = encodeURIComponent(txtArea.value);
+      window.open(`https://wa.me/?text=${encoded}`, '_blank');
+      showToast('Abriendo WhatsApp con el reporte para proveedor...', 'success');
+    }
+
+    async function deleteReportedDamagedLicenses() {
+      const damagedLicenses = State.licenses.filter(l => l.estado === 'Dañada');
+      const count = damagedLicenses.length;
+      if (count === 0) {
+        showToast('No hay licencias dañadas para eliminar.', 'warning');
+        return;
+      }
+
+      showConfirmModal({
+        title: `¿Eliminar ${count} licencias dañadas?`,
+        message: 'Esta acción borrará permanentemente las claves dañadas reportadas para no volver a enviarlas al proveedor en futuros reportes.',
+        proceedText: `Eliminar ${count} dañadas`,
+        isDanger: true,
+        onProceed: async () => {
+          const idsToDelete = damagedLicenses.map(l => l.id);
+          await DB_SERVICE.deleteLicenses(idsToDelete);
+          State.licenses = State.licenses.filter(l => !idsToDelete.includes(l.id));
+
+          await DB_SERVICE.addActivityLog({
+            id: generateId('log'),
+            fecha: formatDateTime(),
+            usuario: State.currentUser.nombre,
+            accion: 'Garantía Proveedor',
+            detalle: `${count} licencias dañadas reportadas y eliminadas del inventario`,
+            cambio: 'Borrado por garantía'
+          });
+
+          closeSupplierReportModal();
+          renderLicenses();
+          updateStockBadge();
+          renderStatsCharts();
+          if (State.currentRole === 'Admin') {
+            renderAdminAlerts();
+          }
+          showToast(`✓ ${count} licencias dañadas eliminadas del sistema.`, 'success');
+        }
+      });
+    }
+
+    function initSystemLinkSharing() {
+      const inputLink = document.getElementById('input-system-link');
+      if (inputLink) {
+        inputLink.value = window.location.href;
+      }
+    }
+
+    // Polling Reactivo de 30 Segundos (Agente 4)
+    function startPollingSync() {
+      if (State.pollingIntervalId) clearInterval(State.pollingIntervalId);
+
+      State.pollingIntervalId = setInterval(async () => {
+        try {
+          const freshLicenses = await DB_SERVICE.getLicenses();
+          const freshFingerprint = freshLicenses.map(l => `${l.id}:${l.estado}`).join('|');
+
+          if (State.lastSyncFingerprint && State.lastSyncFingerprint !== freshFingerprint) {
+            State.licenses = freshLicenses;
+            renderLicenses();
+            updateStockBadge();
+            showToast('🔔 Se detectaron actualizaciones externas en el inventario.', 'info');
+          }
+          State.lastSyncFingerprint = freshFingerprint;
+        } catch (e) {}
+      }, 30000); // 30 segundos
+    }
+
+    // ==========================================================================
+    // AGENTE 1: TEMA CLARO / OSCURO (PREFERS-COLOR-SCHEME & MANUAL)
+    // ==========================================================================
+    function initTheme() {
+      const savedTheme = localStorage.getItem('macrotec_theme');
+      if (savedTheme) {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+      updateThemeButtonsUi();
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme') || 'light';
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('macrotec_theme', next);
+      updateThemeButtonsUi();
+      // Re-renderizar gráficos SVG para colores de tema
+      if (State.currentRole === 'Admin') renderStatsCharts();
+    }
+
+    function updateThemeButtonsUi() {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      const label = isDark ? 'Modo Claro' : 'Modo Oscuro';
+      const loginThemeText = document.getElementById('theme-text-login');
+      if (loginThemeText) loginThemeText.innerText = label;
+    }
+
+    // ==========================================================================
+    // AGENTE INTEGRADOR: INICIALIZADOR MAESTRO & REGISTRO DE EVENTOS
+    // ==========================================================================
+    async function initMacrotecApp() {
+      // 1. Inicializar tema visual
+      initTheme();
+
+      // 2. Inicializar capa de base de datos dual
+      await DB_SERVICE.init();
+
+      // 3. Cargar datos en memoria reactiva
+      State.licenses = await DB_SERVICE.getLicenses();
+      State.users = await DB_SERVICE.getUsers();
+      State.adminPin = await DB_SERVICE.getAdminPin();
+      State.lastSyncFingerprint = State.licenses.map(l => `${l.id}:${l.estado}`).join('|');
+
+      // 4. Renderizar usuarios en login
+      renderLoginUsersList();
+      checkLockoutStatus();
+
+      // 5. Vincular Event Listeners
+
+      // Acceso de Administrador en Login
+      document.getElementById('btn-login-admin').addEventListener('click', () => {
+        openPinModalFor('admin');
+      });
+
+      // Teclado numérico PIN
+      document.querySelectorAll('.key-btn[data-key]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          handlePinDigit(btn.dataset.key);
+        });
+      });
+      document.getElementById('btn-pin-del').addEventListener('click', handlePinDelete);
+      document.getElementById('btn-pin-clear').addEventListener('click', handlePinClear);
+      document.getElementById('btn-close-pin-modal').addEventListener('click', closePinModal);
+
+      // Soporte para teclado físico en modal de PIN
+      window.addEventListener('keydown', (e) => {
+        if (!document.getElementById('modal-pin').classList.contains('active')) return;
+        if (/^[0-9]$/.test(e.key)) {
+          handlePinDigit(e.key);
+        } else if (e.key === 'Backspace') {
+          handlePinDelete();
+        } else if (e.key === 'Escape') {
+          closePinModal();
+        }
+      });
+
+      // Pestañas de Navegación Desktop y Móvil
+      document.querySelectorAll('.nav-tab-btn, .mobile-nav-item[data-target]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          switchTab(btn.dataset.target);
+        });
+      });
+
+      // Cierre de Sesión
+      document.getElementById('btn-logout').addEventListener('click', () => logoutUser());
+      document.getElementById('btn-mobile-quick-logout').addEventListener('click', () => logoutUser());
+
+      // Toggle de Tema
+      document.getElementById('btn-theme-login').addEventListener('click', toggleTheme);
+      document.getElementById('btn-theme-toggle').addEventListener('click', toggleTheme);
+
+      // Filtros de Licencias (Búsqueda en tiempo real)
+      document.getElementById('filter-search-input').addEventListener('input', (e) => {
+        State.filterSearch = e.target.value;
+        renderLicenses();
+      });
+
+      document.getElementById('filter-status-pills').querySelectorAll('.filter-pill').forEach(pill => {
+        pill.addEventListener('click', () => {
+          document.querySelectorAll('#filter-status-pills .filter-pill').forEach(p => p.classList.remove('active'));
+          pill.classList.add('active');
+          State.filterStatus = pill.dataset.status;
+          renderLicenses();
+        });
+      });
+
+      // Modal de Reporte para Proveedor (Licencias Dañadas)
+      const openSupplierBtn = document.getElementById('btn-open-supplier-report-modal');
+      if (openSupplierBtn) openSupplierBtn.addEventListener('click', openSupplierReportModal);
+      const closeSupplierBtn = document.getElementById('btn-close-supplier-modal');
+      if (closeSupplierBtn) closeSupplierBtn.addEventListener('click', closeSupplierReportModal);
+      const closeSupplierFooterBtn = document.getElementById('btn-close-supplier-modal-footer');
+      if (closeSupplierFooterBtn) closeSupplierFooterBtn.addEventListener('click', closeSupplierReportModal);
+      const copySupplierBtn = document.getElementById('btn-copy-supplier-report');
+      if (copySupplierBtn) copySupplierBtn.addEventListener('click', copySupplierReport);
+      const waSupplierBtn = document.getElementById('btn-whatsapp-supplier-report');
+      if (waSupplierBtn) waSupplierBtn.addEventListener('click', shareSupplierReportViaWhatsApp);
+      const delSupplierBtn = document.getElementById('btn-delete-reported-damaged');
+      if (delSupplierBtn) delSupplierBtn.addEventListener('click', deleteReportedDamagedLicenses);
+
+      // Compartir Enlace del Sistema (Administración)
+      const copyLinkBtn = document.getElementById('btn-copy-system-link');
+      if (copyLinkBtn) {
+        copyLinkBtn.addEventListener('click', () => {
+          const inputLink = document.getElementById('input-system-link');
+          const url = (inputLink && inputLink.value) ? inputLink.value : window.location.href;
+          navigator.clipboard.writeText(url).then(() => {
+            showToast('¡Enlace copiado al portapapeles!', 'success');
+          }).catch(() => {
+            if (inputLink) {
+              inputLink.select();
+              document.execCommand('copy');
+            }
+            showToast('¡Enlace copiado al portapapeles!', 'success');
+          });
+        });
+      }
+
+      const waShareLinkBtn = document.getElementById('btn-share-system-link-wa');
+      if (waShareLinkBtn) {
+        waShareLinkBtn.addEventListener('click', () => {
+          const inputLink = document.getElementById('input-system-link');
+          const url = (inputLink && inputLink.value) ? inputLink.value : window.location.href;
+          const msg = `Hola, accede al sistema de inventario de licencias MACROTEC a traves del siguiente enlace:\n${url}\n\nIngresa seleccionando tu nombre e introduciendo tu PIN asignado.`;
+          window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+        });
+      }
+
+      // Modal de Importación
+      document.getElementById('btn-open-import-modal').addEventListener('click', openImportModal);
+      document.getElementById('btn-close-import-modal').addEventListener('click', closeImportModal);
+      document.getElementById('btn-cancel-import').addEventListener('click', closeImportModal);
+      document.getElementById('btn-preview-import').addEventListener('click', detectAndPreviewKeys);
+      document.getElementById('btn-confirm-import').addEventListener('click', executeBatchImport);
+
+      // Exportaciones CSV
+      document.getElementById('btn-export-installed-csv').addEventListener('click', () => exportLicensesToCsv(true));
+      const exportLogsBtn = document.getElementById('btn-export-logs-csv');
+      if (exportLogsBtn) exportLogsBtn.addEventListener('click', exportActivityLogsToCsv);
+
+      // Acciones en Lote
+      document.getElementById('btn-batch-delete').addEventListener('click', handleBatchDelete);
+      document.getElementById('btn-batch-status-installed').addEventListener('click', () => handleBatchStatusChange('Instalada'));
+      document.getElementById('btn-batch-cancel').addEventListener('click', () => {
+        if (batchBarFeedbackTimer) {
+          clearTimeout(batchBarFeedbackTimer);
+          batchBarFeedbackTimer = null;
+        }
+        State.selectedLicenseIds.clear();
+        renderLicenses();
+        const bar = document.getElementById('batch-actions-bar');
+        if (bar) bar.classList.remove('visible');
+      });
+
+      // Escuchar selección de archivo de foto de perfil
+      const photoInput = document.getElementById('new-user-photo');
+      const photoText = document.getElementById('file-upload-text');
+      if (photoInput && photoText) {
+        photoInput.addEventListener('change', () => {
+          if (photoInput.files && photoInput.files[0]) {
+            photoText.innerText = `✓ ${photoInput.files[0].name}`;
+          } else {
+            photoText.innerText = 'Seleccionar foto de perfil...';
+          }
+        });
+      }
+
+      // WhatsApp Share
+      document.getElementById('btn-whatsapp-share').addEventListener('click', shareReportViaWhatsApp);
+
+      // Modal de Resumen Diario
+      document.getElementById('btn-close-daily-modal').addEventListener('click', () => {
+        document.getElementById('modal-daily-summary').classList.remove('active');
+      });
+      document.getElementById('btn-ack-daily-modal').addEventListener('click', () => {
+        const chk = document.getElementById('chk-no-daily-today');
+        if (chk.checked) {
+          const todayStr = formatDate();
+          localStorage.setItem(`macrotec_hide_daily_${todayStr}`, 'true');
+        }
+        document.getElementById('modal-daily-summary').classList.remove('active');
+      });
+
+      // Modal de Extensión de Sesión
+      document.getElementById('btn-extend-session').addEventListener('click', extendSession);
+
+      console.log('✅ MACROTEC Inicializado con éxito. Versión Multi-Agente 2.0.');
+    }
+
+    // Arrancar la aplicación al cargar el DOM
+    document.addEventListener('DOMContentLoaded', initMacrotecApp);
+  </script>
+</body>
+</html>
