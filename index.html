@@ -5494,21 +5494,30 @@ Sistema de Inventario - Activacion WinPro`;
       }
 
       // Modal de Importación
-      document.getElementById('btn-open-import-modal').addEventListener('click', openImportModal);
-      document.getElementById('btn-close-import-modal').addEventListener('click', closeImportModal);
-      document.getElementById('btn-cancel-import').addEventListener('click', closeImportModal);
-      document.getElementById('btn-preview-import').addEventListener('click', detectAndPreviewKeys);
-      document.getElementById('btn-confirm-import').addEventListener('click', executeBatchImport);
+      const openImportBtn = document.getElementById('btn-open-import-modal');
+      if (openImportBtn) openImportBtn.addEventListener('click', openImportModal);
+      const closeImportBtn = document.getElementById('btn-close-import-modal');
+      if (closeImportBtn) closeImportBtn.addEventListener('click', closeImportModal);
+      const cancelImportBtn = document.getElementById('btn-cancel-import');
+      if (cancelImportBtn) cancelImportBtn.addEventListener('click', closeImportModal);
+      const previewImportBtn = document.getElementById('btn-preview-import');
+      if (previewImportBtn) previewImportBtn.addEventListener('click', detectAndPreviewKeys);
+      const confirmImportBtn = document.getElementById('btn-confirm-import');
+      if (confirmImportBtn) confirmImportBtn.addEventListener('click', executeBatchImport);
 
       // Exportaciones CSV
-      document.getElementById('btn-export-installed-csv').addEventListener('click', () => exportLicensesToCsv(true));
+      const exportInstCsvBtn = document.getElementById('btn-export-installed-csv');
+      if (exportInstCsvBtn) exportInstCsvBtn.addEventListener('click', () => exportLicensesToCsv(true));
       const exportLogsBtn = document.getElementById('btn-export-logs-csv');
       if (exportLogsBtn) exportLogsBtn.addEventListener('click', exportActivityLogsToCsv);
 
       // Acciones en Lote
-      document.getElementById('btn-batch-delete').addEventListener('click', handleBatchDelete);
-      document.getElementById('btn-batch-status-installed').addEventListener('click', () => handleBatchStatusChange('Instalada'));
-      document.getElementById('btn-batch-cancel').addEventListener('click', () => {
+      const batchDelBtn = document.getElementById('btn-batch-delete');
+      if (batchDelBtn) batchDelBtn.addEventListener('click', handleBatchDelete);
+      const batchInstBtn = document.getElementById('btn-batch-status-installed');
+      if (batchInstBtn) batchInstBtn.addEventListener('click', () => handleBatchStatusChange('Instalada'));
+      const batchCancelBtn = document.getElementById('btn-batch-cancel');
+      if (batchCancelBtn) batchCancelBtn.addEventListener('click', () => {
         if (batchBarFeedbackTimer) {
           clearTimeout(batchBarFeedbackTimer);
           batchBarFeedbackTimer = null;
@@ -5533,23 +5542,29 @@ Sistema de Inventario - Activacion WinPro`;
       }
 
       // WhatsApp Share
-      document.getElementById('btn-whatsapp-share').addEventListener('click', shareReportViaWhatsApp);
+      const waShareBtn = document.getElementById('btn-whatsapp-share');
+      if (waShareBtn) waShareBtn.addEventListener('click', shareReportViaWhatsApp);
 
       // Modal de Resumen Diario
-      document.getElementById('btn-close-daily-modal').addEventListener('click', () => {
-        document.getElementById('modal-daily-summary').classList.remove('active');
+      const closeDailyBtn = document.getElementById('btn-close-daily-modal');
+      if (closeDailyBtn) closeDailyBtn.addEventListener('click', () => {
+        const modal = document.getElementById('modal-daily-summary');
+        if (modal) modal.classList.remove('active');
       });
-      document.getElementById('btn-ack-daily-modal').addEventListener('click', () => {
+      const ackDailyBtn = document.getElementById('btn-ack-daily-modal');
+      if (ackDailyBtn) ackDailyBtn.addEventListener('click', () => {
         const chk = document.getElementById('chk-no-daily-today');
-        if (chk.checked) {
+        if (chk && chk.checked) {
           const todayStr = formatDate();
           localStorage.setItem(`winpro_hide_daily_${todayStr}`, 'true');
         }
-        document.getElementById('modal-daily-summary').classList.remove('active');
+        const modal = document.getElementById('modal-daily-summary');
+        if (modal) modal.classList.remove('active');
       });
 
       // Modal de Extensión de Sesión
-      document.getElementById('btn-extend-session').addEventListener('click', extendSession);
+      const extendSessionBtn = document.getElementById('btn-extend-session');
+      if (extendSessionBtn) extendSessionBtn.addEventListener('click', extendSession);
 
       // Modales y Acciones de Seguridad y PIN
       const headerChangePinBtn = document.getElementById('btn-change-pin-header');

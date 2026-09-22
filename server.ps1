@@ -21,31 +21,29 @@ try {
 } catch {}
 
 $listener = New-Object System.Net.HttpListener
+$networkMode = $false
 
-# Agregar prefijos locales
-$listener.Prefixes.Add("http://localhost:$port/")
-$listener.Prefixes.Add("http://127.0.0.1:$port/")
-
-# Agregar prefijo comodin o IPs de la red local
-$boundAll = $false
+# 1. Intentar iniciar con acceso de red local (requiere Admin o regla de URL)
 try {
     $listener.Prefixes.Add("http://+:$port/")
-    $boundAll = $true
-} catch {
-    foreach ($ip in $ipList) {
-        try {
-            $listener.Prefixes.Add("http://${ip}:${port}/")
-        } catch {}
-    }
-}
-
-try {
+    $listener.Prefixes.Add("http://localhost:$port/")
+    $listener.Prefixes.Add("http://127.0.0.1:$port/")
     $listener.Start()
+    $networkMode = $true
 } catch {
-    Write-Host "Error al iniciar el servidor en el puerto $port: $_" -ForegroundColor Red
-    Write-Host "Revisa si ya tienes otra ventana del servidor abierta."
-    Read-Host "Presiona Enter para cerrar esta ventana..."
-    exit 1
+    # 2. Si no tiene permisos de administrador, iniciar en MODO LOCAL (100% garantizado sin permisos)
+    $listener = New-Object System.Net.HttpListener
+    $listener.Prefixes.Add("http://localhost:$port/")
+    $listener.Prefixes.Add("http://127.0.0.1:$port/")
+    try {
+        $listener.Start()
+        $networkMode = $false
+    } catch {
+        Write-Host "Error al iniciar el servidor en el puerto $port: $_" -ForegroundColor Red
+        Write-Host "Revisa si ya tienes otra ventana del servidor abierta."
+        Read-Host "Presiona Enter para cerrar esta ventana..."
+        exit 1
+    }
 }
 
 Clear-Host
@@ -55,18 +53,22 @@ Write-Host "====================================================================
 Write-Host " En esta computadora ingresa a: " -NoNewline
 Write-Host "http://localhost:$port/" -ForegroundColor Yellow
 Write-Host ""
-if ($ipList.Count -gt 0) {
-    Write-Host " Desde otras computadoras o telefonos en el Wi-Fi del taller:" -ForegroundColor White
-    foreach ($ip in $ipList) {
-        Write-Host "   -> http://${ip}:${port}/" -ForegroundColor Yellow
+if ($networkMode) {
+    if ($ipList.Count -gt 0) {
+        Write-Host " Desde otras computadoras o teléfonos en el Wi-Fi del taller:" -ForegroundColor White
+        foreach ($ip in $ipList) {
+            Write-Host "   -> http://${ip}:${port}/" -ForegroundColor Yellow
+        }
     }
 } else {
-    Write-Host " Conecta esta PC a la red del taller para ver la direccion IP local." -ForegroundColor Gray
+    Write-Host " [MODO LOCAL ACTIVO]: Sistema funcionando al 100% en esta PC." -ForegroundColor Green
+    Write-Host " Si deseas conectar otras computadoras o celulares en el Wi-Fi:" -ForegroundColor DarkYellow
+    Write-Host " Haz clic derecho en 'iniciar-servidor.bat' y elige 'Ejecutar como administrador'." -ForegroundColor DarkYellow
 }
 Write-Host "======================================================================" -ForegroundColor Cyan
 Write-Host " Base de datos central: $dbFile" -ForegroundColor Gray
-Write-Host " [Manten esta ventanita abierta para que los tecnicos puedan conectarse]" -ForegroundColor DarkYellow
-Write-Host " Para detener el servidor: Cierra esta ventana o presiona Ctrl+C." -ForegroundColor Gray
+Write-Host " [Mantén esta ventanita abierta mientras usen el sistema en el taller]" -ForegroundColor DarkGreen
+Write-Host " Para detener el servidor: Cierra esta ventana." -ForegroundColor Gray
 Write-Host "======================================================================" -ForegroundColor Cyan
 Write-Host ""
 
