@@ -1841,12 +1841,17 @@
            ========================================================== -->
       <section id="tab-instaladas" class="panel-view">
         <div class="admin-card">
-          <div class="admin-card-title">
+          <div class="admin-card-title" style="flex-wrap: wrap; gap: 10px;">
             <span>Licencias Instaladas Exitosamente</span>
-            <button type="button" class="btn btn-secondary btn-sm admin-only" id="btn-export-installed-csv">
-              <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              <span>Exportar CSV</span>
-            </button>
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <select id="select-export-month" class="form-control admin-only" style="width: auto; min-width: 165px; padding: 4px 10px; font-size: 0.82rem; height: 32px; background: var(--bg-card); color: var(--text);">
+                <option value="ALL">📅 Todos los Meses</option>
+              </select>
+              <button type="button" class="btn btn-primary btn-sm admin-only" id="btn-export-monthly-excel" title="Descargar reporte mensual para Microsoft Excel">
+                <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                <span>Descargar Excel (.csv)</span>
+              </button>
+            </div>
           </div>
           <div class="search-row admin-only" style="margin-bottom: 16px;">
             <div class="search-input-wrap">
@@ -2083,6 +2088,16 @@
               <span>Exportar Registro</span>
             </button>
           </div>
+
+          <!-- Buscador en tiempo real de Auditoría (Orden SO****, Cliente, Técnico, Clave, Fecha) -->
+          <div class="search-row" style="margin-bottom: 14px;">
+            <div class="search-input-wrap">
+              <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="filter-logs-search-input" class="search-input" placeholder="Buscar por Orden SO****, Cliente, Técnico, Clave o Fecha...">
+            </div>
+          </div>
+          <div id="logs-filter-stats" style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 12px; display: none;"></div>
+
           <div class="table-responsive">
             <table class="data-table">
               <thead>
@@ -2431,24 +2446,28 @@
         <input type="hidden" id="install-modal-license-id">
         <input type="hidden" id="install-modal-is-editing" value="0">
 
+        <p style="font-size: 0.82rem; color: var(--navy); background: var(--blue-subtle); padding: 6px 10px; border-radius: var(--radius-sm); margin-bottom: 12px; font-weight: 500;">
+          ℹ️ Para validar la instalación debes ingresar al menos uno de los tres datos: <strong>Orden SO</strong>, <strong>Equipo</strong> o <strong>Cliente</strong>.
+        </p>
+
         <!-- Campo Cliente -->
         <div class="form-group">
-          <label class="form-label" for="input-inst-client">Nombre del Cliente / Empresa <span style="color: var(--red);">*</span></label>
-          <input type="text" id="input-inst-client" class="form-control" placeholder="Ej. Laboratorios San Rafael / Juan Pérez" autocomplete="off" required>
+          <label class="form-label" for="input-inst-client">Nombre del Cliente / Empresa</label>
+          <input type="text" id="input-inst-client" class="form-control" placeholder="Ej. Laboratorios San Rafael / Juan Pérez" autocomplete="off">
         </div>
 
         <!-- Campo Número de Orden SO**** -->
         <div class="form-group">
           <label class="form-label" for="input-inst-order">
-            Número de Orden (SO****) <span style="color: var(--red);">*</span>
+            Número de Orden (SO****)
             <span style="font-size: 0.75rem; font-weight: normal; color: var(--text-muted);">(Prefijo SO automático)</span>
           </label>
-          <input type="text" id="input-inst-order" class="form-control" placeholder="SO1042" maxlength="15" autocomplete="off" style="text-transform: uppercase; font-family: var(--font-mono); font-weight: 700;" required>
+          <input type="text" id="input-inst-order" class="form-control" placeholder="SO1042" maxlength="15" autocomplete="off" style="text-transform: uppercase; font-family: var(--font-mono); font-weight: 700;">
         </div>
 
         <!-- Selector de Tipo de Equipo -->
         <div class="form-group" style="margin-bottom: 8px;">
-          <label class="form-label">Tipo de Equipo <span style="color: var(--red);">*</span></label>
+          <label class="form-label">Tipo de Equipo</label>
           <div class="equipment-type-selector">
             <div class="equipment-type-option selected" id="opt-type-mtek" data-type="Combo M-TEK">
               <div style="font-size: 1.2rem; margin-bottom: 4px;">🖥️</div>
@@ -2464,7 +2483,7 @@
         <!-- Campo Dinámico: Código M-TEK (M-TEK*****) -->
         <div class="form-group" id="group-mtek-detail">
           <label class="form-label" for="input-inst-mtek">
-            Código Combo M-TEK (M-TEK*****) <span style="color: var(--red);">*</span>
+            Código Combo M-TEK (M-TEK*****)
             <span style="font-size: 0.75rem; font-weight: normal; color: var(--text-muted);">(Ej. M-TEK15574 o M-TEK5060)</span>
           </label>
           <input type="text" id="input-inst-mtek" class="form-control" placeholder="M-TEK15574" maxlength="25" autocomplete="off" style="text-transform: uppercase; font-family: var(--font-mono); font-weight: 700;">
@@ -2473,7 +2492,7 @@
         <!-- Campo Dinámico: Código Laptop (LP****) -->
         <div class="form-group" id="group-laptop-detail" style="display: none;">
           <label class="form-label" for="input-inst-laptop">
-            Código de Laptop (LP****) <span style="color: var(--red);">*</span>
+            Código de Laptop (LP****)
             <span style="font-size: 0.75rem; font-weight: normal; color: var(--text-muted);">(Ej. LP1001 o LP2045)</span>
           </label>
           <input type="text" id="input-inst-laptop" class="form-control" placeholder="LP2045" maxlength="20" autocomplete="off" style="text-transform: uppercase; font-family: var(--font-mono); font-weight: 700;">
@@ -2489,6 +2508,35 @@
           </button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- Modal de Advertencia de Campos Incompletos (Sin diálogos nativos) -->
+  <div class="modal-overlay" id="modal-confirm-missing-fields" style="z-index: 1060;">
+    <div class="modal-box" style="max-width: 440px;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 1.3rem;">⚠️</span>
+          <h3 class="modal-title" style="color: #b45309; font-weight: 700;">Campos Incompletos</h3>
+        </div>
+        <button type="button" class="btn-icon" id="btn-close-missing-modal">
+          <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div style="padding: 10px 0;">
+        <p style="font-size: 0.95rem; color: var(--text-main); margin-bottom: 8px; line-height: 1.5;" id="missing-fields-prompt-text">
+          <!-- Mensaje dinámico -->
+        </p>
+        <p style="font-size: 0.82rem; color: var(--text-muted); margin: 0; line-height: 1.4;">
+          Puedes continuar e instalarla con los datos que ingresaste, o volver atrás para rellenar la información restante.
+        </p>
+      </div>
+
+      <div class="modal-footer" style="padding-top: 12px; display: flex; gap: 8px; justify-content: flex-end;">
+        <button type="button" class="btn btn-secondary" id="btn-cancel-missing-modal">Volver y Completar</button>
+        <button type="button" class="btn btn-primary" id="btn-proceed-missing-modal">Sí, Continuar e Instalar</button>
+      </div>
     </div>
   </div>
 
@@ -2866,6 +2914,7 @@
       filterStatus: 'ALL',
       filterSearch: '',
       filterInstalledSearch: '',
+      filterLogsSearch: '',
       filterDate: 'ALL',
       sortOrder: 'date-desc',
 
@@ -3630,6 +3679,7 @@
 
     // Render de licencias instaladas
     function renderInstalledLicenses() {
+      populateExportMonths();
       const container = document.getElementById('installed-cards-container');
       container.innerHTML = '';
 
@@ -3866,6 +3916,25 @@
       document.getElementById('install-modal-feedback').innerText = '';
     }
 
+    let pendingEquipmentInstallation = null;
+
+    function openMissingFieldsConfirmModal(missingList, onProceed) {
+      const modal = document.getElementById('modal-confirm-missing-fields');
+      const textEl = document.getElementById('missing-fields-prompt-text');
+      if (!modal || !textEl) return;
+
+      const formattedMissing = missingList.join(' ni ');
+      textEl.innerHTML = `¿Estás seguro que deseas continuar sin <strong>${formattedMissing}</strong>?`;
+      pendingEquipmentInstallation = onProceed;
+      modal.classList.add('active');
+    }
+
+    function closeMissingFieldsConfirmModal() {
+      const modal = document.getElementById('modal-confirm-missing-fields');
+      if (modal) modal.classList.remove('active');
+      pendingEquipmentInstallation = null;
+    }
+
     async function submitInstallEquipment() {
       const licenseId = document.getElementById('install-modal-license-id').value;
       const isEditing = document.getElementById('install-modal-is-editing').value === '1';
@@ -3880,18 +3949,56 @@
 
       const client = clientInput.value.trim();
       const rawOrder = orderInput.value.trim();
+      const rawEquipment = (currentSelectedEquipmentType === 'Laptop' ? laptopInput.value : mtekInput.value).trim();
 
-      if (!client) {
-        feedback.innerText = 'Por favor ingresa el nombre del cliente o empresa.';
-        clientInput.focus();
+      const hasClient = !!client;
+      const hasOrder = !!rawOrder;
+      const hasEquipment = !!rawEquipment;
+
+      // REGLA: Si no está lleno ningún apartado, no se puede validar
+      if (!hasClient && !hasOrder && !hasEquipment) {
+        feedback.innerText = 'Debes ingresar al menos uno de los tres datos (Orden SO, Tipo de Equipo o Cliente) para poder registrar la instalación.';
         return;
       }
+      feedback.innerText = '';
 
-      if (!rawOrder) {
-        feedback.innerText = 'Por favor ingresa el número de orden (SO****).';
-        orderInput.focus();
-        return;
+      // Determinar qué datos faltan
+      const missingList = [];
+      if (!hasOrder) missingList.push('Número de Orden (SO)');
+      if (!hasEquipment) missingList.push(currentSelectedEquipmentType === 'Laptop' ? 'Código de Laptop (LP)' : 'Código de Combo M-TEK');
+      if (!hasClient) missingList.push('Nombre del Cliente');
+
+      const proceedInstallation = async () => {
+        const formattedOrder = hasOrder ? formatSOCode(rawOrder) : 'Sin Orden';
+        let formattedEquipment = 'Sin Equipo Registrado';
+        if (hasEquipment) {
+          formattedEquipment = currentSelectedEquipmentType === 'Laptop' ? formatLaptopCode(rawEquipment) : formatMTEKCode(rawEquipment);
+        }
+        const finalClient = hasClient ? client : 'Sin Cliente Registrado';
+
+        await executeInstallEquipment({
+          licenseId,
+          isEditing,
+          client: finalClient,
+          order: formattedOrder,
+          equipmentType: currentSelectedEquipmentType,
+          equipmentDetail: formattedEquipment
+        });
+      };
+
+      // Si falta al menos uno pero hay al menos uno lleno, mostrar aviso de confirmación
+      if (missingList.length > 0) {
+        openMissingFieldsConfirmModal(missingList, proceedInstallation);
+      } else {
+        await proceedInstallation();
       }
+    }
+
+    async function executeInstallEquipment({ licenseId, isEditing, client, order, equipmentType, equipmentDetail }) {
+      const license = State.licenses.find(l => l.id === licenseId);
+      if (!license) return;
+
+      const feedback = document.getElementById('install-modal-feedback');
 
       // Prevención de colisión multi-usuario en el servidor del taller
       if (DB_SERVICE.isServerDb && !isEditing) {
@@ -3901,42 +4008,22 @@
             const checkData = await checkResp.json();
             const serverLic = checkData.licenses && checkData.licenses.find(l => l.id === licenseId);
             if (serverLic && serverLic.estado === 'Instalada') {
-              feedback.innerText = `Esta licencia ya fue instalada por ${serverLic.instaladoPor || 'otro técnico'}. Selecciona otra.`;
+              if (feedback) feedback.innerText = `Esta licencia ya fue instalada por ${serverLic.instaladoPor || 'otro técnico'}. Selecciona otra.`;
               await DB_SERVICE.init();
               renderLicenses();
+              closeMissingFieldsConfirmModal();
               return;
             }
           }
         } catch (e) {}
       }
 
-      const formattedOrder = formatSOCode(rawOrder);
-      let formattedEquipment = '';
-
-      if (currentSelectedEquipmentType === 'Laptop') {
-        const rawLap = laptopInput.value.trim();
-        if (!rawLap) {
-          feedback.innerText = 'Por favor ingresa el código de la laptop (LP****).';
-          laptopInput.focus();
-          return;
-        }
-        formattedEquipment = formatLaptopCode(rawLap);
-      } else {
-        const rawMtek = mtekInput.value.trim();
-        if (!rawMtek) {
-          feedback.innerText = 'Por favor ingresa el código del Combo M-TEK (M-TEK*****).';
-          mtekInput.focus();
-          return;
-        }
-        formattedEquipment = formatMTEKCode(rawMtek);
-      }
-
       const oldState = license.estado;
       license.estado = 'Instalada';
       license.cliente = client;
-      license.orden = formattedOrder;
-      license.tipoEquipo = currentSelectedEquipmentType;
-      license.equipoDetalle = formattedEquipment;
+      license.orden = order;
+      license.tipoEquipo = equipmentType;
+      license.equipoDetalle = equipmentDetail;
 
       if (!isEditing || !license.instaladoPor) {
         license.instaladoPor = State.currentUser.nombre;
@@ -3963,8 +4050,9 @@
         cambio: `${license.orden} - ${license.cliente}`
       });
 
+      closeMissingFieldsConfirmModal();
       closeInstallEquipmentModal();
-      showToast(isEditing ? `Datos actualizados: ${license.orden}` : `Licencia instalada con éxito en ${license.equipoDetalle} (${license.orden})`, 'success');
+      showToast(isEditing ? `Datos actualizados: ${license.orden}` : `Licencia instalada con éxito (${license.orden})`, 'success');
 
       renderLicenses();
       if (State.activeTab === 'tab-instaladas') renderInstalledLicenses();
@@ -4154,6 +4242,109 @@
 
       const csvContent = '\uFEFF' + [headers.join(','), ...rows.map(r => r.join(','))].join('\r\n');
       downloadCsvFile(csvContent, `winpro_auditoria_${formatDate()}.csv`);
+    }
+
+    // ==========================================================================
+    // REPORTE EXCEL DE INSTALACIONES POR MES (MICROSOFT EXCEL UTF-8 BOM)
+    // ==========================================================================
+    function populateExportMonths() {
+      const select = document.getElementById('select-export-month');
+      if (!select) return;
+      const currentVal = select.value;
+
+      const installed = State.licenses.filter(l => l.estado === 'Instalada' && (l.instaladoEl || l.fechaSubida));
+      const monthsSet = new Set();
+
+      installed.forEach(l => {
+        const rawDate = l.instaladoEl || l.fechaSubida;
+        if (rawDate && rawDate.length >= 7) {
+          monthsSet.add(rawDate.substring(0, 7)); // 'YYYY-MM'
+        }
+      });
+
+      const monthNames = [
+        'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+        'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+      ];
+
+      const sortedMonths = Array.from(monthsSet).sort().reverse();
+      const currentYearMonth = formatDate().substring(0, 7);
+      if (!monthsSet.has(currentYearMonth)) {
+        sortedMonths.unshift(currentYearMonth);
+      }
+
+      let html = '<option value="ALL">📅 Todos los Meses</option>';
+      sortedMonths.forEach(m => {
+        const parts = m.split('-');
+        const year = parts[0];
+        const monthNum = parseInt(parts[1], 10);
+        const name = monthNames[monthNum - 1] || parts[1];
+        html += `<option value="${m}">${name} ${year}</option>`;
+      });
+
+      select.innerHTML = html;
+      if (currentVal && Array.from(select.options).some(o => o.value === currentVal)) {
+        select.value = currentVal;
+      }
+    }
+
+    function exportInstalledByMonthToExcel() {
+      const select = document.getElementById('select-export-month');
+      const selectedMonth = select ? select.value : 'ALL';
+
+      let list = State.licenses.filter(l => l.estado === 'Instalada');
+
+      if (selectedMonth !== 'ALL') {
+        list = list.filter(l => {
+          const d = l.instaladoEl || l.fechaSubida || '';
+          return d.startsWith(selectedMonth);
+        });
+      }
+
+      if (list.length === 0) {
+        showToast('No hay licencias instaladas registradas en el período seleccionado.', 'warning');
+        return;
+      }
+
+      // Ordenar cronológicamente (más recientes primero)
+      list.sort((a, b) => new Date(b.instaladoEl || b.fechaSubida) - new Date(a.instaladoEl || a.fechaSubida));
+
+      const headers = [
+        'Clave de Licencia',
+        'Edición Windows',
+        'Técnico (Quién la Instaló)',
+        'Día y Hora de Instalación',
+        'Número de Orden (SO)',
+        'Nombre del Cliente',
+        'Tipo de Equipo',
+        'Código de Equipo',
+        'Estado'
+      ];
+
+      const rows = list.map(l => {
+        let exactDateTime = l.instaladoEl || '';
+        if (l.historial && l.historial.length > 0) {
+          const lastHist = l.historial.slice().reverse().find(h => h.a === 'Instalada' || h.a === 'Datos Editados');
+          if (lastHist && lastHist.fecha) exactDateTime = lastHist.fecha;
+        }
+
+        return [
+          `"${l.clave || ''}"`,
+          `"${l.tipo || 'Windows 11 Pro'}"`,
+          `"${l.instaladoPor || 'No registrado'}"`,
+          `"${exactDateTime}"`,
+          `"${l.orden || 'Sin Orden'}"`,
+          `"${l.cliente || 'Sin Cliente'}"`,
+          `"${l.tipoEquipo || 'Equipo'}"`,
+          `"${l.equipoDetalle || 'Sin Código'}"`,
+          `"${l.estado || 'Instalada'}"`
+        ];
+      });
+
+      const monthLabel = selectedMonth === 'ALL' ? 'todas' : selectedMonth;
+      const filename = `reporte_instalaciones_${monthLabel}.csv`;
+      const csvContent = '\uFEFF' + [headers.join(','), ...rows.map(r => r.join(','))].join('\r\n');
+      downloadCsvFile(csvContent, filename);
     }
 
     function downloadCsvFile(content, fileName) {
@@ -4846,25 +5037,50 @@
       });
     }
 
-    // Tabla de Logs de Auditoría
+    // Tabla de Logs de Auditoría con Buscador en Tiempo Real (SO****, Cliente, Técnico, Clave, Fecha)
     async function renderActivityLogsTable() {
       const tbody = document.getElementById('logs-table-body');
+      if (!tbody) return;
       tbody.innerHTML = '';
 
-      const logs = await DB_SERVICE.getActivityLogs();
+      let logs = await DB_SERVICE.getActivityLogs();
+      if (!logs) logs = [];
+
+      const query = (State.filterLogsSearch || '').trim().toLowerCase();
+      const statsEl = document.getElementById('logs-filter-stats');
+
+      if (query) {
+        logs = logs.filter(log => {
+          const u = (log.usuario || '').toLowerCase();
+          const a = (log.accion || '').toLowerCase();
+          const d = (log.detalle || '').toLowerCase();
+          const c = (log.cambio || '').toLowerCase();
+          const f = (log.fecha || '').toLowerCase();
+          return u.includes(query) || a.includes(query) || d.includes(query) || c.includes(query) || f.includes(query);
+        });
+
+        if (statsEl) {
+          statsEl.style.display = 'block';
+          const safeQuery = query.replace(/[<>&]/g, '');
+          statsEl.innerHTML = `Mostrando <strong>${logs.length}</strong> registro(s) encontrado(s) para "<em>${safeQuery}</em>"`;
+        }
+      } else {
+        if (statsEl) statsEl.style.display = 'none';
+      }
+
       if (logs.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 18px;">No hay registros de actividad.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 22px;">No se encontraron registros de auditoría${query ? ' que coincidan con la búsqueda' : ''}.</td></tr>`;
         return;
       }
 
-      logs.slice(0, 50).forEach(log => {
+      logs.slice(0, 100).forEach(log => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td><strong>${log.fecha}</strong></td>
-          <td>${log.usuario}</td>
-          <td><span class="badge" style="background: var(--blue-subtle); color: var(--navy);">${log.accion}</span></td>
-          <td style="font-family: var(--font-mono); font-size: 0.8rem;">${log.detalle}</td>
-          <td>${log.cambio}</td>
+          <td><strong style="color: var(--text);">${log.fecha}</strong></td>
+          <td><span style="font-weight: 600; color: var(--navy);">${log.usuario}</span></td>
+          <td><span class="badge" style="background: var(--blue-subtle); color: var(--navy); font-weight: 600;">${log.accion}</span></td>
+          <td style="font-family: var(--font-mono); font-size: 0.82rem;">${log.detalle}</td>
+          <td style="font-weight: 500;">${log.cambio}</td>
         `;
         tbody.appendChild(tr);
       });
@@ -5418,6 +5634,37 @@ Sistema de Inventario - Activacion WinPro`;
         searchInstalledInp.addEventListener('input', (e) => {
           State.filterInstalledSearch = e.target.value;
           renderInstalledLicenses();
+        });
+      }
+
+      // Exportación de Instalaciones por Mes (Microsoft Excel)
+      const exportMonthlyExcelBtn = document.getElementById('btn-export-monthly-excel');
+      if (exportMonthlyExcelBtn) {
+        exportMonthlyExcelBtn.addEventListener('click', exportInstalledByMonthToExcel);
+      }
+
+      // Buscador en tiempo real de Auditoría (SO****, Cliente, Técnico, Clave, Fecha)
+      const searchLogsInp = document.getElementById('filter-logs-search-input');
+      if (searchLogsInp) {
+        searchLogsInp.addEventListener('input', (e) => {
+          State.filterLogsSearch = e.target.value;
+          renderActivityLogsTable();
+        });
+      }
+
+      // Modal de Advertencia de Campos Faltantes
+      const closeMissingModalBtn = document.getElementById('btn-close-missing-modal');
+      if (closeMissingModalBtn) closeMissingModalBtn.addEventListener('click', closeMissingFieldsConfirmModal);
+
+      const cancelMissingModalBtn = document.getElementById('btn-cancel-missing-modal');
+      if (cancelMissingModalBtn) cancelMissingModalBtn.addEventListener('click', closeMissingFieldsConfirmModal);
+
+      const proceedMissingModalBtn = document.getElementById('btn-proceed-missing-modal');
+      if (proceedMissingModalBtn) {
+        proceedMissingModalBtn.addEventListener('click', async () => {
+          if (typeof pendingEquipmentInstallation === 'function') {
+            await pendingEquipmentInstallation();
+          }
         });
       }
 
