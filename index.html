@@ -1177,6 +1177,129 @@
       justify-content: space-between;
     }
 
+    /* Metadatos de Equipo y Orden en Tarjetas */
+    .equipment-meta-box {
+      background: rgba(95, 185, 228, 0.08);
+      border: 1px solid rgba(95, 185, 228, 0.25);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 0.82rem;
+    }
+    [data-theme="dark"] .equipment-meta-box {
+      background: rgba(95, 185, 228, 0.05);
+      border-color: rgba(95, 185, 228, 0.2);
+    }
+    .equipment-meta-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 2px;
+    }
+    .equipment-type-pill {
+      font-weight: 700;
+      font-size: 0.75rem;
+      padding: 3px 8px;
+      border-radius: 9999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .pill-mtek {
+      background: #E0F2FE;
+      color: #0369A1;
+      border: 1px solid #BAE6FD;
+    }
+    [data-theme="dark"] .pill-mtek {
+      background: rgba(3, 105, 161, 0.25);
+      color: #7DD3FC;
+      border-color: rgba(125, 211, 252, 0.3);
+    }
+    .pill-laptop {
+      background: #F3E8FF;
+      color: #7E22CE;
+      border: 1px solid #E9D5FF;
+    }
+    [data-theme="dark"] .pill-laptop {
+      background: rgba(126, 34, 206, 0.25);
+      color: #D8B4FE;
+      border-color: rgba(216, 180, 254, 0.3);
+    }
+    .order-code-pill {
+      font-family: var(--font-mono);
+      font-weight: 800;
+      font-size: 0.78rem;
+      background: var(--surface);
+      color: var(--navy);
+      border: 1px solid var(--border);
+      padding: 2px 7px;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+    }
+    [data-theme="dark"] .order-code-pill {
+      color: var(--blue);
+    }
+    .equipment-meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .meta-field-label {
+      color: var(--text-muted);
+      font-size: 0.76rem;
+    }
+    .meta-field-value {
+      font-weight: 700;
+      color: var(--text);
+      text-align: right;
+    }
+    .meta-field-code {
+      font-family: var(--font-mono);
+      color: #0284C7;
+      letter-spacing: 0.5px;
+    }
+    [data-theme="dark"] .meta-field-code {
+      color: #38BDF8;
+    }
+
+    /* Selector de tipo de equipo en Modal */
+    .equipment-type-selector {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .equipment-type-option {
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px;
+      cursor: pointer;
+      text-align: center;
+      transition: var(--transition);
+      background: var(--surface);
+      user-select: none;
+    }
+    .equipment-type-option:hover {
+      border-color: var(--blue);
+    }
+    .equipment-type-option.selected {
+      border-color: #0284C7;
+      background: var(--blue-subtle);
+      font-weight: 700;
+    }
+    .act-edit-equipment {
+      background: var(--surface);
+      color: var(--navy);
+      border: 1px solid var(--border);
+    }
+    [data-theme="dark"] .act-edit-equipment {
+      color: var(--blue);
+    }
+
     /* Botones de Acción de Estado */
     .card-actions-row {
       display: flex;
@@ -1722,6 +1845,12 @@
               <span>Exportar CSV</span>
             </button>
           </div>
+          <div class="search-row admin-only" style="margin-bottom: 16px;">
+            <div class="search-input-wrap">
+              <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="filter-installed-search-input" class="search-input" placeholder="Buscar por Cliente, Orden SO****, LP****, M-TEK***** o Clave...">
+            </div>
+          </div>
           <div class="licenses-grid" id="installed-cards-container">
             <!-- Render dinámico de instaladas -->
           </div>
@@ -2256,6 +2385,88 @@
     </div>
   </div>
 
+  <!-- 8. Modal de Registro de Instalación y Datos de Equipo (SO****, Cliente, M-TEK*****, LP****) -->
+  <div class="modal-overlay" id="modal-install-equipment">
+    <div class="modal-box" style="max-width: 480px;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="title-install-equipment">Registrar Instalación de Equipo</h3>
+        <button type="button" class="btn-icon" id="btn-close-install-modal">
+          <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div style="background: var(--gray-light); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; margin-bottom: 14px;">
+        <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 2px;">Licencia Windows 11 Pro a asignar:</div>
+        <div style="font-family: var(--font-mono); font-weight: 700; font-size: 0.9rem; color: var(--text);" id="install-modal-key-display">
+          <span class="cmd-prefix">slmgr -ipk </span><span id="install-modal-key-code">XXXXX-XXXXX-XXXXX-XXXXX-XXXXX</span>
+        </div>
+      </div>
+
+      <form id="form-install-equipment" onsubmit="return false;">
+        <input type="hidden" id="install-modal-license-id">
+        <input type="hidden" id="install-modal-is-editing" value="0">
+
+        <!-- Campo Cliente -->
+        <div class="form-group">
+          <label class="form-label" for="input-inst-client">Nombre del Cliente / Empresa <span style="color: var(--red);">*</span></label>
+          <input type="text" id="input-inst-client" class="form-control" placeholder="Ej. Laboratorios San Rafael / Juan Pérez" autocomplete="off" required>
+        </div>
+
+        <!-- Campo Número de Orden SO**** -->
+        <div class="form-group">
+          <label class="form-label" for="input-inst-order">
+            Número de Orden (SO****) <span style="color: var(--red);">*</span>
+            <span style="font-size: 0.75rem; font-weight: normal; color: var(--text-muted);">(Prefijo SO automático)</span>
+          </label>
+          <input type="text" id="input-inst-order" class="form-control" placeholder="SO1042" maxlength="15" autocomplete="off" style="text-transform: uppercase; font-family: var(--font-mono); font-weight: 700;" required>
+        </div>
+
+        <!-- Selector de Tipo de Equipo -->
+        <div class="form-group" style="margin-bottom: 8px;">
+          <label class="form-label">Tipo de Equipo <span style="color: var(--red);">*</span></label>
+          <div class="equipment-type-selector">
+            <div class="equipment-type-option selected" id="opt-type-mtek" data-type="Combo M-TEK">
+              <div style="font-size: 1.2rem; margin-bottom: 4px;">🖥️</div>
+              <div style="font-size: 0.85rem;">Combo PC M-TEK</div>
+            </div>
+            <div class="equipment-type-option" id="opt-type-laptop" data-type="Laptop">
+              <div style="font-size: 1.2rem; margin-bottom: 4px;">💻</div>
+              <div style="font-size: 0.85rem;">Laptop</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Campo Dinámico: Código M-TEK (M-TEK*****) -->
+        <div class="form-group" id="group-mtek-detail">
+          <label class="form-label" for="input-inst-mtek">
+            Código Combo M-TEK (M-TEK*****) <span style="color: var(--red);">*</span>
+            <span style="font-size: 0.75rem; font-weight: normal; color: var(--text-muted);">(Ej. M-TEK15574 o M-TEK5060)</span>
+          </label>
+          <input type="text" id="input-inst-mtek" class="form-control" placeholder="M-TEK15574" maxlength="25" autocomplete="off" style="text-transform: uppercase; font-family: var(--font-mono); font-weight: 700;">
+        </div>
+
+        <!-- Campo Dinámico: Código Laptop (LP****) -->
+        <div class="form-group" id="group-laptop-detail" style="display: none;">
+          <label class="form-label" for="input-inst-laptop">
+            Código de Laptop (LP****) <span style="color: var(--red);">*</span>
+            <span style="font-size: 0.75rem; font-weight: normal; color: var(--text-muted);">(Ej. LP1001 o LP2045)</span>
+          </label>
+          <input type="text" id="input-inst-laptop" class="form-control" placeholder="LP2045" maxlength="20" autocomplete="off" style="text-transform: uppercase; font-family: var(--font-mono); font-weight: 700;">
+        </div>
+
+        <div id="install-modal-feedback" style="font-size: 0.82rem; font-weight: 600; color: var(--red); min-height: 18px; margin-bottom: 12px;"></div>
+
+        <div class="modal-footer" style="padding-top: 8px;">
+          <button type="button" class="btn btn-secondary" id="btn-cancel-install-modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" id="btn-confirm-install-equipment">
+            <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            <span id="btn-confirm-install-text">Confirmar Instalación</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- Contenedor Flotante de Notificaciones Toast -->
   <div id="toast-container"></div>
 
@@ -2544,6 +2755,7 @@
       activeTab: 'tab-licencias',
       filterStatus: 'ALL',
       filterSearch: '',
+      filterInstalledSearch: '',
       filterDate: 'ALL',
       sortOrder: 'date-desc',
 
@@ -3102,9 +3314,12 @@
           // Filtro de Búsqueda
           if (State.filterSearch) {
             const query = State.filterSearch.toLowerCase();
-            const matchKey = lic.clave.toLowerCase().includes(query);
+            const matchKey = lic.clave ? lic.clave.toLowerCase().includes(query) : false;
             const matchUser = lic.instaladoPor ? lic.instaladoPor.toLowerCase().includes(query) : false;
-            if (!matchKey && !matchUser) return false;
+            const matchClient = lic.cliente ? lic.cliente.toLowerCase().includes(query) : false;
+            const matchOrder = lic.orden ? lic.orden.toLowerCase().includes(query) : false;
+            const matchEquip = lic.equipoDetalle ? lic.equipoDetalle.toLowerCase().includes(query) : false;
+            if (!matchKey && !matchUser && !matchClient && !matchOrder && !matchEquip) return false;
           }
         }
 
@@ -3179,7 +3394,7 @@
         // El administrador puede cambiar a cualquier estado o revertir a Disponible
         actionButtonsHtml = `
           <div class="card-actions-row">
-            ${lic.estado !== 'Instalada' ? `<button type="button" class="btn-status-act act-installed" data-action="Instalada">✅ Instalada</button>` : ''}
+            ${lic.estado !== 'Instalada' ? `<button type="button" class="btn-status-act act-installed" data-action="Instalada">✅ Instalada</button>` : `<button type="button" class="btn-status-act act-edit-equipment btn-card-edit-equip" data-id="${lic.id}">✏️ Editar Datos</button>`}
             ${lic.estado !== 'Probar otra vez' ? `<button type="button" class="btn-status-act act-retry" data-action="Probar otra vez">🔄 Probar</button>` : ''}
             ${lic.estado !== 'Dañada' ? `<button type="button" class="btn-status-act act-damaged" data-action="Dañada">❌ Dañada</button>` : ''}
             ${lic.estado !== 'Disponible' ? `<button type="button" class="btn-status-act act-revert" data-action="Disponible">↩ Revertir</button>` : ''}
@@ -3231,6 +3446,25 @@
           ${lic.instaladoEl ? `<div class="row-info"><span>Fecha instalación: <strong>${lic.instaladoEl}</strong></span></div>` : ''}
         </div>
 
+        ${lic.estado === 'Instalada' ? `
+          <div class="equipment-meta-box">
+            <div class="equipment-meta-header">
+              <span class="equipment-type-pill ${lic.tipoEquipo === 'Laptop' ? 'pill-laptop' : 'pill-mtek'}">
+                ${lic.tipoEquipo === 'Laptop' ? '💻 Laptop' : '🖥️ Combo PC'}
+              </span>
+              <span class="order-code-pill" title="Número de orden">📋 ${lic.orden || 'Sin Orden'}</span>
+            </div>
+            <div class="equipment-meta-row">
+              <span class="meta-field-label">Cliente:</span>
+              <span class="meta-field-value">${lic.cliente || 'No especificado'}</span>
+            </div>
+            <div class="equipment-meta-row">
+              <span class="meta-field-label">${lic.tipoEquipo === 'Laptop' ? 'Código Laptop:' : 'Combo M-TEK:'}</span>
+              <span class="meta-field-value meta-field-code">${lic.equipoDetalle || 'N/A'}</span>
+            </div>
+          </div>
+        ` : ''}
+
         ${actionButtonsHtml}
       `;
 
@@ -3264,9 +3498,22 @@
       card.querySelectorAll('.btn-status-act').forEach(btn => {
         btn.addEventListener('click', () => {
           const newStatus = btn.dataset.action;
-          changeLicenseState(lic.id, newStatus);
+          if (newStatus === 'Instalada') {
+            openInstallEquipmentModal(lic.id, false);
+          } else if (newStatus) {
+            changeLicenseState(lic.id, newStatus);
+          }
         });
       });
+
+      // Event listener para editar datos de equipo (solo admin)
+      const editBtn = card.querySelector('.btn-card-edit-equip');
+      if (editBtn) {
+        editBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openInstallEquipmentModal(lic.id, true);
+        });
+      }
 
       return card;
     }
@@ -3276,14 +3523,28 @@
       const container = document.getElementById('installed-cards-container');
       container.innerHTML = '';
 
-      const installed = State.licenses.filter(l => l.estado === 'Instalada');
+      let installed = State.licenses.filter(l => l.estado === 'Instalada');
+
+      if (State.filterInstalledSearch) {
+        const q = State.filterInstalledSearch.toLowerCase();
+        installed = installed.filter(lic => {
+          const matchKey = lic.clave ? lic.clave.toLowerCase().includes(q) : false;
+          const matchUser = lic.instaladoPor ? lic.instaladoPor.toLowerCase().includes(q) : false;
+          const matchClient = lic.cliente ? lic.cliente.toLowerCase().includes(q) : false;
+          const matchOrder = lic.orden ? lic.orden.toLowerCase().includes(q) : false;
+          const matchEquip = lic.equipoDetalle ? lic.equipoDetalle.toLowerCase().includes(q) : false;
+          const matchType = lic.tipoEquipo ? lic.tipoEquipo.toLowerCase().includes(q) : false;
+          return matchKey || matchUser || matchClient || matchOrder || matchEquip || matchType;
+        });
+      }
+
       installed.sort((a, b) => new Date(b.instaladoEl || b.fechaSubida) - new Date(a.instaladoEl || a.fechaSubida));
 
       if (installed.length === 0) {
         container.innerHTML = `
           <div class="empty-state">
             <svg class="icon icon-lg" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-            <div><strong>No hay licencias instaladas registradas</strong></div>
+            <div><strong>${State.filterInstalledSearch ? 'No se encontraron licencias para la búsqueda' : 'No hay licencias instaladas registradas'}</strong></div>
           </div>
         `;
         return;
@@ -3349,6 +3610,10 @@
         // Revertir a disponible (solo admin)
         license.instaladoPor = null;
         license.instaladoEl = null;
+        license.cliente = null;
+        license.orden = null;
+        license.tipoEquipo = null;
+        license.equipoDetalle = null;
       }
 
       // Agregar al historial de la licencia
@@ -3376,6 +3641,204 @@
       showToast(`Clave ${license.clave.slice(0, 10)}... ➔ ${newState}`, 'success');
 
       // Actualizar interfaz reactivamente sin recargar la página
+      renderLicenses();
+      if (State.activeTab === 'tab-instaladas') renderInstalledLicenses();
+      updateStockBadge();
+
+      if (State.currentRole === 'Admin') {
+        renderAdminAlerts();
+        renderStatsCharts();
+        renderActivityLogsTable();
+      }
+    }
+
+    // ==========================================================================
+    // REGISTRO DE EQUIPO E INSTALACIÓN (CLIENTE, SO****, M-TEK*****, LP****)
+    // ==========================================================================
+    let currentSelectedEquipmentType = 'Combo M-TEK';
+
+    function formatSOCode(raw) {
+      if (!raw) return '';
+      let str = raw.trim().toUpperCase().replace(/\s+/g, '');
+      if (!str.startsWith('SO')) {
+        str = 'SO' + str.replace(/^SO/i, '');
+      }
+      return str;
+    }
+
+    function formatMTEKCode(raw) {
+      if (!raw) return '';
+      let str = raw.trim().toUpperCase().replace(/\s+/g, '');
+      if (str.startsWith('M-TEK')) {
+        return str;
+      }
+      if (str.startsWith('MTEK')) {
+        return 'M-TEK' + str.slice(4);
+      }
+      return 'M-TEK' + str;
+    }
+
+    function formatLaptopCode(raw) {
+      if (!raw) return '';
+      let str = raw.trim().toUpperCase().replace(/\s+/g, '');
+      if (!str.startsWith('LP')) {
+        str = 'LP' + str.replace(/^LP/i, '');
+      }
+      return str;
+    }
+
+    function selectEquipmentType(type) {
+      currentSelectedEquipmentType = type;
+      const optMtek = document.getElementById('opt-type-mtek');
+      const optLaptop = document.getElementById('opt-type-laptop');
+      const grpMtek = document.getElementById('group-mtek-detail');
+      const grpLaptop = document.getElementById('group-laptop-detail');
+
+      if (type === 'Laptop') {
+        if (optLaptop) optLaptop.classList.add('selected');
+        if (optMtek) optMtek.classList.remove('selected');
+        if (grpMtek) grpMtek.style.display = 'none';
+        if (grpLaptop) grpLaptop.style.display = 'block';
+      } else {
+        if (optMtek) optMtek.classList.add('selected');
+        if (optLaptop) optLaptop.classList.remove('selected');
+        if (grpMtek) grpMtek.style.display = 'block';
+        if (grpLaptop) grpLaptop.style.display = 'none';
+      }
+    }
+
+    function openInstallEquipmentModal(licenseId, isEditing = false) {
+      const license = State.licenses.find(l => l.id === licenseId);
+      if (!license) return;
+
+      document.getElementById('install-modal-license-id').value = license.id;
+      document.getElementById('install-modal-is-editing').value = isEditing ? '1' : '0';
+      document.getElementById('install-modal-key-code').innerText = license.clave;
+      document.getElementById('install-modal-feedback').innerText = '';
+
+      const titleEl = document.getElementById('title-install-equipment');
+      const btnConfirmText = document.getElementById('btn-confirm-install-text');
+
+      if (isEditing) {
+        titleEl.innerText = 'Editar Datos de Equipo y Orden';
+        btnConfirmText.innerText = 'Guardar Cambios';
+      } else {
+        titleEl.innerText = 'Registrar Instalación de Equipo';
+        btnConfirmText.innerText = 'Confirmar Instalación';
+      }
+
+      const clientInput = document.getElementById('input-inst-client');
+      const orderInput = document.getElementById('input-inst-order');
+      const mtekInput = document.getElementById('input-inst-mtek');
+      const laptopInput = document.getElementById('input-inst-laptop');
+
+      clientInput.value = license.cliente || '';
+      orderInput.value = license.orden || '';
+
+      const currentType = license.tipoEquipo || 'Combo M-TEK';
+      selectEquipmentType(currentType);
+
+      if (currentType === 'Laptop') {
+        laptopInput.value = license.equipoDetalle || '';
+        mtekInput.value = '';
+      } else {
+        mtekInput.value = license.equipoDetalle || '';
+        laptopInput.value = '';
+      }
+
+      document.getElementById('modal-install-equipment').classList.add('active');
+      setTimeout(() => clientInput.focus(), 120);
+    }
+
+    function closeInstallEquipmentModal() {
+      document.getElementById('modal-install-equipment').classList.remove('active');
+      document.getElementById('form-install-equipment').reset();
+      document.getElementById('install-modal-feedback').innerText = '';
+    }
+
+    async function submitInstallEquipment() {
+      const licenseId = document.getElementById('install-modal-license-id').value;
+      const isEditing = document.getElementById('install-modal-is-editing').value === '1';
+      const license = State.licenses.find(l => l.id === licenseId);
+      if (!license) return;
+
+      const clientInput = document.getElementById('input-inst-client');
+      const orderInput = document.getElementById('input-inst-order');
+      const mtekInput = document.getElementById('input-inst-mtek');
+      const laptopInput = document.getElementById('input-inst-laptop');
+      const feedback = document.getElementById('install-modal-feedback');
+
+      const client = clientInput.value.trim();
+      const rawOrder = orderInput.value.trim();
+
+      if (!client) {
+        feedback.innerText = 'Por favor ingresa el nombre del cliente o empresa.';
+        clientInput.focus();
+        return;
+      }
+
+      if (!rawOrder) {
+        feedback.innerText = 'Por favor ingresa el número de orden (SO****).';
+        orderInput.focus();
+        return;
+      }
+
+      const formattedOrder = formatSOCode(rawOrder);
+      let formattedEquipment = '';
+
+      if (currentSelectedEquipmentType === 'Laptop') {
+        const rawLap = laptopInput.value.trim();
+        if (!rawLap) {
+          feedback.innerText = 'Por favor ingresa el código de la laptop (LP****).';
+          laptopInput.focus();
+          return;
+        }
+        formattedEquipment = formatLaptopCode(rawLap);
+      } else {
+        const rawMtek = mtekInput.value.trim();
+        if (!rawMtek) {
+          feedback.innerText = 'Por favor ingresa el código del Combo M-TEK (M-TEK*****).';
+          mtekInput.focus();
+          return;
+        }
+        formattedEquipment = formatMTEKCode(rawMtek);
+      }
+
+      const oldState = license.estado;
+      license.estado = 'Instalada';
+      license.cliente = client;
+      license.orden = formattedOrder;
+      license.tipoEquipo = currentSelectedEquipmentType;
+      license.equipoDetalle = formattedEquipment;
+
+      if (!isEditing || !license.instaladoPor) {
+        license.instaladoPor = State.currentUser.nombre;
+        license.instaladoEl = formatDate();
+      }
+
+      if (!license.historial) license.historial = [];
+      license.historial.push({
+        de: oldState,
+        a: isEditing ? 'Datos Editados' : 'Instalada',
+        quien: State.currentUser.nombre,
+        fecha: formatDateTime(),
+        detalle: `${license.tipoEquipo}: ${license.equipoDetalle} | Orden: ${license.orden} | Cliente: ${license.cliente}`
+      });
+
+      await DB_SERVICE.saveLicense(license);
+
+      await DB_SERVICE.addActivityLog({
+        id: generateId('log'),
+        fecha: formatDateTime(),
+        usuario: State.currentUser.nombre,
+        accion: isEditing ? 'Edición de Equipo' : 'Instalación de Licencia',
+        detalle: `${license.clave} [${license.equipoDetalle}]`,
+        cambio: `${license.orden} - ${license.cliente}`
+      });
+
+      closeInstallEquipmentModal();
+      showToast(isEditing ? `Datos actualizados: ${license.orden}` : `Licencia instalada con éxito en ${license.equipoDetalle} (${license.orden})`, 'success');
+
       renderLicenses();
       if (State.activeTab === 'tab-instaladas') renderInstalledLicenses();
       updateStockBadge();
@@ -3528,14 +3991,18 @@
       }
 
       // Cabecera CSV
-      const headers = ['Clave', 'Tipo', 'Estado', 'Fecha Subida', 'Instalado Por', 'Fecha Instalación'];
+      const headers = ['Clave', 'Tipo', 'Estado', 'Fecha Subida', 'Instalado Por', 'Fecha Instalación', 'Cliente', 'Número de Orden (SO)', 'Tipo de Equipo', 'Código M-TEK / Laptop (LP)'];
       const rows = dataToExport.map(l => [
         `"${l.clave}"`,
         `"${l.tipo}"`,
         `"${l.estado}"`,
         `"${l.fechaSubida || ''}"`,
         `"${l.instaladoPor || ''}"`,
-        `"${l.instaladoEl || ''}"`
+        `"${l.instaladoEl || ''}"`,
+        `"${l.cliente || ''}"`,
+        `"${l.orden || ''}"`,
+        `"${l.tipoEquipo || ''}"`,
+        `"${l.equipoDetalle || ''}"`
       ]);
 
       const csvContent = '\uFEFF' + [headers.join(','), ...rows.map(r => r.join(','))].join('\r\n');
@@ -3689,6 +4156,13 @@
           if (newStatus === 'Instalada') {
             lic.instaladoPor = State.currentUser.nombre;
             lic.instaladoEl = formatDate();
+          } else if (newStatus === 'Disponible') {
+            lic.instaladoPor = null;
+            lic.instaladoEl = null;
+            lic.cliente = null;
+            lic.orden = null;
+            lic.tipoEquipo = null;
+            lic.equipoDetalle = null;
           }
           await DB_SERVICE.saveLicense(lic);
         }
@@ -4703,6 +5177,56 @@ Sistema de Inventario - Activacion WinPro`;
 
       const adminResetOwnPinBtn = document.getElementById('btn-admin-reset-own-pin');
       if (adminResetOwnPinBtn) adminResetOwnPinBtn.addEventListener('click', handleAdminResetOwnPin);
+
+      // Modal de Registro e Instalación de Equipo (SO****, Cliente, M-TEK*****, LP****)
+      const closeInstModalBtn = document.getElementById('btn-close-install-modal');
+      if (closeInstModalBtn) closeInstModalBtn.addEventListener('click', closeInstallEquipmentModal);
+
+      const cancelInstModalBtn = document.getElementById('btn-cancel-install-modal');
+      if (cancelInstModalBtn) cancelInstModalBtn.addEventListener('click', closeInstallEquipmentModal);
+
+      const optTypeMtekBtn = document.getElementById('opt-type-mtek');
+      if (optTypeMtekBtn) optTypeMtekBtn.addEventListener('click', () => selectEquipmentType('Combo M-TEK'));
+
+      const optTypeLaptopBtn = document.getElementById('opt-type-laptop');
+      if (optTypeLaptopBtn) optTypeLaptopBtn.addEventListener('click', () => selectEquipmentType('Laptop'));
+
+      const confirmInstEquipBtn = document.getElementById('btn-confirm-install-equipment');
+      if (confirmInstEquipBtn) confirmInstEquipBtn.addEventListener('click', submitInstallEquipment);
+
+      // Auto-formateo inteligente en blur
+      const orderInp = document.getElementById('input-inst-order');
+      if (orderInp) {
+        orderInp.addEventListener('blur', (e) => {
+          const val = e.target.value.trim();
+          if (val) e.target.value = formatSOCode(val);
+        });
+      }
+
+      const mtekInp = document.getElementById('input-inst-mtek');
+      if (mtekInp) {
+        mtekInp.addEventListener('blur', (e) => {
+          const val = e.target.value.trim();
+          if (val) e.target.value = formatMTEKCode(val);
+        });
+      }
+
+      const laptopInp = document.getElementById('input-inst-laptop');
+      if (laptopInp) {
+        laptopInp.addEventListener('blur', (e) => {
+          const val = e.target.value.trim();
+          if (val) e.target.value = formatLaptopCode(val);
+        });
+      }
+
+      // Buscador en tiempo real de Licencias Instaladas
+      const searchInstalledInp = document.getElementById('filter-installed-search-input');
+      if (searchInstalledInp) {
+        searchInstalledInp.addEventListener('input', (e) => {
+          State.filterInstalledSearch = e.target.value;
+          renderInstalledLicenses();
+        });
+      }
 
       console.log('✅ Activacion WinPro Inicializado con éxito. Versión Multi-Agente 2.0.');
     }
