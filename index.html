@@ -1740,6 +1740,9 @@
           <div class="stock-badge-header" id="stock-badge-header" title="Existencias actuales de licencias Disponibles">
             <span id="stock-indicator-text">Disponibles: 0</span>
           </div>
+          <div id="server-status-badge" style="display: none; font-size: 0.75rem; padding: 4px 8px; border-radius: 9999px; background: #D1FAE5; color: #125934; font-weight: 700; align-items: center; gap: 4px;">
+            <span style="font-size: 0.8rem;">🟢</span> Taller Local
+          </div>
 
           <!-- Botón WhatsApp Reporte (Solo Administrador) -->
           <button type="button" class="btn-icon admin-only" id="btn-whatsapp-share" title="Enviar reporte por WhatsApp">
@@ -2041,6 +2044,28 @@
                 <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
                 <span>Generar Reporte de Dañadas para Proveedor</span>
               </button>
+            </div>
+          <!-- Copia de Seguridad y Migración del Sistema (Laptop / Taller) -->
+          <div class="admin-card" style="margin-top: 16px;">
+            <div class="admin-card-title">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                <span>Copia de Seguridad y Migración del Sistema</span>
+              </div>
+            </div>
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 14px;">
+              Descarga un archivo completo <strong>.json</strong> con todas tus licencias, técnicos, clientes y órdenes registradas. Puedes transferirlo por USB a la PC del taller y cargarlo con 1 clic para tener exactamente los mismos datos.
+            </p>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <button type="button" class="btn btn-primary" id="btn-download-full-backup">
+                <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                <span>Descargar Copia de Seguridad (.json)</span>
+              </button>
+              <label class="btn btn-secondary" style="cursor: pointer; margin: 0; display: inline-flex; align-items: center; gap: 6px;">
+                <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <span>Cargar Copia de Seguridad (.json)</span>
+                <input type="file" id="input-restore-backup-file" accept=".json" style="display: none;">
+              </label>
             </div>
           </div>
         </div>
@@ -2481,32 +2506,116 @@
      */
     
     // ==========================================================================
-    // CAPA DE BASE DE DATOS DUAL (CLAUDE DB CON FALLBACK LOCALSTORE REACTIVO)
+    // CAPA DE BASE DE DATOS DUAL (SERVIDOR LOCAL /api/db CON FALLBACK LOCALSTORAGE)
     // ==========================================================================
     const DB_SERVICE = {
+      isServerDb: false,
       isClaudeDb: false,
       claudeDb: null,
       storageKey: 'winpro_db_v2',
+      serverApiUrl: '/api/db',
+      serverPollInterval: null,
+      lastServerFingerprint: '',
 
       async init() {
+        // 1. Detectar si el Servidor Local del Taller (/api/db) está activo
         try {
-          if (typeof window.claude !== 'undefined' && typeof window.claude.use === 'function') {
-            this.claudeDb = window.claude.use('db');
-            this.isClaudeDb = !!this.claudeDb;
+          const resp = await fetch(this.serverApiUrl, { cache: 'no-store' });
+          if (resp.ok) {
+            const data = await resp.json();
+            this.isServerDb = true;
+            console.log('🟢 Conectado al Servidor Local del Taller (/api/db)');
+
+            const badgeServ = document.getElementById('server-status-badge');
+            if (badgeServ) {
+              badgeServ.style.display = 'inline-flex';
+            }
+
+            if (data && data.licenses && data.licenses.length > 0) {
+              this.saveLocalData(data);
+            } else {
+              const localData = this.getLocalData();
+              if (localData && localData.licenses && localData.licenses.length > 0) {
+                await this.syncLocalToServer();
+              } else {
+                this.seedInitialData();
+                await this.syncLocalToServer();
+              }
+            }
+
+            this.startServerPolling();
           }
         } catch (e) {
-          console.warn('[DB] Fallback a LocalStorage reactivo activado.');
+          console.log('[DB] Servidor local no detectado, operando en almacenamiento local.');
         }
 
-        // Si no existe almacenamiento local inicial, revisar migración o sembrar datos
-        if (!localStorage.getItem(this.storageKey)) {
-          const oldData = localStorage.getItem('macrotec_db_v2');
-          if (oldData) {
-            localStorage.setItem(this.storageKey, oldData);
-          } else {
-            this.seedInitialData();
+        // 2. Si no es servidor local, revisar Claude DB o LocalStorage inicial
+        if (!this.isServerDb) {
+          try {
+            if (typeof window.claude !== 'undefined' && typeof window.claude.use === 'function') {
+              this.claudeDb = window.claude.use('db');
+              this.isClaudeDb = !!this.claudeDb;
+            }
+          } catch (e) {
+            console.warn('[DB] Fallback a LocalStorage reactivo activado.');
+          }
+
+          if (!localStorage.getItem(this.storageKey)) {
+            const oldData = localStorage.getItem('macrotec_db_v2');
+            if (oldData) {
+              localStorage.setItem(this.storageKey, oldData);
+            } else {
+              this.seedInitialData();
+            }
           }
         }
+      },
+
+      async syncLocalToServer() {
+        if (!this.isServerDb) return;
+        try {
+          const data = this.getLocalData();
+          if (data) {
+            await fetch(this.serverApiUrl, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(data)
+            });
+          }
+        } catch (e) {
+          console.warn('[DB] Error al sincronizar con el servidor central:', e);
+        }
+      },
+
+      startServerPolling() {
+        if (this.serverPollInterval) clearInterval(this.serverPollInterval);
+        this.serverPollInterval = setInterval(async () => {
+          if (!this.isServerDb) return;
+          try {
+            const resp = await fetch(this.serverApiUrl, { cache: 'no-store' });
+            if (resp.ok) {
+              const serverData = await resp.json();
+              if (serverData && serverData.licenses) {
+                const fp = JSON.stringify(serverData.licenses.map(l => l.id + l.estado + (l.orden || '') + (l.equipoDetalle || '')));
+                if (this.lastServerFingerprint && this.lastServerFingerprint !== fp) {
+                  this.lastServerFingerprint = fp;
+                  this.saveLocalData(serverData);
+                  State.licenses = serverData.licenses || [];
+                  State.users = serverData.users || [];
+                  if (serverData.config && serverData.config.admin && serverData.config.admin.pin) {
+                    State.adminPin = serverData.config.admin.pin;
+                  }
+                  renderLicenses();
+                  if (State.activeTab === 'tab-instaladas') renderInstalledLicenses();
+                  updateLicenseCounters();
+                  updateStockBadge();
+                } else if (!this.lastServerFingerprint) {
+                  this.lastServerFingerprint = fp;
+                }
+              }
+            }
+          } catch (e) {}
+        }, 3000);
       },
 
       seedInitialData() {
@@ -2559,23 +2668,17 @@
               fechaSubida: "2026-09-10",
               instaladoPor: null,
               instaladoEl: null,
-              historial: [
-                { de: "Alta", a: "Disponible", quien: "Administrador", fecha: "2026-09-10 11:00" },
-                { de: "Disponible", a: "Probar otra vez", quien: "Carlos Gómez", fecha: "2026-09-11 16:45" }
-              ]
+              historial: [{ de: "Alta", a: "Probar otra vez", quien: "Carlos Gómez", fecha: "2026-09-17 11:45" }]
             },
             {
               id: "lic-5",
-              clave: "9F2HK-N78KC-TC444-F97B6-P4T6T",
+              clave: "DCPHK-NFMTC-H88MJ-PFHPY-QJ4BJ",
               tipo: "Windows 11 Pro",
               estado: "Dañada",
               fechaSubida: "2026-09-08",
               instaladoPor: null,
               instaladoEl: null,
-              historial: [
-                { de: "Alta", a: "Disponible", quien: "Administrador", fecha: "2026-09-08 12:00" },
-                { de: "Disponible", a: "Dañada", quien: "Juan Pérez", fecha: "2026-09-09 15:30" }
-              ]
+              historial: [{ de: "Alta", a: "Dañada", quien: "Juan Pérez", fecha: "2026-09-12 16:10" }]
             }
           ],
           activity_logs: [
@@ -2613,7 +2716,7 @@
       },
 
       async saveLicense(license) {
-        const data = this.getLocalData();
+        const data = this.getLocalData() || { licenses: [] };
         if (!data.licenses) data.licenses = [];
         const idx = data.licenses.findIndex(l => l.id === license.id);
         if (idx >= 0) {
@@ -2622,6 +2725,7 @@
           data.licenses.unshift(license);
         }
         this.saveLocalData(data);
+        if (this.isServerDb) await this.syncLocalToServer();
 
         if (this.isClaudeDb && this.claudeDb.collection) {
           try {
@@ -2631,9 +2735,10 @@
       },
 
       async deleteLicenses(ids) {
-        const data = this.getLocalData();
+        const data = this.getLocalData() || { licenses: [] };
         data.licenses = (data.licenses || []).filter(l => !ids.includes(l.id));
         this.saveLocalData(data);
+        if (this.isServerDb) await this.syncLocalToServer();
 
         if (this.isClaudeDb && this.claudeDb.collection) {
           try {
@@ -2658,7 +2763,7 @@
       },
 
       async saveUser(user) {
-        const data = this.getLocalData();
+        const data = this.getLocalData() || { users: [] };
         if (!data.users) data.users = [];
         const idx = data.users.findIndex(u => u.id === user.id);
         if (idx >= 0) {
@@ -2667,6 +2772,7 @@
           data.users.push(user);
         }
         this.saveLocalData(data);
+        if (this.isServerDb) await this.syncLocalToServer();
 
         if (this.isClaudeDb && this.claudeDb.collection) {
           try {
@@ -2676,9 +2782,10 @@
       },
 
       async deleteUser(userId) {
-        const data = this.getLocalData();
+        const data = this.getLocalData() || { users: [] };
         data.users = (data.users || []).filter(u => u.id !== userId);
         this.saveLocalData(data);
+        if (this.isServerDb) await this.syncLocalToServer();
 
         if (this.isClaudeDb && this.claudeDb.collection) {
           try {
@@ -2700,11 +2807,12 @@
       },
 
       async saveAdminPin(pin) {
-        const data = this.getLocalData();
+        const data = this.getLocalData() || { config: {} };
         if (!data.config) data.config = {};
         if (!data.config.admin) data.config.admin = {};
         data.config.admin.pin = pin;
         this.saveLocalData(data);
+        if (this.isServerDb) await this.syncLocalToServer();
 
         if (this.isClaudeDb && this.claudeDb.collection) {
           try {
@@ -2715,10 +2823,11 @@
 
       // Logs de Auditoría
       async addActivityLog(log) {
-        const data = this.getLocalData();
+        const data = this.getLocalData() || { activity_logs: [] };
         if (!data.activity_logs) data.activity_logs = [];
         data.activity_logs.unshift(log);
         this.saveLocalData(data);
+        if (this.isServerDb) await this.syncLocalToServer();
 
         if (this.isClaudeDb && this.claudeDb.collection) {
           try {
@@ -2734,10 +2843,11 @@
 
       // Sesiones
       async recordSession(session) {
-        const data = this.getLocalData();
+        const data = this.getLocalData() || { sessions: [] };
         if (!data.sessions) data.sessions = [];
         data.sessions.unshift(session);
         this.saveLocalData(data);
+        if (this.isServerDb) await this.syncLocalToServer();
       }
     };
 
@@ -3783,6 +3893,23 @@
         return;
       }
 
+      // Prevención de colisión multi-usuario en el servidor del taller
+      if (DB_SERVICE.isServerDb && !isEditing) {
+        try {
+          const checkResp = await fetch(DB_SERVICE.serverApiUrl, { cache: 'no-store' });
+          if (checkResp.ok) {
+            const checkData = await checkResp.json();
+            const serverLic = checkData.licenses && checkData.licenses.find(l => l.id === licenseId);
+            if (serverLic && serverLic.estado === 'Instalada') {
+              feedback.innerText = `Esta licencia ya fue instalada por ${serverLic.instaladoPor || 'otro técnico'}. Selecciona otra.`;
+              await DB_SERVICE.init();
+              renderLicenses();
+              return;
+            }
+          }
+        } catch (e) {}
+      }
+
       const formattedOrder = formatSOCode(rawOrder);
       let formattedEquipment = '';
 
@@ -4040,6 +4167,72 @@
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
       showToast(`Archivo ${fileName} generado y descargado`, 'success');
+    }
+
+    // ==========================================================================
+    // RESPALDO Y MIGRACIÓN (.JSON) ENTRE LAPTOP Y TALLER
+    // ==========================================================================
+    function downloadFullDatabaseBackup() {
+      const data = DB_SERVICE.getLocalData();
+      if (!data || !data.licenses || data.licenses.length === 0) {
+        showToast('No hay datos en el sistema para respaldar.', 'warning');
+        return;
+      }
+      const jsonContent = JSON.stringify(data, null, 2);
+      const blob = new Blob([jsonContent], { type: 'application/json;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      const filename = `respaldo_winpro_${formatDate()}.json`;
+      link.setAttribute("href", url);
+      link.setAttribute("download", filename);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      showToast(`Copia de seguridad descargada: ${filename}`, 'success');
+    }
+
+    async function handleRestoreBackupFile(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = async function(e) {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          if (!parsed || !Array.isArray(parsed.licenses)) {
+            showToast('El archivo no contiene un formato de respaldo válido de WinPro.', 'error');
+            return;
+          }
+
+          DB_SERVICE.saveLocalData(parsed);
+          if (DB_SERVICE.isServerDb) {
+            await DB_SERVICE.syncLocalToServer();
+          }
+
+          State.licenses = parsed.licenses || [];
+          State.users = parsed.users || [];
+          if (parsed.config && parsed.config.admin && parsed.config.admin.pin) {
+            State.adminPin = parsed.config.admin.pin;
+          }
+
+          renderLicenses();
+          renderUsers();
+          if (State.activeTab === 'tab-instaladas') renderInstalledLicenses();
+          updateLicenseCounters();
+          updateStockBadge();
+          renderActivityLogs();
+          renderAuditTable();
+
+          showToast(`¡Copia de seguridad restaurada con éxito! (${State.licenses.length} licencias cargadas)`, 'success');
+        } catch (err) {
+          console.error(err);
+          showToast('Error al leer el archivo JSON: ' + err.message, 'error');
+        } finally {
+          event.target.value = '';
+        }
+      };
+      reader.readAsText(file, 'UTF-8');
     }
 
     // ==========================================================================
@@ -5227,6 +5420,13 @@ Sistema de Inventario - Activacion WinPro`;
           renderInstalledLicenses();
         });
       }
+
+      // Copia de Seguridad y Migración (.json)
+      const downloadBackupBtn = document.getElementById('btn-download-full-backup');
+      if (downloadBackupBtn) downloadBackupBtn.addEventListener('click', downloadFullDatabaseBackup);
+
+      const restoreBackupInp = document.getElementById('input-restore-backup-file');
+      if (restoreBackupInp) restoreBackupInp.addEventListener('change', handleRestoreBackupFile);
 
       console.log('✅ Activacion WinPro Inicializado con éxito. Versión Multi-Agente 2.0.');
     }
