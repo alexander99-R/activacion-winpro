@@ -1392,7 +1392,7 @@
       border: 2px solid #0b2a4a;
       border-radius: 8px;
       padding: 10px 8px 8px;
-      margin-bottom: 10px;
+      margin-bottom: 0;
     }
     .sticker-win-code-label {
       font-size: 0.65rem;
@@ -1465,12 +1465,18 @@
         position: absolute !important;
         left: 0 !important;
         top: 0 !important;
-        width: 70mm !important;
-        padding: 4mm !important;
+        width: 65mm !important;
+        padding: 0 !important;
         box-shadow: none !important;
-        border: 1.5px solid #000 !important;
+        border: none !important;
         background: #ffffff !important;
         color: #000000 !important;
+      }
+      .sticker-win-code-box {
+        border: 1.5px solid #000000 !important;
+        background: #ffffff !important;
+        margin: 0 !important;
+        padding: 8px 6px 6px !important;
       }
       @page {
         margin: 3mm;
@@ -3064,25 +3070,6 @@
             <svg id="sticker-barcode-svg" style="max-width: 100%; height: 52px; display: block;"></svg>
           </div>
         </div>
-
-        <div class="sticker-details-grid">
-          <div class="sticker-row">
-            <span class="sticker-lbl">M-TEK / Equipo:</span>
-            <span class="sticker-val" id="sticker-equipment">Combo M-TEK</span>
-          </div>
-          <div class="sticker-row">
-            <span class="sticker-lbl">N° Orden:</span>
-            <span class="sticker-val" id="sticker-order">SO-0000</span>
-          </div>
-          <div class="sticker-row">
-            <span class="sticker-lbl">Fecha:</span>
-            <span class="sticker-val" id="sticker-date">00/00/0000</span>
-          </div>
-          <div class="sticker-row">
-            <span class="sticker-lbl">Instaló:</span>
-            <span class="sticker-val" id="sticker-tech">Técnico</span>
-          </div>
-        </div>
       </div>
 
       <div class="modal-footer" style="padding-top: 16px; display: flex; gap: 10px;">
@@ -3690,16 +3677,7 @@
       }
 
       const elCode = document.getElementById('sticker-code-win');
-      const elOrder = document.getElementById('sticker-order');
-      const elEquip = document.getElementById('sticker-equipment');
-      const elDate = document.getElementById('sticker-date');
-      const elTech = document.getElementById('sticker-tech');
-
       if (elCode) elCode.innerText = data.codigoWin || 'WIN0001';
-      if (elOrder) elOrder.innerText = data.orden || 'Sin Orden';
-      if (elEquip) elEquip.innerText = data.equipo || 'Combo M-TEK';
-      if (elDate) elDate.innerText = data.fecha || formatDate();
-      if (elTech) elTech.innerText = data.tecnico || 'Técnico';
 
       // Renderizar código de barras Code 128 real con la Licencia de Windows
       if (data.clave && typeof JsBarcode === 'function') {
