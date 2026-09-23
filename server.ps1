@@ -33,13 +33,13 @@ try {
 } catch {
     # 2. Si no tiene permisos de administrador, iniciar en MODO LOCAL (100% garantizado sin permisos)
     $listener = New-Object System.Net.HttpListener
-    $listener.Prefixes.Add("http://localhost:$port/")
-    $listener.Prefixes.Add("http://127.0.0.1:$port/")
+    $listener.Prefixes.Add("http://localhost:${port}/")
+    $listener.Prefixes.Add("http://127.0.0.1:${port}/")
     try {
         $listener.Start()
         $networkMode = $false
     } catch {
-        Write-Host "Error al iniciar el servidor en el puerto $port: $_" -ForegroundColor Red
+        Write-Host "Error al iniciar el servidor en el puerto ${port}: $_" -ForegroundColor Red
         Write-Host "Revisa si ya tienes otra ventana del servidor abierta."
         Read-Host "Presiona Enter para cerrar esta ventana..."
         exit 1
