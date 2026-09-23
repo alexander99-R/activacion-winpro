@@ -2,6 +2,7 @@
 # SERVIDOR HTTP LOCAL PARA ACTIVACION WINPRO - TALLER
 # Arquitectura: PowerShell Core / Windows PowerShell
 # Soporta: Archivos estaticos + API REST /api/db para base de datos compartida
+#          API REST /api/info para descubrimiento de red y enlace de celulares
 # ==============================================================================
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 $OutputEncoding = [System.Text.Encoding]::UTF8
@@ -12,30 +13,74 @@ if (-not $baseDir) { $baseDir = Get-Location }
 $port = 8080
 $dbFile = Join-Path $baseDir "database.json"
 
-# Obtener IPs locales de la máquina
-$ipList = @()
+# 1. Comprobar si se ejecuta con permisos de Administrador
+$isAdmin = $false
 try {
-    $ipList = Get-NetIPAddress -AddressFamily IPv4 -ErrorAction SilentlyContinue | 
-              Where-Object { $_.IPAddress -notlike "127.*" -and $_.IPAddress -notlike "169.254.*" } | 
-              Select-Object -ExpandProperty IPAddress
+    $currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
+    $isAdmin = $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 } catch {}
 
+# Si somos Administrador, abrir Firewall y registrar URL ACL para permitir conexiones de celulares
+if ($isAdmin) {
+    try {
+        netsh advfirewall firewall show rule name="WinPro Taller 8080" >$null 2>&1
+        if ($LASTEXITCODE -ne 0) {
+            netsh advfirewall firewall add rule name="WinPro Taller 8080" dir=in action=allow protocol=TCP localport=$port profile=any >$null 2>&1
+        }
+    } catch {}
+    try {
+        netsh http add urlacl url="http://+:${port}/" sddl="D:(A;;GX;;;WD)" >$null 2>&1
+    } catch {}
+}
+
+# 2. Obtener IPs locales de la máquina (priorizando Wi-Fi o Ethernet activa)
+$ipList = [System.Collections.Generic.List[string]]::new()
+$primaryIp = ""
+
+try {
+    $defRoute = Get-NetRoute -DestinationPrefix "0.0.0.0/0" -ErrorAction SilentlyContinue | Sort-Object RouteMetric | Select-Object -First 1
+    if ($defRoute) {
+        $activeIps = Get-NetIPAddress -InterfaceIndex $defRoute.InterfaceIndex -AddressFamily IPv4 -ErrorAction SilentlyContinue | 
+                     Where-Object { $_.IPAddress -notmatch "^127\." -and $_.IPAddress -notmatch "^169\.254\." } | 
+                     Select-Object -ExpandProperty IPAddress
+        foreach ($ip in $activeIps) {
+            if ($ip -and -not $ipList.Contains($ip)) {
+                $ipList.Add($ip)
+                if (-not $primaryIp) { $primaryIp = $ip }
+            }
+        }
+    }
+} catch {}
+
+try {
+    $allIps = Get-NetIPAddress -AddressFamily IPv4 -ErrorAction SilentlyContinue | 
+              Where-Object { $_.IPAddress -notmatch "^127\." -and $_.IPAddress -notmatch "^169\.254\." } | 
+              Select-Object -ExpandProperty IPAddress
+    foreach ($ip in $allIps) {
+        if ($ip -and -not $ipList.Contains($ip)) {
+            $ipList.Add($ip)
+            if (-not $primaryIp) { $primaryIp = $ip }
+        }
+    }
+} catch {}
+
+if (-not $primaryIp) { $primaryIp = "localhost" }
+
+# 3. Inicializar HttpListener
 $listener = New-Object System.Net.HttpListener
 $networkMode = $false
 
-# 1. Intentar iniciar con acceso de red local (requiere Admin o regla de URL)
+# Intentar escuchar en toda la red local (+)
 try {
-    $listener.Prefixes.Add("http://+:$port/")
-    $listener.Prefixes.Add("http://localhost:$port/")
-    $listener.Prefixes.Add("http://127.0.0.1:$port/")
+    $listener.Prefixes.Add("http://+:${port}/")
     $listener.Start()
     $networkMode = $true
 } catch {
-    # 2. Si no tiene permisos de administrador, iniciar en MODO LOCAL (100% garantizado sin permisos)
-    $listener = New-Object System.Net.HttpListener
-    $listener.Prefixes.Add("http://localhost:${port}/")
-    $listener.Prefixes.Add("http://127.0.0.1:${port}/")
+    # Si no tiene permisos de red amplia, iniciar en modo loopback local
     try {
+        $listener = New-Object System.Net.HttpListener
+        $listener.Prefixes.Add("http://localhost:${port}/")
+        $listener.Prefixes.Add("http://127.0.0.1:${port}/")
         $listener.Start()
         $networkMode = $false
     } catch {
@@ -50,21 +95,32 @@ Clear-Host
 Write-Host "======================================================================" -ForegroundColor Cyan
 Write-Host "   SISTEMA ACTIVACION WINPRO - SERVIDOR DEL TALLER (ACTIVO)           " -ForegroundColor Green
 Write-Host "======================================================================" -ForegroundColor Cyan
-Write-Host " En esta computadora ingresa a: " -NoNewline
-Write-Host "http://localhost:$port/" -ForegroundColor Yellow
-Write-Host ""
-if ($networkMode) {
-    if ($ipList.Count -gt 0) {
-        Write-Host " Desde otras computadoras o teléfonos en el Wi-Fi del taller:" -ForegroundColor White
-        foreach ($ip in $ipList) {
-            Write-Host "   -> http://${ip}:${port}/" -ForegroundColor Yellow
+
+if ($networkMode -and $primaryIp -ne "localhost") {
+    Write-Host " [MODO RED LOCAL WI-FI ACTIVADO CON ÉXITO]" -ForegroundColor Green
+    Write-Host ""
+    Write-Host " >>> ENLACE PARA CELULARES Y OTRAS COMPUTADORAS (WI-FI) <<<" -ForegroundColor Yellow
+    Write-Host "     http://${primaryIp}:${port}/" -ForegroundColor Yellow
+    Write-Host ""
+    if ($ipList.Count -gt 1) {
+        Write-Host " Otras IPs de red disponibles:" -ForegroundColor Gray
+        foreach ($otherIp in $ipList) {
+            if ($otherIp -ne $primaryIp) {
+                Write-Host "   - http://${otherIp}:${port}/" -ForegroundColor Gray
+            }
         }
+        Write-Host ""
     }
+    Write-Host " En esta computadora ingresa a: " -NoNewline
+    Write-Host "http://${primaryIp}:${port}/" -ForegroundColor Yellow
 } else {
-    Write-Host " [MODO LOCAL ACTIVO]: Sistema funcionando al 100% en esta PC." -ForegroundColor Green
+    Write-Host " [MODO LOCAL ACTIVO]: Sistema funcionando al 100% en esta PC." -ForegroundColor Yellow
+    Write-Host " En esta computadora ingresa a: http://localhost:${port}/" -ForegroundColor Yellow
+    Write-Host ""
     Write-Host " Si deseas conectar otras computadoras o celulares en el Wi-Fi:" -ForegroundColor DarkYellow
     Write-Host " Haz clic derecho en 'iniciar-servidor.bat' y elige 'Ejecutar como administrador'." -ForegroundColor DarkYellow
 }
+
 Write-Host "======================================================================" -ForegroundColor Cyan
 Write-Host " Base de datos central: $dbFile" -ForegroundColor Gray
 Write-Host " [Mantén esta ventanita abierta mientras usen el sistema en el taller]" -ForegroundColor DarkGreen
@@ -74,7 +130,11 @@ Write-Host ""
 
 # Abrir el navegador automáticamente en esta máquina
 try {
-    Start-Process "http://localhost:$port/"
+    if ($networkMode -and $primaryIp -ne "localhost") {
+        Start-Process "http://${primaryIp}:${port}/"
+    } else {
+        Start-Process "http://localhost:${port}/"
+    }
 } catch {}
 
 while ($listener.IsListening) {
@@ -95,6 +155,26 @@ while ($listener.IsListening) {
         }
 
         $urlPath = $request.Url.LocalPath.TrimStart('/')
+
+        # ------------------------------------------------------------------
+        # API DE INFORMACIÓN DE RED (/api/info)
+        # ------------------------------------------------------------------
+        if ($urlPath -eq "api/info") {
+            $response.ContentType = "application/json; charset=utf-8"
+            $primaryUrl = if ($networkMode -and $primaryIp -ne "localhost") { "http://${primaryIp}:${port}/" } else { "http://localhost:${port}/" }
+            $infoObj = @{
+                port = $port
+                primaryIp = $primaryIp
+                serverUrl = $primaryUrl
+                networkMode = $networkMode
+                ipList = @($ipList)
+            }
+            $jsonStr = ConvertTo-Json $infoObj
+            $infoBytes = [System.Text.Encoding]::UTF8.GetBytes($jsonStr)
+            $response.OutputStream.Write($infoBytes, 0, $infoBytes.Length)
+            $response.Close()
+            continue
+        }
 
         # ------------------------------------------------------------------
         # API DE BASE DE DATOS (/api/db) - SINCRONIZACIÓN EN TIEMPO REAL

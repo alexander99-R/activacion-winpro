@@ -1744,6 +1744,12 @@
             <span style="font-size: 0.8rem;">🟢</span> Taller Local
           </div>
 
+          <!-- Botón Conectar Celulares / Acceso en Red Wi-Fi -->
+          <button type="button" class="btn-network-badge" id="btn-share-network-access" title="Conectar celulares y otras laptops por Wi-Fi" style="display: none; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 9999px; background: #E0F2FE; border: 1px solid #BAE6FD; color: #0369A1; font-weight: 700; font-size: 0.78rem; cursor: pointer; transition: var(--transition);">
+            <span style="font-size: 0.85rem;">📱</span>
+            <span id="badge-network-text">Conectar Celulares (Wi-Fi)</span>
+          </button>
+
           <!-- Botón WhatsApp Reporte (Solo Administrador) -->
           <button type="button" class="btn-icon admin-only" id="btn-whatsapp-share" title="Enviar reporte por WhatsApp">
             <svg class="icon" viewBox="0 0 24 24" style="stroke: #25D366;">
@@ -2021,6 +2027,10 @@
               <button type="button" class="btn btn-primary" id="btn-copy-system-link">
                 <svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                 <span>Copiar Enlace</span>
+              </button>
+              <button type="button" class="btn btn-secondary" id="btn-open-qr-card">
+                <svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                <span>Ver Código QR</span>
               </button>
               <button type="button" class="btn btn-accent" id="btn-share-system-link-wa">
                 <svg class="icon icon-sm" viewBox="0 0 24 24" style="stroke: currentColor;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
@@ -2540,6 +2550,74 @@
     </div>
   </div>
 
+  <!-- Modal de Conexión de Dispositivos y Código QR (Wi-Fi Taller) -->
+  <div class="modal-overlay" id="modal-share-network" style="z-index: 1055;">
+    <div class="modal-box" style="max-width: 480px; text-align: center;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 1.4rem;">📱</span>
+          <h3 class="modal-title" style="font-weight: 700;">Conectar Celulares y Laptops</h3>
+        </div>
+        <button type="button" class="btn-icon" id="btn-close-share-network">
+          <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div style="padding: 16px 8px 8px 8px;">
+        <div style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 9999px; background: #D1FAE5; color: #125934; font-size: 0.82rem; font-weight: 700; margin-bottom: 12px;">
+          <span style="font-size: 0.9rem;">🟢</span> Servidor Activo en Red Local
+        </div>
+
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 16px; line-height: 1.4;">
+          Cualquier celular o computadora conectado a la misma red Wi-Fi del taller puede usar el sistema escaneando este código o entrando al enlace:
+        </p>
+
+        <!-- Código QR -->
+        <div style="display: flex; justify-content: center; margin-bottom: 16px;">
+          <div style="padding: 12px; background: #ffffff; border: 2px solid var(--border); border-radius: 16px; display: inline-block; box-shadow: var(--shadow-sm);" id="qr-container">
+            <img id="network-qr-image" src="" alt="Código QR de Conexión" style="width: 170px; height: 170px; display: block; margin: 0 auto; object-fit: contain;">
+          </div>
+        </div>
+
+        <!-- Caja con Enlace de Red -->
+        <div style="margin-bottom: 16px;">
+          <label style="display: block; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; text-align: left;">
+            Dirección Web del Taller (IP Local):
+          </label>
+          <div style="display: flex; gap: 8px;">
+            <input type="text" id="input-network-url" class="form-control" readonly style="font-family: var(--font-mono); font-weight: 700; font-size: 0.95rem; background: var(--gray-light); text-align: center; cursor: text;" value="Cargando...">
+            <button type="button" class="btn btn-secondary" id="btn-copy-network-url" style="white-space: nowrap; padding: 0 16px;" title="Copiar enlace">
+              <svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              <span>Copiar</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Botón Compartir WhatsApp -->
+        <div style="margin-bottom: 16px;">
+          <button type="button" class="btn" id="btn-share-url-whatsapp" style="width: 100%; background: #25D366; color: #ffffff; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: none; border-radius: 8px; padding: 10px 16px; cursor: pointer;">
+            <svg class="icon icon-sm" viewBox="0 0 24 24" style="stroke: #ffffff; fill: none;">
+              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+            </svg>
+            <span>Enviar Enlace por WhatsApp</span>
+          </button>
+        </div>
+
+        <!-- Pasos Informativos -->
+        <div style="background: var(--blue2); border-radius: 8px; padding: 10px 14px; text-align: left; font-size: 0.8rem; color: var(--navy); line-height: 1.4;">
+          <div style="font-weight: 700; margin-bottom: 4px;">💡 ¿Cómo conectar tus dispositivos?</div>
+          <div>1. Conecta tu celular o laptop a la misma red Wi-Fi del taller.</div>
+          <div>2. Abre la cámara del celular y apunta al código QR arriba, o abre el enlace en tu navegador.</div>
+          <div>3. Todas las licencias que instales se guardarán directamente en esta computadora central.</div>
+        </div>
+      </div>
+
+      <div class="modal-footer" style="padding-top: 12px;">
+        <button type="button" class="btn btn-secondary" id="btn-done-share-network" style="width: 100%;">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Contenedor Flotante de Notificaciones Toast -->
   <div id="toast-container"></div>
 
@@ -2564,6 +2642,8 @@
       serverApiUrl: '/api/db',
       serverPollInterval: null,
       lastServerFingerprint: '',
+      serverNetworkUrl: '',
+      serverInfo: null,
 
       async init() {
         // 1. Detectar si el Servidor Local del Taller (/api/db) está activo
@@ -2578,6 +2658,23 @@
             if (badgeServ) {
               badgeServ.style.display = 'inline-flex';
             }
+
+            const btnNetwork = document.getElementById('btn-share-network-access');
+            if (btnNetwork) {
+              btnNetwork.style.display = 'inline-flex';
+            }
+
+            // Descubrir URL de red local y dirección para celulares
+            try {
+              const respInfo = await fetch('/api/info', { cache: 'no-store' });
+              if (respInfo.ok) {
+                const info = await respInfo.json();
+                this.serverInfo = info;
+                if (info && info.serverUrl) {
+                  this.serverNetworkUrl = info.serverUrl;
+                }
+              }
+            } catch (errInfo) {}
 
             if (data && data.licenses && data.licenses.length > 0) {
               this.saveLocalData(data);
@@ -2595,6 +2692,19 @@
           }
         } catch (e) {
           console.log('[DB] Servidor local no detectado, operando en almacenamiento local.');
+        }
+
+        // Mostrar botón de red si estamos en entorno web HTTP
+        if (!this.isServerDb && window.location.protocol.startsWith('http')) {
+          const btnNetwork = document.getElementById('btn-share-network-access');
+          if (btnNetwork) {
+            btnNetwork.style.display = 'inline-flex';
+          }
+        }
+
+        // Actualizar campo de compartir enlace inmediatamente si está disponible
+        if (typeof initSystemLinkSharing === 'function') {
+          initSystemLinkSharing();
         }
 
         // 2. Si no es servidor local, revisar Claude DB o LocalStorage inicial
@@ -5313,11 +5423,43 @@ Sistema de Inventario - Activacion WinPro`;
       });
     }
 
+    function getBestNetworkShareUrl() {
+      if (DB_SERVICE.serverNetworkUrl) {
+        return DB_SERVICE.serverNetworkUrl;
+      }
+      if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1' && window.location.protocol.startsWith('http')) {
+        return window.location.origin + '/';
+      }
+      return window.location.href;
+    }
+
     function initSystemLinkSharing() {
       const inputLink = document.getElementById('input-system-link');
       if (inputLink) {
-        inputLink.value = window.location.href;
+        inputLink.value = getBestNetworkShareUrl();
       }
+    }
+
+    function openShareNetworkModal() {
+      const modal = document.getElementById('modal-share-network');
+      const inputUrl = document.getElementById('input-network-url');
+      const qrImg = document.getElementById('network-qr-image');
+      if (!modal) return;
+
+      const shareUrl = getBestNetworkShareUrl();
+      if (inputUrl) inputUrl.value = shareUrl;
+
+      if (qrImg) {
+        const encoded = encodeURIComponent(shareUrl);
+        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encoded}&margin=2`;
+      }
+
+      modal.classList.add('active');
+    }
+
+    function closeShareNetworkModal() {
+      const modal = document.getElementById('modal-share-network');
+      if (modal) modal.classList.remove('active');
     }
 
     // Polling Reactivo de 30 Segundos (Agente 4)
@@ -5465,12 +5607,12 @@ Sistema de Inventario - Activacion WinPro`;
       const delSupplierBtn = document.getElementById('btn-delete-reported-damaged');
       if (delSupplierBtn) delSupplierBtn.addEventListener('click', deleteReportedDamagedLicenses);
 
-      // Compartir Enlace del Sistema (Administración)
+      // Compartir Enlace del Sistema (Administración y Celulares)
       const copyLinkBtn = document.getElementById('btn-copy-system-link');
       if (copyLinkBtn) {
         copyLinkBtn.addEventListener('click', () => {
           const inputLink = document.getElementById('input-system-link');
-          const url = (inputLink && inputLink.value) ? inputLink.value : window.location.href;
+          const url = (inputLink && inputLink.value) ? inputLink.value : getBestNetworkShareUrl();
           navigator.clipboard.writeText(url).then(() => {
             showToast('¡Enlace copiado al portapapeles!', 'success');
           }).catch(() => {
@@ -5487,8 +5629,47 @@ Sistema de Inventario - Activacion WinPro`;
       if (waShareLinkBtn) {
         waShareLinkBtn.addEventListener('click', () => {
           const inputLink = document.getElementById('input-system-link');
-          const url = (inputLink && inputLink.value) ? inputLink.value : window.location.href;
+          const url = (inputLink && inputLink.value) ? inputLink.value : getBestNetworkShareUrl();
           const msg = `Hola, accede al sistema de inventario de licencias Activacion WinPro a traves del siguiente enlace:\n${url}\n\nIngresa seleccionando tu nombre e introduciendo tu PIN asignado.`;
+          window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+        });
+      }
+
+      const openQrCardBtn = document.getElementById('btn-open-qr-card');
+      if (openQrCardBtn) openQrCardBtn.addEventListener('click', openShareNetworkModal);
+
+      const headerShareBtn = document.getElementById('btn-share-network-access');
+      if (headerShareBtn) headerShareBtn.addEventListener('click', openShareNetworkModal);
+
+      const closeShareNetworkBtn = document.getElementById('btn-close-share-network');
+      if (closeShareNetworkBtn) closeShareNetworkBtn.addEventListener('click', closeShareNetworkModal);
+
+      const doneShareNetworkBtn = document.getElementById('btn-done-share-network');
+      if (doneShareNetworkBtn) doneShareNetworkBtn.addEventListener('click', closeShareNetworkModal);
+
+      const copyNetBtn = document.getElementById('btn-copy-network-url');
+      if (copyNetBtn) {
+        copyNetBtn.addEventListener('click', () => {
+          const inputUrl = document.getElementById('input-network-url');
+          const url = (inputUrl && inputUrl.value) ? inputUrl.value : getBestNetworkShareUrl();
+          navigator.clipboard.writeText(url).then(() => {
+            showToast('¡Enlace de red copiado con éxito!', 'success');
+          }).catch(() => {
+            if (inputUrl) {
+              inputUrl.select();
+              document.execCommand('copy');
+            }
+            showToast('¡Enlace de red copiado con éxito!', 'success');
+          });
+        });
+      }
+
+      const shareNetWaBtn = document.getElementById('btn-share-url-whatsapp');
+      if (shareNetWaBtn) {
+        shareNetWaBtn.addEventListener('click', () => {
+          const inputUrl = document.getElementById('input-network-url');
+          const url = (inputUrl && inputUrl.value) ? inputUrl.value : getBestNetworkShareUrl();
+          const msg = `Hola, este es el enlace para entrar al Sistema de Licencias del Taller:\n${url}\n\nConéctate al Wi-Fi del taller para abrirlo.`;
           window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
         });
       }
