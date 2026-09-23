@@ -1378,57 +1378,45 @@
       background: #ffffff;
       color: #0f172a;
       border: 2px dashed #94a3b8;
-      border-radius: 12px;
-      padding: 18px 20px;
-      max-width: 360px;
+      border-radius: 10px;
+      padding: 14px 16px;
+      max-width: 320px;
       margin: 0 auto;
-      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    }
-    .sticker-header {
-      text-align: center;
-      border-bottom: 2px solid #0f172a;
-      padding-bottom: 6px;
-      margin-bottom: 12px;
-    }
-    .sticker-title {
-      font-weight: 900;
-      font-size: 0.85rem;
-      letter-spacing: 0.6px;
-      text-transform: uppercase;
-      color: #0b2a4a;
     }
     .sticker-win-code-box {
       text-align: center;
       background: #f8fafc;
       border: 2px solid #0b2a4a;
       border-radius: 8px;
-      padding: 8px 6px;
-      margin-bottom: 12px;
+      padding: 10px 8px 8px;
+      margin-bottom: 10px;
     }
     .sticker-win-code-label {
       font-size: 0.65rem;
       text-transform: uppercase;
-      font-weight: 700;
-      color: #64748b;
-      letter-spacing: 0.5px;
+      font-weight: 800;
+      color: #475569;
+      letter-spacing: 0.7px;
     }
     .sticker-win-code-val {
-      font-size: 1.7rem;
+      font-size: 1.85rem;
       font-weight: 900;
       font-family: var(--font-mono, monospace);
       color: #0b2a4a;
       letter-spacing: 2px;
       line-height: 1.1;
-      margin: 4px 0;
+      margin: 4px 0 6px;
     }
     .sticker-barcode-visual {
       display: flex;
       justify-content: center;
       align-items: flex-end;
-      gap: 2px;
-      height: 22px;
+      gap: 2.5px;
+      height: 28px;
       margin: 6px auto 2px;
+      padding: 0 4px;
     }
     .sticker-barcode-bar {
       background: #0f172a;
@@ -1439,14 +1427,16 @@
       display: flex;
       flex-direction: column;
       gap: 6px;
-      font-size: 0.8rem;
-      border-top: 1px dashed #cbd5e1;
-      padding-top: 10px;
+      font-size: 0.82rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      background: #f8fafc;
+      padding: 8px 10px;
     }
     .sticker-row {
       display: flex;
       justify-content: space-between;
-      align-items: baseline;
+      align-items: center;
       gap: 8px;
     }
     .sticker-lbl {
@@ -1457,33 +1447,10 @@
       flex-shrink: 0;
     }
     .sticker-val {
-      font-weight: 600;
+      font-weight: 700;
       color: #0f172a;
       text-align: right;
       word-break: break-all;
-    }
-    .sticker-key-box {
-      background: #f1f5f9;
-      border: 1px solid #cbd5e1;
-      border-radius: 6px;
-      padding: 6px 8px;
-      text-align: center;
-      margin-top: 8px;
-    }
-    .sticker-key-val {
-      font-family: var(--font-mono, monospace);
-      font-size: 0.84rem;
-      font-weight: 800;
-      color: #0f172a;
-      letter-spacing: 0.5px;
-    }
-    .sticker-footer-note {
-      text-align: center;
-      font-size: 0.65rem;
-      color: #64748b;
-      margin-top: 10px;
-      border-top: 1px solid #e2e8f0;
-      padding-top: 6px;
     }
 
     @media print {
@@ -1497,15 +1464,15 @@
         position: absolute !important;
         left: 0 !important;
         top: 0 !important;
-        width: 78mm !important;
-        padding: 5mm !important;
+        width: 70mm !important;
+        padding: 4mm !important;
         box-shadow: none !important;
-        border: 1px solid #000 !important;
+        border: 1.5px solid #000 !important;
         background: #ffffff !important;
         color: #000000 !important;
       }
       @page {
-        margin: 4mm;
+        margin: 3mm;
         size: auto;
       }
     }
@@ -3089,10 +3056,6 @@
 
       <!-- Contenedor de la Etiqueta Imprimible -->
       <div id="printable-sticker-card" class="sticker-preview-box">
-        <div class="sticker-header">
-          <div class="sticker-title">ACTIVACIÓN WINDOWS 11 PRO</div>
-        </div>
-
         <div class="sticker-win-code-box">
           <div class="sticker-win-code-label">CÓDIGO DE IDENTIFICACIÓN</div>
           <div class="sticker-win-code-val" id="sticker-code-win">WIN-0001</div>
@@ -3113,40 +3076,28 @@
             <span class="sticker-barcode-bar" style="width: 3px;"></span>
             <span class="sticker-barcode-bar" style="width: 4px;"></span>
             <span class="sticker-barcode-bar" style="width: 1px;"></span>
+            <span class="sticker-barcode-bar" style="width: 3px;"></span>
             <span class="sticker-barcode-bar" style="width: 2px;"></span>
           </div>
         </div>
 
         <div class="sticker-details-grid">
           <div class="sticker-row">
-            <span class="sticker-lbl">Orden SO:</span>
+            <span class="sticker-lbl">M-TEK / Equipo:</span>
+            <span class="sticker-val" id="sticker-equipment">Combo M-TEK</span>
+          </div>
+          <div class="sticker-row">
+            <span class="sticker-lbl">N° Orden:</span>
             <span class="sticker-val" id="sticker-order">SO-0000</span>
-          </div>
-          <div class="sticker-row">
-            <span class="sticker-lbl">Cliente:</span>
-            <span class="sticker-val" id="sticker-client">Cliente</span>
-          </div>
-          <div class="sticker-row">
-            <span class="sticker-lbl">Equipo:</span>
-            <span class="sticker-val" id="sticker-equipment">Laptop / PC</span>
           </div>
           <div class="sticker-row">
             <span class="sticker-lbl">Fecha:</span>
             <span class="sticker-val" id="sticker-date">00/00/0000</span>
           </div>
           <div class="sticker-row">
-            <span class="sticker-lbl">Técnico:</span>
+            <span class="sticker-lbl">Instaló:</span>
             <span class="sticker-val" id="sticker-tech">Técnico</span>
           </div>
-        </div>
-
-        <div class="sticker-key-box">
-          <div style="font-size: 0.65rem; text-transform: uppercase; color: #475569; font-weight: 700;">Clave Windows 11 Pro</div>
-          <div class="sticker-key-val" id="sticker-key">XXXXX-XXXXX-XXXXX-XXXXX-XXXXX</div>
-        </div>
-
-        <div class="sticker-footer-note">
-          Conserve esta etiqueta para reemplazos de SSD o mantenimientos futuros
         </div>
       </div>
 
@@ -3721,23 +3672,27 @@
       if (typeof licenseOrLogData === 'string') {
         const lic = State.licenses.find(l => l.id === licenseOrLogData);
         if (lic) {
+          let eqDesc = lic.equipoDetalle || '';
+          if (lic.tipoEquipo) {
+            eqDesc = eqDesc ? `${lic.tipoEquipo}: ${eqDesc}` : lic.tipoEquipo;
+          }
           data = {
             codigoWin: lic.codigoWin || 'WIN-0000',
             orden: lic.orden || 'Sin Orden',
-            cliente: lic.cliente || 'Sin Cliente',
-            equipo: `${lic.tipoEquipo || ''} ${lic.equipoDetalle || ''}`.trim() || 'Equipo',
-            clave: lic.clave || '',
+            equipo: eqDesc || 'Combo M-TEK',
             fecha: lic.instaladoEl || formatDate(),
             tecnico: lic.instaladoPor || (State.currentUser ? State.currentUser.nombre : 'Técnico')
           };
         }
       } else if (typeof licenseOrLogData === 'object') {
+        let eqDesc = licenseOrLogData.equipo || licenseOrLogData.equipoDetalle || '';
+        if (licenseOrLogData.tipoEquipo && !eqDesc.includes(licenseOrLogData.tipoEquipo)) {
+          eqDesc = `${licenseOrLogData.tipoEquipo}: ${eqDesc}`.trim();
+        }
         data = {
           codigoWin: licenseOrLogData.codigoWin || 'WIN-0000',
           orden: licenseOrLogData.orden || 'Sin Orden',
-          cliente: licenseOrLogData.cliente || 'Sin Cliente',
-          equipo: licenseOrLogData.equipo || `${licenseOrLogData.tipoEquipo || ''} ${licenseOrLogData.equipoDetalle || ''}`.trim() || 'Equipo',
-          clave: licenseOrLogData.clave || licenseOrLogData.detalle || '',
+          equipo: eqDesc || 'Combo M-TEK',
           fecha: licenseOrLogData.fecha || licenseOrLogData.instaladoEl || formatDate(),
           tecnico: licenseOrLogData.tecnico || licenseOrLogData.usuario || licenseOrLogData.instaladoPor || (State.currentUser ? State.currentUser.nombre : 'Técnico')
         };
@@ -3745,19 +3700,15 @@
 
       const elCode = document.getElementById('sticker-code-win');
       const elOrder = document.getElementById('sticker-order');
-      const elClient = document.getElementById('sticker-client');
       const elEquip = document.getElementById('sticker-equipment');
       const elDate = document.getElementById('sticker-date');
       const elTech = document.getElementById('sticker-tech');
-      const elKey = document.getElementById('sticker-key');
 
       if (elCode) elCode.innerText = data.codigoWin || 'WIN-????';
       if (elOrder) elOrder.innerText = data.orden || 'Sin Orden';
-      if (elClient) elClient.innerText = data.cliente || 'Sin Cliente';
-      if (elEquip) elEquip.innerText = data.equipo || 'Equipo';
+      if (elEquip) elEquip.innerText = data.equipo || 'Combo M-TEK';
       if (elDate) elDate.innerText = data.fecha || formatDate();
       if (elTech) elTech.innerText = data.tecnico || 'Técnico';
-      if (elKey) elKey.innerText = data.clave || '';
 
       const modal = document.getElementById('modal-print-win-label');
       if (modal) modal.classList.add('active');
