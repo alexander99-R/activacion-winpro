@@ -3850,10 +3850,7 @@
             lineColor: '#000000',
             width: 2.2,
             height: 48,
-            displayValue: true,
-            fontSize: 14,
-            font: 'monospace',
-            textMargin: 3,
+            displayValue: false,
             margin: 4
           });
         } catch (e) {
@@ -3986,7 +3983,7 @@
         // Coincidencia exacta única (caso típico al escanear con la pistola o buscar SO)
         const lic = matchedLicenses[0];
         titleEl.innerText = `Ficha de Equipo: ${lic.codigoWin || 'WIN0001'}`;
-        bodyEl.innerHTML = renderSingleAssocDetailHtml(lic, matchedLogs);
+        bodyEl.innerHTML = renderSingleAssocDetailHtml(lic);
         attachAssocDetailEvents(bodyEl, lic);
       } else if (matchedLicenses.length > 1) {
         // Varias coincidencias (ej. buscar por cliente que tiene varios equipos)
@@ -4016,35 +4013,12 @@
         .replace(/"/g, '&quot;');
     }
 
-    function renderSingleAssocDetailHtml(lic, allLogs) {
+    function renderSingleAssocDetailHtml(lic) {
       const winCode = (lic.codigoWin ? String(lic.codigoWin).replace(/-/g, '') : 'WIN0001');
       let statusBadgeClass = 'badge-disponible';
       if (lic.estado === 'Instalada') statusBadgeClass = 'badge-instalada';
       else if (lic.estado === 'Probar otra vez') statusBadgeClass = 'badge-probar';
       else if (lic.estado === 'Dañada') statusBadgeClass = 'badge-danada';
-
-      // Filtrar logs de auditoría para este equipo
-      const relatedLogs = (allLogs && allLogs.length ? allLogs : State.activity_logs || []).filter(l => {
-        const lWin = (l.codigoWin ? String(l.codigoWin).replace(/-/g, '') : '');
-        return (lWin && lWin === winCode) || (l.clave && l.clave === lic.clave) || (lic.orden && l.orden === lic.orden);
-      });
-
-      let historyHtml = '';
-      if (relatedLogs.length > 0) {
-        historyHtml = relatedLogs.slice(0, 10).map(log => `
-          <div class="search-assoc-log-item">
-            <div style="display: flex; justify-content: space-between; font-weight: 700; color: var(--text);">
-              <span>${escapeHtmlText(log.accion || 'Movimiento')} - ${escapeHtmlText(log.usuario || 'Técnico')}</span>
-              <span style="font-size: 0.75rem; color: var(--text-muted);">${escapeHtmlText(log.fecha || '')}</span>
-            </div>
-            <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 2px;">
-              ${escapeHtmlText(log.detalle || log.cambio || '')} ${log.orden ? `(Orden: ${escapeHtmlText(log.orden)})` : ''}
-            </div>
-          </div>
-        `).join('');
-      } else {
-        historyHtml = '<div style="font-size: 0.8rem; color: var(--text-muted); font-style: italic;">Sin eventos previos registrados.</div>';
-      }
 
       return `
         <div class="search-assoc-card">
@@ -4100,19 +4074,11 @@
             </div>
           </div>
 
-          <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
+          <div style="display: flex; justify-content: flex-end; margin-top: 14px;">
             <button type="button" class="btn btn-primary btn-sm btn-assoc-print-sticker" data-id="${lic.id}">
               <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
               <span>Reimprimir Etiqueta Adhesiva WIN</span>
             </button>
-          </div>
-
-          <div class="search-assoc-history">
-            <div class="search-assoc-history-title">
-              <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
-              <span>Historial y Cambios del Sistema Asociados:</span>
-            </div>
-            <div>${historyHtml}</div>
           </div>
         </div>
       `;
@@ -4213,7 +4179,7 @@
             const bodyEl = document.getElementById('search-modal-body');
             if (titleEl) titleEl.innerText = `Ficha de Equipo: ${lic.codigoWin || 'WIN0001'}`;
             if (bodyEl) {
-              bodyEl.innerHTML = renderSingleAssocDetailHtml(lic, allLogs);
+              bodyEl.innerHTML = renderSingleAssocDetailHtml(lic);
               attachAssocDetailEvents(bodyEl, lic);
             }
           }
