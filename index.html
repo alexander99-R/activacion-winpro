@@ -1374,6 +1374,131 @@
       color: #ffffff;
     }
 
+    /* Barra Global de Búsqueda y Escaneo de Código de Barras */
+    .global-barcode-search-banner {
+      margin-bottom: 20px;
+    }
+    .global-search-box {
+      display: flex;
+      align-items: center;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 4px 6px 4px 14px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+      transition: var(--transition);
+      gap: 10px;
+    }
+    .global-search-box:focus-within {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    }
+    .global-search-icon-wrap {
+      display: flex;
+      align-items: center;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+    .global-search-field {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 0.95rem;
+      color: var(--text);
+      font-family: inherit;
+      padding: 8px 0;
+    }
+    .global-search-field::placeholder {
+      color: var(--text-muted);
+      font-size: 0.88rem;
+    }
+    
+    /* Ficha Integral de Consulta Asociada */
+    .search-assoc-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    .search-assoc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .search-assoc-keybox {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin: 12px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .search-assoc-keyval {
+      font-family: var(--font-mono, monospace);
+      font-weight: 800;
+      font-size: 1.15rem;
+      color: var(--blue);
+      letter-spacing: 1px;
+    }
+    .search-assoc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .search-assoc-field {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 10px;
+    }
+    .search-assoc-lbl {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+    }
+    .search-assoc-val {
+      font-weight: 700;
+      font-size: 0.92rem;
+      color: var(--text);
+      word-break: break-all;
+    }
+    .search-assoc-history {
+      margin-top: 14px;
+      border-top: 1px solid var(--border);
+      padding-top: 12px;
+    }
+    .search-assoc-history-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .search-assoc-log-item {
+      font-size: 0.82rem;
+      padding: 6px 10px;
+      border-left: 3px solid var(--blue);
+      background: var(--bg-card);
+      margin-bottom: 6px;
+      border-radius: 0 4px 4px 0;
+    }
+
     /* Etiqueta Adhesiva Física WIN-**** */
     .sticker-preview-box {
       background: #ffffff;
@@ -2032,7 +2157,7 @@
               <span>Licencias</span>
               <span class="nav-counter" id="desktop-counter-disponibles">0</span>
             </button>
-            <button type="button" class="nav-tab-btn admin-only" data-target="tab-instaladas">
+            <button type="button" class="nav-tab-btn" data-target="tab-instaladas">
               <svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
               <span>Instaladas</span>
               <span class="nav-counter" id="desktop-counter-instaladas">0</span>
@@ -2129,6 +2254,20 @@
         <!-- Render dinámico de alertas de stock bajo o licencias estancadas -->
       </div>
 
+      <!-- Barra Global de Búsqueda y Escaneo de Código de Barras (WIN**** / SO**** / Cliente) -->
+      <div class="global-barcode-search-banner">
+        <div class="global-search-box">
+          <div class="global-search-icon-wrap">
+            <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+          <input type="text" id="global-barcode-search-input" class="global-search-field" placeholder="🔍 Escanear Código de Barras WIN**** o buscar por Orden SO****, Cliente, Equipo..." autocomplete="off">
+          <button type="button" class="btn btn-primary" id="btn-trigger-global-search">
+            <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <span>Buscar Todo</span>
+          </button>
+        </div>
+      </div>
+
       <!-- ==========================================================
            TAB 1: LICENCIAS ACTIVAS / DISPONIBLES & TODAS
            ========================================================== -->
@@ -2162,12 +2301,12 @@
 
         <!-- Barra de Búsqueda y Filtros (Búsqueda solo visible para Admin) -->
         <div class="filters-toolbar">
-          <div class="search-row admin-only">
+          <div class="search-row">
             <div class="search-input-wrap">
               <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-              <input type="text" id="filter-search-input" class="search-input" placeholder="Buscar por clave Windows o técnico...">
+              <input type="text" id="filter-search-input" class="search-input" placeholder="Buscar por WIN****, clave, cliente u orden...">
             </div>
-            <button type="button" class="btn btn-primary" id="btn-open-import-modal">
+            <button type="button" class="btn btn-primary admin-only" id="btn-open-import-modal">
               <svg class="icon" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
               <span class="desktop-text">Importar</span>
             </button>
@@ -2206,10 +2345,10 @@
               </button>
             </div>
           </div>
-          <div class="search-row admin-only" style="margin-bottom: 16px;">
+          <div class="search-row" style="margin-bottom: 16px;">
             <div class="search-input-wrap">
               <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-              <input type="text" id="filter-installed-search-input" class="search-input" placeholder="Buscar por Cliente, Orden SO****, LP****, M-TEK***** o Clave...">
+              <input type="text" id="filter-installed-search-input" class="search-input" placeholder="Buscar por WIN****, Cliente, Orden SO****, Equipo o Clave...">
             </div>
           </div>
           <div class="licenses-grid" id="installed-cards-container">
@@ -2539,7 +2678,7 @@
         <span class="mobile-nav-badge" id="mobile-badge-disp">0</span>
       </button>
 
-      <button type="button" class="mobile-nav-item admin-only" data-target="tab-instaladas">
+      <button type="button" class="mobile-nav-item" data-target="tab-instaladas">
         <svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
         <span>Instaladas</span>
       </button>
@@ -3078,6 +3217,29 @@
           <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
           <span>Imprimir Etiqueta</span>
         </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Consulta Integral: Todo lo Asociado a WIN**** / SO**** / Cliente -->
+  <div class="modal-overlay" id="modal-quick-search-result">
+    <div class="modal-box" style="max-width: 650px;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 1.25rem;">🔍</span>
+          <h3 class="modal-title" id="search-modal-title">Ficha Integral de Consulta</h3>
+        </div>
+        <button type="button" class="btn-icon" id="btn-close-search-modal">
+          <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div id="search-modal-body" style="padding: 10px 0; max-height: 75vh; overflow-y: auto;">
+        <!-- Render dinámico de todo lo asociado -->
+      </div>
+
+      <div class="modal-footer" style="padding-top: 14px;">
+        <button type="button" class="btn btn-secondary" id="btn-dismiss-search-modal" style="width: 100%;">Cerrar Consulta</button>
       </div>
     </div>
   </div>
@@ -3679,19 +3841,20 @@
       const elCode = document.getElementById('sticker-code-win');
       if (elCode) elCode.innerText = data.codigoWin || 'WIN0001';
 
-      // Renderizar código de barras Code 128 real con la Licencia de Windows
-      if (data.clave && typeof JsBarcode === 'function') {
+      // Renderizar código de barras Code 128 real con el código alfanumérico WIN****
+      const winBarcodeValue = (data.codigoWin ? String(data.codigoWin).replace(/[^A-Za-z0-9]/g, '').toUpperCase() : 'WIN0001');
+      if (typeof JsBarcode === 'function') {
         try {
-          JsBarcode('#sticker-barcode-svg', data.clave, {
+          JsBarcode('#sticker-barcode-svg', winBarcodeValue, {
             format: 'CODE128',
             lineColor: '#000000',
-            width: 1.4,
-            height: 40,
+            width: 2.2,
+            height: 48,
             displayValue: true,
-            fontSize: 10,
+            fontSize: 14,
             font: 'monospace',
             textMargin: 3,
-            margin: 2
+            margin: 4
           });
         } catch (e) {
           console.warn('Error al generar código de barras Code 128:', e);
@@ -3705,6 +3868,357 @@
     function closePrintStickerModal() {
       const modal = document.getElementById('modal-print-win-label');
       if (modal) modal.classList.remove('active');
+    }
+
+    // Copiar solo la Clave en el portapapeles
+    async function copyKeyOnlyToClipboard(key, buttonEl) {
+      if (!key) return;
+      let copiedOk = false;
+      if (navigator.clipboard && window.isSecureContext) {
+        try {
+          await navigator.clipboard.writeText(key);
+          copiedOk = true;
+        } catch (err) {}
+      }
+      if (!copiedOk) {
+        try {
+          const textArea = document.createElement("textarea");
+          textArea.value = key;
+          textArea.style.position = "fixed";
+          textArea.style.left = "-999999px";
+          textArea.style.top = "-999999px";
+          document.body.appendChild(textArea);
+          textArea.focus();
+          textArea.select();
+          copiedOk = document.execCommand('copy');
+          textArea.remove();
+        } catch (e) {}
+      }
+      if (copiedOk) {
+        const originalText = buttonEl.innerHTML;
+        buttonEl.innerHTML = `<svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> ¡Copiada!`;
+        showToast(`Clave copiada: ${key}`, 'success', 2200);
+        setTimeout(() => {
+          buttonEl.innerHTML = originalText;
+        }, 1800);
+      } else {
+        showToast(`Clave: ${key}`, 'info', 4000);
+      }
+    }
+
+    // ==========================================================================
+    // BÚSQUEDA GLOBAL / ESCANEO DE CÓDIGO DE BARRAS (WIN**** / SO**** / CLIENTE)
+    // ==========================================================================
+    function executeGlobalSearch(rawQuery) {
+      const query = (rawQuery || '').trim();
+      if (!query) {
+        showToast('Ingresa o escanea un código WIN, orden o cliente para buscar.', 'info');
+        return;
+      }
+
+      const qLower = query.toLowerCase();
+      const qAlnum = query.replace(/[^A-Za-z0-9]/g, '').toLowerCase();
+
+      // Buscar en State.licenses
+      const matchedLicenses = (State.licenses || []).filter(lic => {
+        // Código WIN
+        const winAlnum = (lic.codigoWin || '').replace(/[^A-Za-z0-9]/g, '').toLowerCase();
+        if (winAlnum && (winAlnum === qAlnum || winAlnum.includes(qAlnum))) return true;
+
+        // Orden (ej. SO1045 o SO-1045)
+        const ordAlnum = (lic.orden || '').replace(/[^A-Za-z0-9]/g, '').toLowerCase();
+        if (ordAlnum && (ordAlnum === qAlnum || ordAlnum.includes(qAlnum))) return true;
+        if (lic.orden && lic.orden.toLowerCase().includes(qLower)) return true;
+
+        // Cliente
+        if (lic.cliente && lic.cliente.toLowerCase().includes(qLower)) return true;
+
+        // Equipo / M-TEK
+        if (lic.equipoDetalle && lic.equipoDetalle.toLowerCase().includes(qLower)) return true;
+        if (lic.tipoEquipo && lic.tipoEquipo.toLowerCase().includes(qLower)) return true;
+
+        // Clave
+        if (lic.clave && lic.clave.toLowerCase().includes(qLower)) return true;
+        const claveAlnum = (lic.clave || '').replace(/[^A-Za-z0-9]/g, '').toLowerCase();
+        if (claveAlnum && claveAlnum.includes(qAlnum) && qAlnum.length >= 4) return true;
+
+        // Técnico instalador
+        if (lic.instaladoPor && lic.instaladoPor.toLowerCase().includes(qLower)) return true;
+
+        return false;
+      });
+
+      // Buscar en State.activity_logs
+      const matchedLogs = (State.activity_logs || []).filter(log => {
+        const logWin = (log.codigoWin || '').replace(/[^A-Za-z0-9]/g, '').toLowerCase();
+        if (logWin && (logWin === qAlnum || logWin.includes(qAlnum))) return true;
+
+        const logOrd = (log.orden || '').replace(/[^A-Za-z0-9]/g, '').toLowerCase();
+        if (logOrd && (logOrd === qAlnum || logOrd.includes(qAlnum))) return true;
+
+        if (log.cliente && log.cliente.toLowerCase().includes(qLower)) return true;
+        if (log.equipo && log.equipo.toLowerCase().includes(qLower)) return true;
+        if (log.clave && log.clave.toLowerCase().includes(qLower)) return true;
+        return false;
+      });
+
+      openQuickSearchResultModal(query, matchedLicenses, matchedLogs);
+    }
+
+    function openQuickSearchResultModal(query, matchedLicenses, matchedLogs) {
+      const modal = document.getElementById('modal-quick-search-result');
+      const titleEl = document.getElementById('search-modal-title');
+      const bodyEl = document.getElementById('search-modal-body');
+      if (!modal || !titleEl || !bodyEl) return;
+
+      if (matchedLicenses.length === 0 && matchedLogs.length === 0) {
+        titleEl.innerText = `Búsqueda: "${query}"`;
+        bodyEl.innerHTML = `
+          <div class="empty-state" style="padding: 24px 10px;">
+            <svg class="icon icon-lg" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <div><strong>No se encontró ningún equipo o licencia asociada</strong></div>
+            <p style="font-size: 0.85rem; color: var(--text-muted); max-width: 420px; margin: 0 auto;">
+              No hay registros asociados a "<strong>${escapeHtmlText(query)}</strong>". Comprueba que el código WIN (ej. WIN0001), orden de trabajo (ej. SO1045) o nombre del cliente sea correcto.
+            </p>
+          </div>
+        `;
+      } else if (matchedLicenses.length === 1) {
+        // Coincidencia exacta única (caso típico al escanear con la pistola o buscar SO)
+        const lic = matchedLicenses[0];
+        titleEl.innerText = `Ficha de Equipo: ${lic.codigoWin || 'WIN0001'}`;
+        bodyEl.innerHTML = renderSingleAssocDetailHtml(lic, matchedLogs);
+        attachAssocDetailEvents(bodyEl, lic);
+      } else if (matchedLicenses.length > 1) {
+        // Varias coincidencias (ej. buscar por cliente que tiene varios equipos)
+        titleEl.innerText = `Equipos Asociados (${matchedLicenses.length}) para "${query}"`;
+        bodyEl.innerHTML = renderMultipleAssocResultsHtml(query, matchedLicenses);
+        attachMultipleAssocEvents(bodyEl, matchedLicenses, matchedLogs);
+      } else {
+        // Solo coincidencias en auditoría histórica
+        titleEl.innerText = `Registros Históricos para "${query}"`;
+        bodyEl.innerHTML = renderLogsOnlyAssocHtml(matchedLogs);
+      }
+
+      modal.classList.add('active');
+    }
+
+    function closeQuickSearchResultModal() {
+      const modal = document.getElementById('modal-quick-search-result');
+      if (modal) modal.classList.remove('active');
+    }
+
+    function escapeHtmlText(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function renderSingleAssocDetailHtml(lic, allLogs) {
+      const winCode = (lic.codigoWin ? String(lic.codigoWin).replace(/-/g, '') : 'WIN0001');
+      let statusBadgeClass = 'badge-disponible';
+      if (lic.estado === 'Instalada') statusBadgeClass = 'badge-instalada';
+      else if (lic.estado === 'Probar otra vez') statusBadgeClass = 'badge-probar';
+      else if (lic.estado === 'Dañada') statusBadgeClass = 'badge-danada';
+
+      // Filtrar logs de auditoría para este equipo
+      const relatedLogs = (allLogs && allLogs.length ? allLogs : State.activity_logs || []).filter(l => {
+        const lWin = (l.codigoWin ? String(l.codigoWin).replace(/-/g, '') : '');
+        return (lWin && lWin === winCode) || (l.clave && l.clave === lic.clave) || (lic.orden && l.orden === lic.orden);
+      });
+
+      let historyHtml = '';
+      if (relatedLogs.length > 0) {
+        historyHtml = relatedLogs.slice(0, 10).map(log => `
+          <div class="search-assoc-log-item">
+            <div style="display: flex; justify-content: space-between; font-weight: 700; color: var(--text);">
+              <span>${escapeHtmlText(log.accion || 'Movimiento')} - ${escapeHtmlText(log.usuario || 'Técnico')}</span>
+              <span style="font-size: 0.75rem; color: var(--text-muted);">${escapeHtmlText(log.fecha || '')}</span>
+            </div>
+            <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 2px;">
+              ${escapeHtmlText(log.detalle || log.cambio || '')} ${log.orden ? `(Orden: ${escapeHtmlText(log.orden)})` : ''}
+            </div>
+          </div>
+        `).join('');
+      } else {
+        historyHtml = '<div style="font-size: 0.8rem; color: var(--text-muted); font-style: italic;">Sin eventos previos registrados.</div>';
+      }
+
+      return `
+        <div class="search-assoc-card">
+          <div class="search-assoc-header">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="badge-win-code" style="font-size: 1.15rem; font-weight: 900; padding: 4px 12px; letter-spacing: 1.5px;">${winCode}</span>
+              <span class="badge ${statusBadgeClass}" style="font-size: 0.85rem;">${lic.estado}</span>
+            </div>
+            <span style="font-size: 0.82rem; font-weight: 700; color: var(--text-muted);">Windows 11 Pro</span>
+          </div>
+
+          <div class="search-assoc-keybox">
+            <div>
+              <div class="search-assoc-lbl">Clave de Windows (Reinstalación / Cambio de SSD)</div>
+              <div class="search-assoc-keyval">${escapeHtmlText(lic.clave || 'No asignada')}</div>
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <button type="button" class="btn btn-primary btn-sm btn-assoc-copy-key" data-key="${escapeHtmlText(lic.clave || '')}">
+                <svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <span>Copiar Clave</span>
+              </button>
+              <button type="button" class="btn btn-secondary btn-sm btn-assoc-copy-cmd" data-key="${escapeHtmlText(lic.clave || '')}">
+                <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+                <span>slmgr /ipk</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="search-assoc-grid">
+            <div class="search-assoc-field">
+              <div class="search-assoc-lbl">M-TEK / Equipo</div>
+              <div class="search-assoc-val">${escapeHtmlText(lic.equipoDetalle || lic.tipoEquipo || 'Combo M-TEK')}</div>
+            </div>
+            <div class="search-assoc-field">
+              <div class="search-assoc-lbl">N° de Orden</div>
+              <div class="search-assoc-val">${escapeHtmlText(lic.orden || 'Sin Orden')}</div>
+            </div>
+            <div class="search-assoc-field">
+              <div class="search-assoc-lbl">Cliente</div>
+              <div class="search-assoc-val">${escapeHtmlText(lic.cliente || 'Sin Cliente')}</div>
+            </div>
+            <div class="search-assoc-field">
+              <div class="search-assoc-lbl">Instalado Por / Técnico</div>
+              <div class="search-assoc-val">${escapeHtmlText(lic.instaladoPor || 'Técnico')}</div>
+            </div>
+            <div class="search-assoc-field">
+              <div class="search-assoc-lbl">Fecha de Instalación</div>
+              <div class="search-assoc-val">${escapeHtmlText(lic.instaladoEl || lic.fechaSubida || 'No registrada')}</div>
+            </div>
+            <div class="search-assoc-field">
+              <div class="search-assoc-lbl">Notas del Servicio</div>
+              <div class="search-assoc-val">${escapeHtmlText(lic.notas || 'Sin observaciones')}</div>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
+            <button type="button" class="btn btn-primary btn-sm btn-assoc-print-sticker" data-id="${lic.id}">
+              <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+              <span>Reimprimir Etiqueta Adhesiva WIN</span>
+            </button>
+          </div>
+
+          <div class="search-assoc-history">
+            <div class="search-assoc-history-title">
+              <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
+              <span>Historial y Cambios del Sistema Asociados:</span>
+            </div>
+            <div>${historyHtml}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderMultipleAssocResultsHtml(query, list) {
+      const items = list.map(lic => {
+        const win = (lic.codigoWin ? String(lic.codigoWin).replace(/-/g, '') : 'WIN0001');
+        let statusBadgeClass = 'badge-disponible';
+        if (lic.estado === 'Instalada') statusBadgeClass = 'badge-instalada';
+        else if (lic.estado === 'Probar otra vez') statusBadgeClass = 'badge-probar';
+        else if (lic.estado === 'Dañada') statusBadgeClass = 'badge-danada';
+
+        return `
+          <div class="search-assoc-card" style="padding: 12px; margin-bottom: 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span class="badge-win-code" style="font-weight: 800;">${win}</span>
+                <span class="badge ${statusBadgeClass}">${lic.estado}</span>
+                <strong style="color: var(--text);">${escapeHtmlText(lic.orden || 'Sin Orden')}</strong>
+              </div>
+              <button type="button" class="btn btn-secondary btn-sm btn-select-assoc-single" data-id="${lic.id}">
+                <span>Ver Todo lo Asociado ➔</span>
+              </button>
+            </div>
+            <div style="margin-top: 6px; font-size: 0.82rem; color: var(--text-muted); display: flex; gap: 14px; flex-wrap: wrap;">
+              <span><strong>Cliente:</strong> ${escapeHtmlText(lic.cliente || 'Sin Cliente')}</span>
+              <span><strong>Equipo:</strong> ${escapeHtmlText(lic.equipoDetalle || lic.tipoEquipo || 'M-TEK')}</span>
+              <span><strong>Fecha:</strong> ${escapeHtmlText(lic.instaladoEl || lic.fechaSubida || '')}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      return `
+        <div style="margin-bottom: 10px; font-size: 0.88rem; color: var(--text-muted);">
+          Se encontraron <strong>${list.length}</strong> equipos asociados. Selecciona uno para ver su ficha completa:
+        </div>
+        ${items}
+      `;
+    }
+
+    function renderLogsOnlyAssocHtml(logs) {
+      const items = logs.map(log => `
+        <div class="search-assoc-log-item">
+          <div style="display: flex; justify-content: space-between; font-weight: 700; color: var(--text);">
+            <span>${escapeHtmlText(log.accion || 'Registro')} - ${escapeHtmlText(log.usuario || 'Técnico')}</span>
+            <span style="font-size: 0.75rem; color: var(--text-muted);">${escapeHtmlText(log.fecha || '')}</span>
+          </div>
+          <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">
+            ${escapeHtmlText(log.detalle || '')} ${log.orden ? `| Orden: ${escapeHtmlText(log.orden)}` : ''} ${log.codigoWin ? `| Código: ${escapeHtmlText(log.codigoWin)}` : ''}
+          </div>
+        </div>
+      `).join('');
+
+      return `
+        <div class="search-assoc-card">
+          <div class="search-assoc-history-title">
+            <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
+            <span>Registros de Auditoría Encontrados:</span>
+          </div>
+          <div>${items}</div>
+        </div>
+      `;
+    }
+
+    function attachAssocDetailEvents(container, lic) {
+      const copyKeyBtn = container.querySelector('.btn-assoc-copy-key');
+      if (copyKeyBtn) {
+        copyKeyBtn.addEventListener('click', () => {
+          copyKeyOnlyToClipboard(copyKeyBtn.dataset.key || lic.clave, copyKeyBtn);
+        });
+      }
+
+      const copyCmdBtn = container.querySelector('.btn-assoc-copy-cmd');
+      if (copyCmdBtn) {
+        copyCmdBtn.addEventListener('click', () => {
+          copyCmdToClipboard(copyCmdBtn.dataset.key || lic.clave, copyCmdBtn);
+        });
+      }
+
+      const printBtn = container.querySelector('.btn-assoc-print-sticker');
+      if (printBtn) {
+        printBtn.addEventListener('click', () => {
+          closeQuickSearchResultModal();
+          openPrintStickerModal(lic.id);
+        });
+      }
+    }
+
+    function attachMultipleAssocEvents(container, list, allLogs) {
+      container.querySelectorAll('.btn-select-assoc-single').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const licId = btn.dataset.id;
+          const lic = list.find(l => l.id === licId);
+          if (lic) {
+            const titleEl = document.getElementById('search-modal-title');
+            const bodyEl = document.getElementById('search-modal-body');
+            if (titleEl) titleEl.innerText = `Ficha de Equipo: ${lic.codigoWin || 'WIN0001'}`;
+            if (bodyEl) {
+              bodyEl.innerHTML = renderSingleAssocDetailHtml(lic, allLogs);
+              attachAssocDetailEvents(bodyEl, lic);
+            }
+          }
+        });
+      });
     }
 
     // Sistema de Notificaciones Toast flotantes
@@ -4212,17 +4726,19 @@
           if (State.filterStatus !== 'ALL' && lic.estado !== State.filterStatus) {
             return false;
           }
-          // Filtro de Búsqueda
-          if (State.filterSearch) {
-            const query = State.filterSearch.toLowerCase();
-            const matchKey = lic.clave ? lic.clave.toLowerCase().includes(query) : false;
-            const matchUser = lic.instaladoPor ? lic.instaladoPor.toLowerCase().includes(query) : false;
-            const matchClient = lic.cliente ? lic.cliente.toLowerCase().includes(query) : false;
-            const matchOrder = lic.orden ? lic.orden.toLowerCase().includes(query) : false;
-            const matchEquip = lic.equipoDetalle ? lic.equipoDetalle.toLowerCase().includes(query) : false;
-            const matchWin = lic.codigoWin ? lic.codigoWin.toLowerCase().includes(query) : false;
-            if (!matchKey && !matchUser && !matchClient && !matchOrder && !matchEquip && !matchWin) return false;
-          }
+        }
+
+        // Filtro de Búsqueda (Común para todos los roles)
+        if (State.filterSearch) {
+          const query = State.filterSearch.toLowerCase();
+          const queryClean = query.replace(/[^A-Za-z0-9]/g, '');
+          const matchKey = lic.clave ? lic.clave.toLowerCase().includes(query) : false;
+          const matchUser = lic.instaladoPor ? lic.instaladoPor.toLowerCase().includes(query) : false;
+          const matchClient = lic.cliente ? lic.cliente.toLowerCase().includes(query) : false;
+          const matchOrder = lic.orden ? (lic.orden.toLowerCase().includes(query) || lic.orden.replace(/[^A-Za-z0-9]/g, '').toLowerCase().includes(queryClean)) : false;
+          const matchEquip = lic.equipoDetalle ? lic.equipoDetalle.toLowerCase().includes(query) : false;
+          const matchWin = lic.codigoWin ? (lic.codigoWin.toLowerCase().includes(query) || lic.codigoWin.replace(/[^A-Za-z0-9]/g, '').toLowerCase().includes(queryClean)) : false;
+          if (!matchKey && !matchUser && !matchClient && !matchOrder && !matchEquip && !matchWin) return false;
         }
 
         return true;
@@ -4455,14 +4971,15 @@
 
       if (State.filterInstalledSearch) {
         const q = State.filterInstalledSearch.toLowerCase();
+        const qClean = q.replace(/[^A-Za-z0-9]/g, '');
         installed = installed.filter(lic => {
           const matchKey = lic.clave ? lic.clave.toLowerCase().includes(q) : false;
           const matchUser = lic.instaladoPor ? lic.instaladoPor.toLowerCase().includes(q) : false;
           const matchClient = lic.cliente ? lic.cliente.toLowerCase().includes(q) : false;
-          const matchOrder = lic.orden ? lic.orden.toLowerCase().includes(q) : false;
+          const matchOrder = lic.orden ? (lic.orden.toLowerCase().includes(q) || lic.orden.replace(/[^A-Za-z0-9]/g, '').toLowerCase().includes(qClean)) : false;
           const matchEquip = lic.equipoDetalle ? lic.equipoDetalle.toLowerCase().includes(q) : false;
           const matchType = lic.tipoEquipo ? lic.tipoEquipo.toLowerCase().includes(q) : false;
-          const matchWin = lic.codigoWin ? lic.codigoWin.toLowerCase().includes(q) : false;
+          const matchWin = lic.codigoWin ? (lic.codigoWin.toLowerCase().includes(q) || lic.codigoWin.replace(/[^A-Za-z0-9]/g, '').toLowerCase().includes(qClean)) : false;
           return matchKey || matchUser || matchClient || matchOrder || matchEquip || matchType || matchWin;
         });
       }
@@ -7008,6 +7525,40 @@ Sistema de Inventario - Activacion WinPro`;
       if (btnClosePrint) btnClosePrint.addEventListener('click', closePrintStickerModal);
       const btnCancelPrint = document.getElementById('btn-cancel-print-sticker');
       if (btnCancelPrint) btnCancelPrint.addEventListener('click', closePrintStickerModal);
+
+      // Controles de Búsqueda Global y Escaneo de Código de Barras
+      const globalSearchInput = document.getElementById('global-barcode-search-input');
+      const btnGlobalSearch = document.getElementById('btn-trigger-global-search');
+      if (globalSearchInput) {
+        globalSearchInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            executeGlobalSearch(globalSearchInput.value);
+          }
+        });
+      }
+      if (btnGlobalSearch && globalSearchInput) {
+        btnGlobalSearch.addEventListener('click', () => {
+          executeGlobalSearch(globalSearchInput.value);
+        });
+      }
+
+      // Cerrar Modal de Consulta Asociada
+      const btnCloseSearchModal = document.getElementById('btn-close-search-modal');
+      if (btnCloseSearchModal) btnCloseSearchModal.addEventListener('click', closeQuickSearchResultModal);
+      const btnDismissSearchModal = document.getElementById('btn-dismiss-search-modal');
+      if (btnDismissSearchModal) btnDismissSearchModal.addEventListener('click', closeQuickSearchResultModal);
+
+      // Atajo de teclado: F2 o Ctrl+K para enfocar la barra de escaneo de código de barras
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'F2' || (e.ctrlKey && e.key.toLowerCase() === 'k')) {
+          if (globalSearchInput) {
+            e.preventDefault();
+            globalSearchInput.focus();
+            globalSearchInput.select();
+          }
+        }
+      });
 
       console.log('✅ Activacion WinPro Inicializado con éxito. Versión Multi-Agente 2.0.');
     }
