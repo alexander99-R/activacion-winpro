@@ -8,6 +8,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
+  <script src="jsbarcode.min.js"></script>
   
   <style>
     /* ==========================================================================
@@ -3058,26 +3059,9 @@
       <div id="printable-sticker-card" class="sticker-preview-box">
         <div class="sticker-win-code-box">
           <div class="sticker-win-code-label">CÓDIGO DE IDENTIFICACIÓN</div>
-          <div class="sticker-win-code-val" id="sticker-code-win">WIN-0001</div>
-          <div class="sticker-barcode-visual" aria-hidden="true">
-            <span class="sticker-barcode-bar" style="width: 2px;"></span>
-            <span class="sticker-barcode-bar" style="width: 4px;"></span>
-            <span class="sticker-barcode-bar" style="width: 1px;"></span>
-            <span class="sticker-barcode-bar" style="width: 3px;"></span>
-            <span class="sticker-barcode-bar" style="width: 5px;"></span>
-            <span class="sticker-barcode-bar" style="width: 2px;"></span>
-            <span class="sticker-barcode-bar" style="width: 1px;"></span>
-            <span class="sticker-barcode-bar" style="width: 4px;"></span>
-            <span class="sticker-barcode-bar" style="width: 2px;"></span>
-            <span class="sticker-barcode-bar" style="width: 3px;"></span>
-            <span class="sticker-barcode-bar" style="width: 1px;"></span>
-            <span class="sticker-barcode-bar" style="width: 5px;"></span>
-            <span class="sticker-barcode-bar" style="width: 2px;"></span>
-            <span class="sticker-barcode-bar" style="width: 3px;"></span>
-            <span class="sticker-barcode-bar" style="width: 4px;"></span>
-            <span class="sticker-barcode-bar" style="width: 1px;"></span>
-            <span class="sticker-barcode-bar" style="width: 3px;"></span>
-            <span class="sticker-barcode-bar" style="width: 2px;"></span>
+          <div class="sticker-win-code-val" id="sticker-code-win">WIN0001</div>
+          <div style="background: #ffffff; padding: 4px; border-radius: 6px; margin-top: 6px; display: flex; justify-content: center; overflow: hidden;">
+            <svg id="sticker-barcode-svg" style="max-width: 100%; height: 52px; display: block;"></svg>
           </div>
         </div>
 
@@ -3125,20 +3109,20 @@
      */
     
     // ==========================================================================
-    // CÓDIGO ÚNICO DE LICENCIA (WIN-****)
+    // CÓDIGO ÚNICO DE LICENCIA (WIN****) - Alfanumérico sin guion
     // ==========================================================================
     function getNextWinCode(licensesList) {
       let maxNum = 0;
       (licensesList || []).forEach(l => {
         if (l.codigoWin && typeof l.codigoWin === 'string') {
-          const m = l.codigoWin.match(/WIN-(\d+)/i);
+          const m = l.codigoWin.match(/WIN-?(\d+)/i);
           if (m && m[1]) {
             const num = parseInt(m[1], 10);
             if (!isNaN(num) && num > maxNum) maxNum = num;
           }
         }
       });
-      return `WIN-${String(maxNum + 1).padStart(4, '0')}`;
+      return `WIN${String(maxNum + 1).padStart(4, '0')}`;
     }
 
     function ensureWinCodes(licensesList) {
@@ -3147,7 +3131,12 @@
       let maxNum = 0;
       licensesList.forEach(l => {
         if (l.codigoWin && typeof l.codigoWin === 'string') {
-          const m = l.codigoWin.match(/WIN-(\d+)/i);
+          // Quitar guiones existentes para cumplir con formato alfanumérico WIN****
+          if (l.codigoWin.includes('-')) {
+            l.codigoWin = l.codigoWin.replace(/-/g, '');
+            changed = true;
+          }
+          const m = l.codigoWin.match(/WIN(\d+)/i);
           if (m && m[1]) {
             const num = parseInt(m[1], 10);
             if (!isNaN(num) && num > maxNum) maxNum = num;
@@ -3157,7 +3146,7 @@
       licensesList.forEach(l => {
         if (!l.codigoWin) {
           maxNum++;
-          l.codigoWin = `WIN-${String(maxNum).padStart(4, '0')}`;
+          l.codigoWin = `WIN${String(maxNum).padStart(4, '0')}`;
           changed = true;
         }
       });
@@ -3329,7 +3318,7 @@
           licenses: [
             {
               id: "lic-1",
-              codigoWin: "WIN-0001",
+              codigoWin: "WIN0001",
               clave: "W269N-WFGWX-YVC9B-4J6C9-T83GX",
               tipo: "Windows 11 Pro",
               estado: "Disponible",
@@ -3340,7 +3329,7 @@
             },
             {
               id: "lic-2",
-              codigoWin: "WIN-0002",
+              codigoWin: "WIN0002",
               clave: "VK7JG-NPHTM-C97JM-9MPGT-3V66T",
               tipo: "Windows 11 Pro",
               estado: "Disponible",
@@ -3351,7 +3340,7 @@
             },
             {
               id: "lic-3",
-              codigoWin: "WIN-0003",
+              codigoWin: "WIN0003",
               clave: "MH37W-N47XK-V7XM9-C7227-GCQG9",
               tipo: "Windows 11 Pro",
               estado: "Instalada",
@@ -3369,7 +3358,7 @@
             },
             {
               id: "lic-4",
-              codigoWin: "WIN-0004",
+              codigoWin: "WIN0004",
               clave: "NRG8B-VKK3Q-CXVCJ-9G2XF-6Q84J",
               tipo: "Windows 11 Pro",
               estado: "Probar otra vez",
@@ -3380,7 +3369,7 @@
             },
             {
               id: "lic-5",
-              codigoWin: "WIN-0005",
+              codigoWin: "WIN0005",
               clave: "DCPHK-NFMTC-H88MJ-PFHPY-QJ4BJ",
               tipo: "Windows 11 Pro",
               estado: "Dañada",
@@ -3391,7 +3380,7 @@
             }
           ],
           activity_logs: [
-            { id: "log-1", tipo: "instalacion", codigoWin: "WIN-0003", orden: "SO-1082", cliente: "Taller Central", equipo: "Desktop M-TEK-001", clave: "MH37W-N47XK-V7XM9-C7227-GCQG9", fecha: "2026-09-18 14:20", usuario: "Juan Pérez", accion: "Instalación", detalle: "MH37W-N47XK-V7XM9-C7227-GCQG9", cambio: "Disponible ➔ Instalada" }
+            { id: "log-1", tipo: "instalacion", codigoWin: "WIN0003", orden: "SO-1082", cliente: "Taller Central", equipo: "Desktop M-TEK-001", clave: "MH37W-N47XK-V7XM9-C7227-GCQG9", fecha: "2026-09-18 14:20", usuario: "Juan Pérez", accion: "Instalación", detalle: "MH37W-N47XK-V7XM9-C7227-GCQG9", cambio: "Disponible ➔ Instalada" }
           ],
           sessions: []
         };
@@ -3677,7 +3666,8 @@
             eqDesc = eqDesc ? `${lic.tipoEquipo}: ${eqDesc}` : lic.tipoEquipo;
           }
           data = {
-            codigoWin: lic.codigoWin || 'WIN-0000',
+            codigoWin: (lic.codigoWin ? String(lic.codigoWin).replace(/-/g, '') : 'WIN0001'),
+            clave: lic.clave || '',
             orden: lic.orden || 'Sin Orden',
             equipo: eqDesc || 'Combo M-TEK',
             fecha: lic.instaladoEl || formatDate(),
@@ -3690,7 +3680,8 @@
           eqDesc = `${licenseOrLogData.tipoEquipo}: ${eqDesc}`.trim();
         }
         data = {
-          codigoWin: licenseOrLogData.codigoWin || 'WIN-0000',
+          codigoWin: (licenseOrLogData.codigoWin ? String(licenseOrLogData.codigoWin).replace(/-/g, '') : 'WIN0001'),
+          clave: licenseOrLogData.clave || licenseOrLogData.detalle || '',
           orden: licenseOrLogData.orden || 'Sin Orden',
           equipo: eqDesc || 'Combo M-TEK',
           fecha: licenseOrLogData.fecha || licenseOrLogData.instaladoEl || formatDate(),
@@ -3704,11 +3695,30 @@
       const elDate = document.getElementById('sticker-date');
       const elTech = document.getElementById('sticker-tech');
 
-      if (elCode) elCode.innerText = data.codigoWin || 'WIN-????';
+      if (elCode) elCode.innerText = data.codigoWin || 'WIN0001';
       if (elOrder) elOrder.innerText = data.orden || 'Sin Orden';
       if (elEquip) elEquip.innerText = data.equipo || 'Combo M-TEK';
       if (elDate) elDate.innerText = data.fecha || formatDate();
       if (elTech) elTech.innerText = data.tecnico || 'Técnico';
+
+      // Renderizar código de barras Code 128 real con la Licencia de Windows
+      if (data.clave && typeof JsBarcode === 'function') {
+        try {
+          JsBarcode('#sticker-barcode-svg', data.clave, {
+            format: 'CODE128',
+            lineColor: '#000000',
+            width: 1.4,
+            height: 40,
+            displayValue: true,
+            fontSize: 10,
+            font: 'monospace',
+            textMargin: 3,
+            margin: 2
+          });
+        } catch (e) {
+          console.warn('Error al generar código de barras Code 128:', e);
+        }
+      }
 
       const modal = document.getElementById('modal-print-win-label');
       if (modal) modal.classList.add('active');
@@ -4350,7 +4360,7 @@
           <div class="card-edition">
             <svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
             <span>Windows 11 Pro</span>
-            ${lic.codigoWin ? `<span class="badge-win-code">${lic.codigoWin}</span>` : ''}
+            ${lic.codigoWin ? `<span class="badge-win-code">${String(lic.codigoWin).replace(/-/g, '')}</span>` : ''}
           </div>
           <div style="display: flex; align-items: center; gap: 8px;">
             <span class="badge ${badgeClass}">${statusIcon} ${lic.estado}</span>
@@ -6062,7 +6072,7 @@
         } else {
           instLogs.slice(0, 100).forEach(log => {
             const tr = document.createElement('tr');
-            const winCode = log.codigoWin || 'WIN-????';
+            const winCode = (log.codigoWin ? String(log.codigoWin).replace(/-/g, '') : 'WIN0001');
             const ord = log.orden || 'Sin Orden';
             const cli = log.cliente || 'Sin Cliente';
             const eq = log.equipo || 'Equipo';
