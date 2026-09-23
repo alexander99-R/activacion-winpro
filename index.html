@@ -395,7 +395,7 @@
     }
     .login-container {
       width: 100%;
-      max-width: 480px;
+      max-width: 640px;
       background: var(--surface);
       border-radius: var(--radius);
       box-shadow: var(--shadow-lg);
@@ -508,64 +508,80 @@
     }
 
     .users-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-      gap: 12px;
-      margin-top: 12px;
-      max-height: 280px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 14px;
+      max-height: 380px;
       overflow-y: auto;
-      padding: 4px;
+      padding: 8px 4px;
     }
     .user-card-btn {
-      background: var(--surface-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 14px 10px;
+      background: transparent;
+      border: 2px solid transparent;
+      border-radius: 16px;
+      padding: 10px 12px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       cursor: pointer;
-      transition: var(--transition);
-      box-shadow: var(--shadow-sm);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
       text-align: center;
+      width: 130px;
     }
     .user-card-btn:hover {
-      transform: translateY(-3px);
+      background: rgba(95, 185, 228, 0.08);
+      transform: translateY(-4px);
+    }
+    .user-card-btn:hover .user-avatar {
+      transform: scale(1.08);
       border-color: var(--blue);
-      box-shadow: var(--shadow);
+      box-shadow: 0 10px 24px rgba(95, 185, 228, 0.45);
+    }
+    .user-card-btn:hover .user-name {
+      color: var(--blue);
     }
     .user-avatar {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
+      width: 96px;
+      height: 96px;
+      border-radius: 16px;
       object-fit: cover;
-      background: var(--blue2);
-      color: var(--navy);
+      background: linear-gradient(135deg, var(--navy) 0%, #164676 100%);
+      color: #ffffff;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 700;
-      font-size: 1.1rem;
-      border: 2px solid var(--blue);
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      font-weight: 800;
+      font-size: 2.2rem;
+      border: 3px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s, box-shadow 0.25s;
+    }
+    [data-theme="light"] .user-avatar {
+      border: 3px solid rgba(11, 42, 74, 0.15);
+      color: white;
+      background: linear-gradient(135deg, var(--navy) 0%, #1c5285 100%);
     }
     .user-name {
-      font-size: 0.88rem;
-      font-weight: 600;
+      font-size: 0.95rem;
+      font-weight: 700;
       color: var(--text);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 110px;
+      max-width: 120px;
+      transition: color 0.2s;
     }
     .user-role-badge {
-      font-size: 0.68rem;
-      padding: 2px 6px;
-      border-radius: 4px;
-      background: var(--gray-light);
-      color: var(--text-muted);
-      font-weight: 600;
+      font-size: 0.72rem;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: var(--blue-subtle);
+      color: var(--blue);
+      font-weight: 700;
+      border: 1px solid rgba(95, 185, 228, 0.25);
     }
 
     /* Modal de PIN (Agent 3) */
@@ -1336,6 +1352,163 @@
       background: var(--navy);
       color: white;
     }
+    .act-print-label {
+      background: #0f172a;
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+    .act-print-label:hover {
+      background: #1e293b;
+      color: #7dd3fc;
+      border-color: #38bdf8;
+    }
+    .btn-print-audit-sticker {
+      color: var(--blue);
+    }
+    .btn-print-audit-sticker:hover {
+      background: var(--blue-subtle);
+      color: var(--navy);
+    }
+    [data-theme="dark"] .btn-print-audit-sticker:hover {
+      color: #ffffff;
+    }
+
+    /* Etiqueta Adhesiva Física WIN-**** */
+    .sticker-preview-box {
+      background: #ffffff;
+      color: #0f172a;
+      border: 2px dashed #94a3b8;
+      border-radius: 12px;
+      padding: 18px 20px;
+      max-width: 360px;
+      margin: 0 auto;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    .sticker-header {
+      text-align: center;
+      border-bottom: 2px solid #0f172a;
+      padding-bottom: 6px;
+      margin-bottom: 12px;
+    }
+    .sticker-title {
+      font-weight: 900;
+      font-size: 0.85rem;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      color: #0b2a4a;
+    }
+    .sticker-win-code-box {
+      text-align: center;
+      background: #f8fafc;
+      border: 2px solid #0b2a4a;
+      border-radius: 8px;
+      padding: 8px 6px;
+      margin-bottom: 12px;
+    }
+    .sticker-win-code-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: #64748b;
+      letter-spacing: 0.5px;
+    }
+    .sticker-win-code-val {
+      font-size: 1.7rem;
+      font-weight: 900;
+      font-family: var(--font-mono, monospace);
+      color: #0b2a4a;
+      letter-spacing: 2px;
+      line-height: 1.1;
+      margin: 4px 0;
+    }
+    .sticker-barcode-visual {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 2px;
+      height: 22px;
+      margin: 6px auto 2px;
+    }
+    .sticker-barcode-bar {
+      background: #0f172a;
+      height: 100%;
+      border-radius: 1px;
+    }
+    .sticker-details-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 0.8rem;
+      border-top: 1px dashed #cbd5e1;
+      padding-top: 10px;
+    }
+    .sticker-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+    }
+    .sticker-lbl {
+      font-weight: 700;
+      color: #475569;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+    .sticker-val {
+      font-weight: 600;
+      color: #0f172a;
+      text-align: right;
+      word-break: break-all;
+    }
+    .sticker-key-box {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 6px 8px;
+      text-align: center;
+      margin-top: 8px;
+    }
+    .sticker-key-val {
+      font-family: var(--font-mono, monospace);
+      font-size: 0.84rem;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: 0.5px;
+    }
+    .sticker-footer-note {
+      text-align: center;
+      font-size: 0.65rem;
+      color: #64748b;
+      margin-top: 10px;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 6px;
+    }
+
+    @media print {
+      body * {
+        visibility: hidden !important;
+      }
+      #printable-sticker-card, #printable-sticker-card * {
+        visibility: visible !important;
+      }
+      #printable-sticker-card {
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 78mm !important;
+        padding: 5mm !important;
+        box-shadow: none !important;
+        border: 1px solid #000 !important;
+        background: #ffffff !important;
+        color: #000000 !important;
+      }
+      @page {
+        margin: 4mm;
+        size: auto;
+      }
+    }
 
     /* Estado Vacío */
     .empty-state {
@@ -1822,7 +1995,6 @@
           Activacion WinPro
           <span class="brand-badge">WINDOWS 11 PRO</span>
         </div>
-        <p class="brand-subtitle">Sharkoon Workshop • Inventario de Licencias & Activación</p>
       </div>
 
       <!-- Acceso Administrador -->
@@ -2901,6 +3073,93 @@
     </div>
   </div>
 
+  <!-- Modal Imprimir Etiqueta Adhesiva WIN-**** -->
+  <div class="modal-overlay" id="modal-print-win-label">
+    <div class="modal-box" style="max-width: 440px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Imprimir Etiqueta Adhesiva</h3>
+        <button type="button" class="btn-icon" id="btn-close-print-modal">
+          <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px; text-align: center;">
+        Vista previa de la etiqueta para adherir al gabinete o laptop del cliente.
+      </p>
+
+      <!-- Contenedor de la Etiqueta Imprimible -->
+      <div id="printable-sticker-card" class="sticker-preview-box">
+        <div class="sticker-header">
+          <div class="sticker-title">ACTIVACIÓN WINDOWS 11 PRO</div>
+        </div>
+
+        <div class="sticker-win-code-box">
+          <div class="sticker-win-code-label">CÓDIGO DE IDENTIFICACIÓN</div>
+          <div class="sticker-win-code-val" id="sticker-code-win">WIN-0001</div>
+          <div class="sticker-barcode-visual" aria-hidden="true">
+            <span class="sticker-barcode-bar" style="width: 2px;"></span>
+            <span class="sticker-barcode-bar" style="width: 4px;"></span>
+            <span class="sticker-barcode-bar" style="width: 1px;"></span>
+            <span class="sticker-barcode-bar" style="width: 3px;"></span>
+            <span class="sticker-barcode-bar" style="width: 5px;"></span>
+            <span class="sticker-barcode-bar" style="width: 2px;"></span>
+            <span class="sticker-barcode-bar" style="width: 1px;"></span>
+            <span class="sticker-barcode-bar" style="width: 4px;"></span>
+            <span class="sticker-barcode-bar" style="width: 2px;"></span>
+            <span class="sticker-barcode-bar" style="width: 3px;"></span>
+            <span class="sticker-barcode-bar" style="width: 1px;"></span>
+            <span class="sticker-barcode-bar" style="width: 5px;"></span>
+            <span class="sticker-barcode-bar" style="width: 2px;"></span>
+            <span class="sticker-barcode-bar" style="width: 3px;"></span>
+            <span class="sticker-barcode-bar" style="width: 4px;"></span>
+            <span class="sticker-barcode-bar" style="width: 1px;"></span>
+            <span class="sticker-barcode-bar" style="width: 2px;"></span>
+          </div>
+        </div>
+
+        <div class="sticker-details-grid">
+          <div class="sticker-row">
+            <span class="sticker-lbl">Orden SO:</span>
+            <span class="sticker-val" id="sticker-order">SO-0000</span>
+          </div>
+          <div class="sticker-row">
+            <span class="sticker-lbl">Cliente:</span>
+            <span class="sticker-val" id="sticker-client">Cliente</span>
+          </div>
+          <div class="sticker-row">
+            <span class="sticker-lbl">Equipo:</span>
+            <span class="sticker-val" id="sticker-equipment">Laptop / PC</span>
+          </div>
+          <div class="sticker-row">
+            <span class="sticker-lbl">Fecha:</span>
+            <span class="sticker-val" id="sticker-date">00/00/0000</span>
+          </div>
+          <div class="sticker-row">
+            <span class="sticker-lbl">Técnico:</span>
+            <span class="sticker-val" id="sticker-tech">Técnico</span>
+          </div>
+        </div>
+
+        <div class="sticker-key-box">
+          <div style="font-size: 0.65rem; text-transform: uppercase; color: #475569; font-weight: 700;">Clave Windows 11 Pro</div>
+          <div class="sticker-key-val" id="sticker-key">XXXXX-XXXXX-XXXXX-XXXXX-XXXXX</div>
+        </div>
+
+        <div class="sticker-footer-note">
+          Conserve esta etiqueta para reemplazos de SSD o mantenimientos futuros
+        </div>
+      </div>
+
+      <div class="modal-footer" style="padding-top: 16px; display: flex; gap: 10px;">
+        <button type="button" class="btn btn-secondary" id="btn-cancel-print-sticker" style="flex: 1;">Cerrar</button>
+        <button type="button" class="btn btn-primary" id="btn-execute-print-sticker" style="flex: 1.4; display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+          <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          <span>Imprimir Etiqueta</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Contenedor Flotante de Notificaciones Toast -->
   <div id="toast-container"></div>
 
@@ -3451,6 +3710,63 @@
       }
       closeConfirmModal();
     });
+
+    // ==========================================================================
+    // IMPRESIÓN DE ETIQUETA FÍSICA ADHESIVA WIN-****
+    // ==========================================================================
+    function openPrintStickerModal(licenseOrLogData) {
+      if (!licenseOrLogData) return;
+
+      let data = {};
+      if (typeof licenseOrLogData === 'string') {
+        const lic = State.licenses.find(l => l.id === licenseOrLogData);
+        if (lic) {
+          data = {
+            codigoWin: lic.codigoWin || 'WIN-0000',
+            orden: lic.orden || 'Sin Orden',
+            cliente: lic.cliente || 'Sin Cliente',
+            equipo: `${lic.tipoEquipo || ''} ${lic.equipoDetalle || ''}`.trim() || 'Equipo',
+            clave: lic.clave || '',
+            fecha: lic.instaladoEl || formatDate(),
+            tecnico: lic.instaladoPor || (State.currentUser ? State.currentUser.nombre : 'Técnico')
+          };
+        }
+      } else if (typeof licenseOrLogData === 'object') {
+        data = {
+          codigoWin: licenseOrLogData.codigoWin || 'WIN-0000',
+          orden: licenseOrLogData.orden || 'Sin Orden',
+          cliente: licenseOrLogData.cliente || 'Sin Cliente',
+          equipo: licenseOrLogData.equipo || `${licenseOrLogData.tipoEquipo || ''} ${licenseOrLogData.equipoDetalle || ''}`.trim() || 'Equipo',
+          clave: licenseOrLogData.clave || licenseOrLogData.detalle || '',
+          fecha: licenseOrLogData.fecha || licenseOrLogData.instaladoEl || formatDate(),
+          tecnico: licenseOrLogData.tecnico || licenseOrLogData.usuario || licenseOrLogData.instaladoPor || (State.currentUser ? State.currentUser.nombre : 'Técnico')
+        };
+      }
+
+      const elCode = document.getElementById('sticker-code-win');
+      const elOrder = document.getElementById('sticker-order');
+      const elClient = document.getElementById('sticker-client');
+      const elEquip = document.getElementById('sticker-equipment');
+      const elDate = document.getElementById('sticker-date');
+      const elTech = document.getElementById('sticker-tech');
+      const elKey = document.getElementById('sticker-key');
+
+      if (elCode) elCode.innerText = data.codigoWin || 'WIN-????';
+      if (elOrder) elOrder.innerText = data.orden || 'Sin Orden';
+      if (elClient) elClient.innerText = data.cliente || 'Sin Cliente';
+      if (elEquip) elEquip.innerText = data.equipo || 'Equipo';
+      if (elDate) elDate.innerText = data.fecha || formatDate();
+      if (elTech) elTech.innerText = data.tecnico || 'Técnico';
+      if (elKey) elKey.innerText = data.clave || '';
+
+      const modal = document.getElementById('modal-print-win-label');
+      if (modal) modal.classList.add('active');
+    }
+
+    function closePrintStickerModal() {
+      const modal = document.getElementById('modal-print-win-label');
+      if (modal) modal.classList.remove('active');
+    }
 
     // Sistema de Notificaciones Toast flotantes
     function showToast(message, type = 'info', duration = 3500) {
@@ -4038,9 +4354,10 @@
       // Botones de acción según el rol y el estado actual
       let actionButtonsHtml = '';
       if (State.currentRole === 'Admin') {
-        // El administrador puede cambiar a cualquier estado o revertir a Disponible
+        // El administrador puede cambiar a cualquier estado, revertir a Disponible o imprimir etiqueta
         actionButtonsHtml = `
           <div class="card-actions-row">
+            ${lic.estado === 'Instalada' ? `<button type="button" class="btn-status-act act-print-label btn-card-print-label" data-id="${lic.id}">🖨️ Etiqueta WIN</button>` : ''}
             ${lic.estado !== 'Instalada' ? `<button type="button" class="btn-status-act act-installed" data-action="Instalada">✅ Instalada</button>` : `<button type="button" class="btn-status-act act-edit-equipment btn-card-edit-equip" data-id="${lic.id}">✏️ Editar Datos</button>`}
             ${lic.estado !== 'Probar otra vez' ? `<button type="button" class="btn-status-act act-retry" data-action="Probar otra vez">🔄 Probar</button>` : ''}
             ${lic.estado !== 'Dañada' ? `<button type="button" class="btn-status-act act-damaged" data-action="Dañada">❌ Dañada</button>` : ''}
@@ -4048,7 +4365,7 @@
           </div>
         `;
       } else if (State.currentRole === 'Técnico') {
-        // Los técnicos pueden marcar como Instalada, Probar otra vez o Dañada, pero NUNCA revertir una Instalada
+        // Los técnicos pueden marcar como Instalada, Probar otra vez o Dañada, y si está Instalada pueden imprimir la etiqueta
         if (lic.estado === 'Disponible' || lic.estado === 'Probar otra vez') {
           actionButtonsHtml = `
             <div class="card-actions-row">
@@ -4057,10 +4374,24 @@
               <button type="button" class="btn-status-act act-damaged" data-action="Dañada">❌ Dañada</button>
             </div>
           `;
+        } else if (lic.estado === 'Instalada') {
+          actionButtonsHtml = `
+            <div class="card-actions-row">
+              <button type="button" class="btn-status-act act-print-label btn-card-print-label" data-id="${lic.id}">🖨️ Imprimir Etiqueta WIN</button>
+            </div>
+          `;
         }
       } else if (State.currentRole === 'Visor') {
-        // El visor no tiene botones de acción (solo lectura)
-        actionButtonsHtml = '';
+        // El visor puede imprimir etiqueta si la licencia está instalada
+        if (lic.estado === 'Instalada') {
+          actionButtonsHtml = `
+            <div class="card-actions-row">
+              <button type="button" class="btn-status-act act-print-label btn-card-print-label" data-id="${lic.id}">🖨️ Imprimir Etiqueta WIN</button>
+            </div>
+          `;
+        } else {
+          actionButtonsHtml = '';
+        }
       }
 
       card.innerHTML = `
@@ -4160,6 +4491,15 @@
         editBtn.addEventListener('click', (e) => {
           e.stopPropagation();
           openInstallEquipmentModal(lic.id, true);
+        });
+      }
+
+      // Event listener para imprimir etiqueta adhesiva física WIN-****
+      const printBtn = card.querySelector('.btn-card-print-label');
+      if (printBtn) {
+        printBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openPrintStickerModal(lic.id);
         });
       }
 
@@ -4549,6 +4889,13 @@
       closeMissingFieldsConfirmModal();
       closeInstallEquipmentModal();
       showToast(isEditing ? `Datos actualizados: ${license.orden}` : `Licencia instalada con éxito (${license.orden})`, 'success');
+
+      // Si es una instalación nueva, abrir vista previa para imprimir la etiqueta adhesiva física para el equipo
+      if (!isEditing) {
+        setTimeout(() => {
+          openPrintStickerModal(license.id);
+        }, 320);
+      }
 
       renderLicenses();
       if (State.activeTab === 'tab-instaladas') renderInstalledLicenses();
@@ -5777,7 +6124,10 @@
               <td>${cli}</td>
               <td style="font-size: 0.85rem;">${eq}</td>
               <td style="font-family: var(--font-mono); font-size: 0.8rem;">${clv}</td>
-              <td style="text-align: center;">
+              <td style="text-align: center; white-space: nowrap;">
+                <button type="button" class="btn-icon btn-print-audit-sticker" data-log-id="${log.id}" title="Imprimir etiqueta adhesiva WIN">
+                  <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                </button>
                 <button type="button" class="btn-icon btn-delete-audit-log" data-log-id="${log.id}" title="Eliminar registro">
                   <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
                 </button>
@@ -5813,6 +6163,16 @@
           });
         }
       }
+
+      // Event listeners para imprimir etiquetas físicas desde auditoría
+      document.querySelectorAll('.btn-print-audit-sticker').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const logId = btn.dataset.logId;
+          const targetLog = instLogs.find(l => l.id === logId);
+          if (targetLog) openPrintStickerModal(targetLog);
+        });
+      });
 
       // Event listeners para eliminar registros individuales
       document.querySelectorAll('.btn-delete-audit-log').forEach(btn => {
@@ -6697,6 +7057,18 @@ Sistema de Inventario - Activacion WinPro`;
           showToast('Foto de perfil actualizada con éxito.', 'success');
         });
       }
+
+      // Controles del Modal de Impresión de Etiquetas WIN-****
+      const btnExecPrint = document.getElementById('btn-execute-print-sticker');
+      if (btnExecPrint) {
+        btnExecPrint.addEventListener('click', () => {
+          window.print();
+        });
+      }
+      const btnClosePrint = document.getElementById('btn-close-print-modal');
+      if (btnClosePrint) btnClosePrint.addEventListener('click', closePrintStickerModal);
+      const btnCancelPrint = document.getElementById('btn-cancel-print-sticker');
+      if (btnCancelPrint) btnCancelPrint.addEventListener('click', closePrintStickerModal);
 
       console.log('✅ Activacion WinPro Inicializado con éxito. Versión Multi-Agente 2.0.');
     }
