@@ -1506,6 +1506,182 @@
       gap: 12px;
     }
 
+    /* Adaptabilidad de Logotipos del Tiburón (Sharkoon) */
+    .header-shark-logo {
+      height: 38px;
+      width: auto;
+      object-fit: contain;
+    }
+    .login-shark-logo {
+      max-height: 85px;
+      width: auto;
+      margin: 0 auto 12px auto;
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.12));
+    }
+    [data-theme="light"] .logo-dark-variant { display: none !important; }
+    [data-theme="light"] .logo-light-variant { display: block !important; }
+    [data-theme="dark"] .logo-light-variant { display: none !important; }
+    [data-theme="dark"] .logo-dark-variant { display: block !important; }
+
+    /* Insignia de Código Único de Licencia (WIN****) */
+    .badge-win-code {
+      display: inline-flex;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 0.76rem;
+      background: #E0E7FF;
+      color: #3730A3;
+      padding: 2px 7px;
+      border-radius: 6px;
+      border: 1px solid #C7D2FE;
+      letter-spacing: 0.5px;
+    }
+    [data-theme="dark"] .badge-win-code {
+      background: #312E81;
+      color: #E0E7FF;
+      border-color: #4338CA;
+    }
+
+    /* Menú Desplegable de Configuración (Tuerquita) */
+    .settings-dropdown-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+    .settings-dropdown-menu {
+      display: none;
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      width: 270px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      z-index: 1000;
+      padding: 0;
+      overflow: hidden;
+      animation: fadeInScale 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .settings-dropdown-menu.active {
+      display: block;
+    }
+    .settings-user-header {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--gray-light);
+    }
+    .settings-user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--blue);
+      background: var(--surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--navy);
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    .settings-user-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .settings-user-name {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .settings-user-role {
+      font-size: 0.72rem;
+      color: var(--navy);
+      font-weight: 700;
+      display: inline-block;
+      padding: 1px 6px;
+      background: var(--blue-subtle);
+      border-radius: 4px;
+      margin-top: 2px;
+    }
+    .settings-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 10px 14px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.15s ease;
+    }
+    .settings-menu-item:hover {
+      background: var(--gray-light);
+      color: var(--navy);
+    }
+    .settings-menu-item svg {
+      width: 17px;
+      height: 17px;
+      stroke: var(--navy);
+      flex-shrink: 0;
+    }
+    .settings-menu-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 4px 0;
+    }
+
+    /* Sub-pestañas de Auditoría */
+    .audit-subtabs {
+      display: flex;
+      gap: 6px;
+      background: var(--gray-light);
+      padding: 4px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+    }
+    .audit-subtab-btn {
+      padding: 6px 14px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      border-radius: 6px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: var(--transition);
+    }
+    .audit-subtab-btn.active {
+      background: var(--surface);
+      color: var(--navy);
+      box-shadow: var(--shadow-sm);
+    }
+    .btn-delete-audit-log {
+      color: var(--red);
+      opacity: 0.7;
+      transition: opacity 0.15s ease;
+      cursor: pointer;
+    }
+    .btn-delete-audit-log:hover {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+
     /* ==========================================================================
        MODALES Y NOTIFICACIONES TOAST (AGENTE 1, 2, 3, 4)
        ========================================================================== */
@@ -1637,18 +1813,14 @@
        ========================================================================== -->
   <div id="view-login">
     <div class="login-container">
-      <div class="brand-logo-wrap">
-        <div class="brand-shield">
-          <svg class="icon icon-lg" viewBox="0 0 24 24">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            <path d="M9 12l2 2 4-4"/>
-          </svg>
-        </div>
+      <div class="brand-logo-wrap" style="text-align: center; margin-bottom: 24px;">
+        <img src="logo-black.png" alt="Sharkoon Logo" class="login-shark-logo logo-light-variant" style="max-height: 85px; width: auto; margin: 0 auto 12px auto; display: block;">
+        <img src="logo-white.png" alt="Sharkoon Logo" class="login-shark-logo logo-dark-variant" style="max-height: 85px; width: auto; margin: 0 auto 12px auto; display: none;">
         <div class="brand-title">
           Activacion WinPro
           <span class="brand-badge">WINDOWS 11 PRO</span>
         </div>
-        <p class="brand-subtitle">Inventario de Licencias & Activación</p>
+        <p class="brand-subtitle">Sharkoon Workshop • Inventario de Licencias & Activación</p>
       </div>
 
       <!-- Acceso Administrador -->
@@ -1698,11 +1870,8 @@
     <header class="top-header">
       <div class="header-content">
         <div class="header-brand">
-          <div class="header-logo-icon">
-            <svg class="icon" viewBox="0 0 24 24">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            </svg>
-          </div>
+          <img src="logo-black.png" alt="Logo Sharkoon" class="header-shark-logo logo-light-variant" style="height: 38px; width: auto; object-fit: contain;">
+          <img src="logo-white.png" alt="Logo Sharkoon" class="header-shark-logo logo-dark-variant" style="height: 38px; width: auto; object-fit: contain; display: none;">
           <div class="header-titles">
             <h1>Activacion WinPro</h1>
             <span id="header-user-status">Cargando...</span>
@@ -1744,8 +1913,8 @@
             <span style="font-size: 0.8rem;">🟢</span> Taller Local
           </div>
 
-          <!-- Botón Conectar Celulares / Acceso en Red Wi-Fi -->
-          <button type="button" class="btn-network-badge" id="btn-share-network-access" title="Conectar celulares y otras laptops por Wi-Fi" style="display: none; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 9999px; background: #E0F2FE; border: 1px solid #BAE6FD; color: #0369A1; font-weight: 700; font-size: 0.78rem; cursor: pointer; transition: var(--transition);">
+          <!-- Botón Conectar Celulares / Acceso en Red Wi-Fi (SOLO ADMINISTRADOR) -->
+          <button type="button" class="btn-network-badge admin-only" id="btn-share-network-access" title="Conectar celulares y otras laptops por Wi-Fi" style="display: none; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 9999px; background: #E0F2FE; border: 1px solid #BAE6FD; color: #0369A1; font-weight: 700; font-size: 0.78rem; cursor: pointer; transition: var(--transition);">
             <span style="font-size: 0.85rem;">📱</span>
             <span id="badge-network-text">Conectar Celulares (Wi-Fi)</span>
           </button>
@@ -1757,17 +1926,47 @@
             </svg>
           </button>
 
-          <!-- Toggle de Tema -->
-          <button type="button" class="btn-icon" id="btn-theme-toggle" title="Cambiar tema claro/oscuro">
-            <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-          </button>
+          <!-- Menú de Configuración Desplegable (Tuerquita) -->
+          <div class="settings-dropdown-wrapper" id="settings-dropdown-wrapper">
+            <button type="button" class="btn-icon" id="btn-settings-toggle" title="Configuración del Sistema">
+              <svg class="icon" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+              </svg>
+            </button>
 
-          <!-- Cambiar Mi PIN / Contraseña -->
-          <button type="button" class="btn-icon" id="btn-change-pin-header" title="Cambiar mi PIN de acceso">
-            <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          </button>
+            <div class="settings-dropdown-menu" id="menu-settings-dropdown">
+              <!-- Cabecera del Usuario en Configuración -->
+              <div class="settings-user-header">
+                <div class="settings-user-avatar" id="settings-menu-avatar">A</div>
+                <div class="settings-user-info">
+                  <div class="settings-user-name" id="settings-menu-name">Usuario</div>
+                  <span class="settings-user-role" id="settings-menu-role">Técnico</span>
+                </div>
+              </div>
+              <div style="padding: 6px 0;">
+                <button type="button" class="settings-menu-item" id="btn-theme-toggle">
+                  <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                  <span id="settings-theme-label">Cambiar Tema</span>
+                </button>
+                <button type="button" class="settings-menu-item" id="btn-change-pin-header">
+                  <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  <span>Cambiar Mi PIN</span>
+                </button>
+                <button type="button" class="settings-menu-item" id="btn-open-change-photo-modal">
+                  <svg class="icon" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                  <span>Cambiar Foto de Perfil</span>
+                </button>
+                <div class="settings-menu-divider"></div>
+                <button type="button" class="settings-menu-item" id="btn-menu-logout-item" style="color: var(--red);">
+                  <svg class="icon" viewBox="0 0 24 24" style="stroke: var(--red);"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                  <span>Cerrar Sesión</span>
+                </button>
+              </div>
+            </div>
+          </div>
 
-          <!-- Cerrar Sesión -->
+          <!-- Cerrar Sesión Directo -->
           <button type="button" class="btn-icon" id="btn-logout" title="Cerrar Sesión">
             <svg class="icon" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
           </button>
@@ -2091,35 +2290,91 @@
            ========================================================== -->
       <section id="tab-logs" class="panel-view admin-only">
         <div class="admin-card">
-          <div class="admin-card-title">
-            <span>Registro Global de Auditoría</span>
-            <button type="button" class="btn btn-secondary btn-sm" id="btn-export-logs-csv">
-              <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              <span>Exportar Registro</span>
-            </button>
+          <div class="admin-card-title" style="flex-wrap: wrap; gap: 10px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span>Registro de Auditoría</span>
+              <span class="badge badge-info" id="audit-total-count-badge" style="font-size: 0.75rem;">0 registros</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <button type="button" class="btn btn-secondary btn-sm" id="btn-clear-test-logs" title="Limpiar registros de prueba para iniciar desde 0">
+                <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                <span>Limpiar Pruebas</span>
+              </button>
+              <button type="button" class="btn btn-secondary btn-sm" id="btn-export-logs-csv">
+                <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                <span>Exportar Excel</span>
+              </button>
+            </div>
           </div>
 
-          <!-- Buscador en tiempo real de Auditoría (Orden SO****, Cliente, Técnico, Clave, Fecha) -->
+          <!-- Sub-pestañas: Instalaciones vs Movimientos del Sistema & Filtro por Mes -->
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 14px;">
+            <div class="audit-subtabs">
+              <button type="button" class="audit-subtab-btn active" id="btn-subtab-inst" data-subtab="instalaciones">
+                <svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                <span>Instalaciones de Windows</span>
+                <span class="badge badge-info" id="badge-count-inst" style="font-size: 0.7rem; padding: 2px 6px;">0</span>
+              </button>
+              <button type="button" class="audit-subtab-btn" id="btn-subtab-sys" data-subtab="sistema">
+                <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                <span>Movimientos del Sistema</span>
+                <span class="badge badge-info" id="badge-count-sys" style="font-size: 0.7rem; padding: 2px 6px;">0</span>
+              </button>
+            </div>
+
+            <!-- Selector Filtro de Mes -->
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <label for="filter-logs-month" style="font-size: 0.82rem; font-weight: 600; color: var(--text-muted); margin: 0;">Filtrar por Mes:</label>
+              <select id="filter-logs-month" class="form-control" style="font-size: 0.82rem; padding: 5px 10px; width: auto; min-width: 170px;">
+                <option value="all">📅 Todos los Meses</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Buscador en tiempo real de Auditoría -->
           <div class="search-row" style="margin-bottom: 14px;">
             <div class="search-input-wrap">
               <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-              <input type="text" id="filter-logs-search-input" class="search-input" placeholder="Buscar por Orden SO****, Cliente, Técnico, Clave o Fecha...">
+              <input type="text" id="filter-logs-search-input" class="search-input" placeholder="Buscar por Código WIN****, Orden SO****, Cliente, Técnico, Clave o Fecha...">
             </div>
           </div>
           <div id="logs-filter-stats" style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 12px; display: none;"></div>
 
-          <div class="table-responsive">
+          <!-- Tabla 1: Instalaciones de Windows -->
+          <div class="table-responsive" id="wrap-table-audit-inst">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Fecha y Hora</th>
+                  <th>Técnico</th>
+                  <th>Cód. Licencia</th>
+                  <th>Orden SO</th>
+                  <th>Cliente</th>
+                  <th>Equipo / Modelo</th>
+                  <th>Clave de Activación</th>
+                  <th style="width: 50px; text-align: center;">Acción</th>
+                </tr>
+              </thead>
+              <tbody id="logs-inst-table-body">
+                <!-- Render dinámico -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Tabla 2: Movimientos del Sistema -->
+          <div class="table-responsive" id="wrap-table-audit-sys" style="display: none;">
             <table class="data-table">
               <thead>
                 <tr>
                   <th>Fecha y Hora</th>
                   <th>Usuario</th>
                   <th>Acción</th>
-                  <th>Detalle / Clave</th>
-                  <th>Cambio</th>
+                  <th>Detalle / Módulo</th>
+                  <th>Cambio Realizado</th>
+                  <th style="width: 50px; text-align: center;">Acción</th>
                 </tr>
               </thead>
-              <tbody id="logs-table-body">
+              <tbody id="logs-sys-table-body">
                 <!-- Render dinámico -->
               </tbody>
             </table>
@@ -2618,6 +2873,32 @@
     </div>
   </div>
 
+  <!-- Modal para Cambiar Foto de Perfil (Propia) -->
+  <div class="modal-overlay" id="modal-change-my-photo">
+    <div class="modal-box" style="max-width: 420px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Cambiar Foto de Perfil</h3>
+        <button type="button" class="btn-icon" id="btn-close-change-my-photo">
+          <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div style="text-align: center; margin-bottom: 20px;">
+        <div style="width: 90px; height: 90px; border-radius: 50%; overflow: hidden; margin: 0 auto 12px; border: 3px solid var(--blue); box-shadow: var(--shadow); background: var(--gray-light); display: flex; align-items: center; justify-content: center;">
+          <img id="my-photo-preview" src="" alt="Previsualización" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+          <span id="my-photo-avatar-text" style="font-size: 2rem; font-weight: 700; color: var(--navy);">?</span>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">Selecciona una foto cuadrada desde tu dispositivo (PNG o JPG).</p>
+      </div>
+      <div class="form-group">
+        <input type="file" id="input-my-photo-file" accept="image/*" class="form-control" style="padding: 8px;">
+      </div>
+      <div class="modal-footer" style="padding-top: 14px;">
+        <button type="button" class="btn btn-secondary" id="btn-cancel-my-photo">Cancelar</button>
+        <button type="button" class="btn btn-primary" id="btn-save-my-photo">Guardar Foto</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Contenedor Flotante de Notificaciones Toast -->
   <div id="toast-container"></div>
 
@@ -2631,6 +2912,46 @@
      * Compatibilidad: claude.use("db") (Claude Artifacts) + LocalStorage Mock Fallback
      */
     
+    // ==========================================================================
+    // CÓDIGO ÚNICO DE LICENCIA (WIN-****)
+    // ==========================================================================
+    function getNextWinCode(licensesList) {
+      let maxNum = 0;
+      (licensesList || []).forEach(l => {
+        if (l.codigoWin && typeof l.codigoWin === 'string') {
+          const m = l.codigoWin.match(/WIN-(\d+)/i);
+          if (m && m[1]) {
+            const num = parseInt(m[1], 10);
+            if (!isNaN(num) && num > maxNum) maxNum = num;
+          }
+        }
+      });
+      return `WIN-${String(maxNum + 1).padStart(4, '0')}`;
+    }
+
+    function ensureWinCodes(licensesList) {
+      if (!Array.isArray(licensesList)) return false;
+      let changed = false;
+      let maxNum = 0;
+      licensesList.forEach(l => {
+        if (l.codigoWin && typeof l.codigoWin === 'string') {
+          const m = l.codigoWin.match(/WIN-(\d+)/i);
+          if (m && m[1]) {
+            const num = parseInt(m[1], 10);
+            if (!isNaN(num) && num > maxNum) maxNum = num;
+          }
+        }
+      });
+      licensesList.forEach(l => {
+        if (!l.codigoWin) {
+          maxNum++;
+          l.codigoWin = `WIN-${String(maxNum).padStart(4, '0')}`;
+          changed = true;
+        }
+      });
+      return changed;
+    }
+
     // ==========================================================================
     // CAPA DE BASE DE DATOS DUAL (SERVIDOR LOCAL /api/db CON FALLBACK LOCALSTORAGE)
     // ==========================================================================
@@ -2727,6 +3048,15 @@
             }
           }
         }
+
+        // Asegurar que todas las licencias tengan su código único WIN-****
+        const activeData = this.getLocalData();
+        if (activeData && activeData.licenses) {
+          if (ensureWinCodes(activeData.licenses)) {
+            this.saveLocalData(activeData);
+            if (this.isServerDb) await this.syncLocalToServer();
+          }
+        }
       },
 
       async syncLocalToServer() {
@@ -2787,6 +3117,7 @@
           licenses: [
             {
               id: "lic-1",
+              codigoWin: "WIN-0001",
               clave: "W269N-WFGWX-YVC9B-4J6C9-T83GX",
               tipo: "Windows 11 Pro",
               estado: "Disponible",
@@ -2797,6 +3128,7 @@
             },
             {
               id: "lic-2",
+              codigoWin: "WIN-0002",
               clave: "VK7JG-NPHTM-C97JM-9MPGT-3V66T",
               tipo: "Windows 11 Pro",
               estado: "Disponible",
@@ -2807,9 +3139,14 @@
             },
             {
               id: "lic-3",
+              codigoWin: "WIN-0003",
               clave: "MH37W-N47XK-V7XM9-C7227-GCQG9",
               tipo: "Windows 11 Pro",
               estado: "Instalada",
+              orden: "SO-1082",
+              cliente: "Taller Central",
+              tipoEquipo: "Desktop",
+              equipoDetalle: "M-TEK-001",
               fechaSubida: "2026-09-14",
               instaladoPor: "Juan Pérez",
               instaladoEl: "2026-09-18",
@@ -2820,6 +3157,7 @@
             },
             {
               id: "lic-4",
+              codigoWin: "WIN-0004",
               clave: "NRG8B-VKK3Q-CXVCJ-9G2XF-6Q84J",
               tipo: "Windows 11 Pro",
               estado: "Probar otra vez",
@@ -2830,6 +3168,7 @@
             },
             {
               id: "lic-5",
+              codigoWin: "WIN-0005",
               clave: "DCPHK-NFMTC-H88MJ-PFHPY-QJ4BJ",
               tipo: "Windows 11 Pro",
               estado: "Dañada",
@@ -2840,7 +3179,7 @@
             }
           ],
           activity_logs: [
-            { id: "log-1", fecha: "2026-09-18 14:20", usuario: "Juan Pérez", accion: "Instalación", detalle: "MH37W-N47XK-V7XM9-C7227-GCQG9", cambio: "Disponible ➔ Instalada" }
+            { id: "log-1", tipo: "instalacion", codigoWin: "WIN-0003", orden: "SO-1082", cliente: "Taller Central", equipo: "Desktop M-TEK-001", clave: "MH37W-N47XK-V7XM9-C7227-GCQG9", fecha: "2026-09-18 14:20", usuario: "Juan Pérez", accion: "Instalación", detalle: "MH37W-N47XK-V7XM9-C7227-GCQG9", cambio: "Disponible ➔ Instalada" }
           ],
           sessions: []
         };
@@ -2999,6 +3338,20 @@
         return (data && data.activity_logs) || [];
       },
 
+      async deleteActivityLog(logId) {
+        const data = this.getLocalData() || { activity_logs: [] };
+        data.activity_logs = (data.activity_logs || []).filter(l => l.id !== logId);
+        this.saveLocalData(data);
+        if (this.isServerDb) await this.syncLocalToServer();
+      },
+
+      async clearAllActivityLogs() {
+        const data = this.getLocalData() || {};
+        data.activity_logs = [];
+        this.saveLocalData(data);
+        if (this.isServerDb) await this.syncLocalToServer();
+      },
+
       // Sesiones
       async recordSession(session) {
         const data = this.getLocalData() || { sessions: [] };
@@ -3021,10 +3374,12 @@
       
       // Filtros
       activeTab: 'tab-licencias',
+      auditSubTab: 'instalaciones', // 'instalaciones' | 'sistema'
       filterStatus: 'ALL',
       filterSearch: '',
       filterInstalledSearch: '',
       filterLogsSearch: '',
+      filterLogsMonth: 'all',
       filterDate: 'ALL',
       sortOrder: 'date-desc',
 
@@ -3414,6 +3769,9 @@
       if (State.sessionWarningTimerId) clearTimeout(State.sessionWarningTimerId);
       if (State.pollingIntervalId) clearInterval(State.pollingIntervalId);
 
+      const settingsMenu = document.getElementById('menu-settings-dropdown');
+      if (settingsMenu) settingsMenu.classList.remove('active');
+
       State.currentUser = null;
       State.currentRole = null;
       State.selectedLicenseIds.clear();
@@ -3466,7 +3824,24 @@
 
       // Actualizar cabecera con nombre y rol
       const headerUserEl = document.getElementById('header-user-status');
-      headerUserEl.innerText = `${State.currentUser.nombre} (${State.currentRole})`;
+      if (headerUserEl && State.currentUser) {
+        headerUserEl.innerText = `${State.currentUser.nombre} (${State.currentRole})`;
+      }
+
+      // Actualizar cabecera del menú de configuración (tuerquita)
+      const menuAvatar = document.getElementById('settings-menu-avatar');
+      const menuName = document.getElementById('settings-menu-name');
+      const menuRole = document.getElementById('settings-menu-role');
+      if (menuName && State.currentUser) menuName.innerText = State.currentUser.nombre || 'Usuario';
+      if (menuRole) menuRole.innerText = State.currentRole || 'Técnico';
+      if (menuAvatar && State.currentUser) {
+        if (State.currentUser.foto) {
+          menuAvatar.innerHTML = `<img src="${State.currentUser.foto}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+        } else {
+          menuAvatar.innerHTML = '';
+          menuAvatar.innerText = (State.currentUser.nombre || 'U').charAt(0).toUpperCase();
+        }
+      }
 
       // Renderizar licencias y métricas
       renderLicenses();
@@ -3588,7 +3963,8 @@
             const matchClient = lic.cliente ? lic.cliente.toLowerCase().includes(query) : false;
             const matchOrder = lic.orden ? lic.orden.toLowerCase().includes(query) : false;
             const matchEquip = lic.equipoDetalle ? lic.equipoDetalle.toLowerCase().includes(query) : false;
-            if (!matchKey && !matchUser && !matchClient && !matchOrder && !matchEquip) return false;
+            const matchWin = lic.codigoWin ? lic.codigoWin.toLowerCase().includes(query) : false;
+            if (!matchKey && !matchUser && !matchClient && !matchOrder && !matchEquip && !matchWin) return false;
           }
         }
 
@@ -3690,6 +4066,7 @@
           <div class="card-edition">
             <svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
             <span>Windows 11 Pro</span>
+            ${lic.codigoWin ? `<span class="badge-win-code">${lic.codigoWin}</span>` : ''}
           </div>
           <div style="display: flex; align-items: center; gap: 8px;">
             <span class="badge ${badgeClass}">${statusIcon} ${lic.estado}</span>
@@ -3804,7 +4181,8 @@
           const matchOrder = lic.orden ? lic.orden.toLowerCase().includes(q) : false;
           const matchEquip = lic.equipoDetalle ? lic.equipoDetalle.toLowerCase().includes(q) : false;
           const matchType = lic.tipoEquipo ? lic.tipoEquipo.toLowerCase().includes(q) : false;
-          return matchKey || matchUser || matchClient || matchOrder || matchEquip || matchType;
+          const matchWin = lic.codigoWin ? lic.codigoWin.toLowerCase().includes(q) : false;
+          return matchKey || matchUser || matchClient || matchOrder || matchEquip || matchType || matchWin;
         });
       }
 
@@ -4153,6 +4531,12 @@
 
       await DB_SERVICE.addActivityLog({
         id: generateId('log'),
+        tipo: 'instalacion',
+        codigoWin: license.codigoWin || '',
+        orden: license.orden || '',
+        cliente: license.cliente || '',
+        equipo: `${license.tipoEquipo || ''} ${license.equipoDetalle || ''}`.trim(),
+        clave: license.clave,
         fecha: formatDateTime(),
         usuario: State.currentUser.nombre,
         accion: isEditing ? 'Edición de Equipo' : 'Instalación de Licencia',
@@ -4262,8 +4646,10 @@
 
       for (let i = 0; i < total; i++) {
         const key = pendingValidKeysToImport[i];
+        const nextWinCode = getNextWinCode(State.licenses);
         const newLic = {
           id: generateId('lic'),
+          codigoWin: nextWinCode,
           clave: key,
           tipo: 'Windows 11 Pro', // Siempre Windows 11 Pro
           estado: 'Disponible',
@@ -4334,24 +4720,145 @@
       downloadCsvFile(csvContent, filename);
     }
 
-    function exportActivityLogsToCsv() {
-      const logs = DB_SERVICE.getLocalData()?.activity_logs || [];
+    function exportAuditToExcel() {
+      const data = DB_SERVICE.getLocalData();
+      let logs = (data && data.activity_logs) || [];
+
       if (logs.length === 0) {
         showToast('No hay registros de auditoría para exportar.', 'warning');
         return;
       }
 
-      const headers = ['Fecha', 'Usuario', 'Acción', 'Detalle', 'Cambio'];
-      const rows = logs.map(l => [
-        `"${l.fecha}"`,
-        `"${l.usuario}"`,
-        `"${l.accion}"`,
-        `"${l.detalle}"`,
-        `"${l.cambio}"`
-      ]);
+      const selectedMonth = State.filterLogsMonth || 'all';
+      if (selectedMonth !== 'all') {
+        logs = logs.filter(l => (l.fecha || '').startsWith(selectedMonth));
+      }
 
-      const csvContent = '\uFEFF' + [headers.join(','), ...rows.map(r => r.join(','))].join('\r\n');
-      downloadCsvFile(csvContent, `winpro_auditoria_${formatDate()}.csv`);
+      if (logs.length === 0) {
+        showToast('No hay registros en el período seleccionado.', 'warning');
+        return;
+      }
+
+      // Separar en Instalaciones y Movimientos
+      const instLogs = logs.filter(l => {
+        return l.tipo === 'instalacion' || 
+               (l.accion && (l.accion.includes('Instalación') || l.accion.includes('Edición de Equipo'))) ||
+               Boolean(l.codigoWin || l.orden);
+      });
+      const sysLogs = logs.filter(l => !instLogs.includes(l));
+
+      const escapeXml = (str) => {
+        if (str === null || str === undefined) return '';
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&apos;');
+      };
+
+      let xml = '<?xml version="1.0" encoding="UTF-8"?>\r\n' +
+        '<?mso-application progid="Excel.Sheet"?>\r\n' +
+        '<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"\r\n' +
+        ' xmlns:o="urn:schemas-microsoft-com:office:office"\r\n' +
+        ' xmlns:x="urn:schemas-microsoft-com:office:excel"\r\n' +
+        ' xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"\r\n' +
+        ' xmlns:html="http://www.w3.org/TR/REC-html40">\r\n' +
+        ' <Styles>\r\n' +
+        '  <Style ss:ID="Header">\r\n' +
+        '   <Font ss:Bold="1" ss:Color="#FFFFFF"/>\r\n' +
+        '   <Interior ss:Color="#0B2A4A" ss:Pattern="Solid"/>\r\n' +
+        '   <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>\r\n' +
+        '  </Style>\r\n' +
+        '  <Style ss:ID="DataCell">\r\n' +
+        '   <Alignment ss:Vertical="Center"/>\r\n' +
+        '  </Style>\r\n' +
+        ' </Styles>\r\n';
+
+      // Hoja 1: Instalaciones de Windows
+      xml += ' <Worksheet ss:Name="Instalaciones_Windows">\r\n' +
+        '  <Table>\r\n' +
+        '   <Column ss:Width="120"/>\r\n' +
+        '   <Column ss:Width="110"/>\r\n' +
+        '   <Column ss:Width="95"/>\r\n' +
+        '   <Column ss:Width="95"/>\r\n' +
+        '   <Column ss:Width="140"/>\r\n' +
+        '   <Column ss:Width="160"/>\r\n' +
+        '   <Column ss:Width="210"/>\r\n' +
+        '   <Column ss:Width="120"/>\r\n' +
+        '   <Row ss:Height="25">\r\n' +
+        '    <Cell ss:StyleID="Header"><Data ss:Type="String">Fecha y Hora</Data></Cell>\r\n' +
+        '    <Cell ss:StyleID="Header"><Data ss:Type="String">Técnico</Data></Cell>\r\n' +
+        '    <Cell ss:StyleID="Header"><Data ss:Type="String">Código Licencia</Data></Cell>\r\n' +
+        '    <Cell ss:StyleID="Header"><Data ss:Type="String">Orden SO</Data></Cell>\r\n' +
+        '    <Cell ss:StyleID="Header"><Data ss:Type="String">Cliente</Data></Cell>\r\n' +
+        '    <Cell ss:StyleID="Header"><Data ss:Type="String">Equipo / Modelo</Data></Cell>\r\n' +
+        '    <Cell ss:StyleID="Header"><Data ss:Type="String">Clave de Activación</Data></Cell>\r\n' +
+        '    <Cell ss:StyleID="Header"><Data ss:Type="String">Acción</Data></Cell>\r\n' +
+        '   </Row>\r\n';
+
+      instLogs.forEach(l => {
+        const winCode = l.codigoWin || '';
+        const ord = l.orden || '';
+        const cli = l.cliente || '';
+        const eq = l.equipo || '';
+        const clv = l.clave || l.detalle || '';
+        xml += '   <Row ss:Height="20">\r\n' +
+          `    <Cell ss:StyleID="DataCell"><Data ss:Type="String">${escapeXml(l.fecha)}</Data></Cell>\r\n` +
+          `    <Cell ss:StyleID="DataCell"><Data ss:Type="String">${escapeXml(l.usuario)}</Data></Cell>\r\n` +
+          `    <Cell ss:StyleID="DataCell"><Data ss:Type="String">${escapeXml(winCode)}</Data></Cell>\r\n` +
+          `    <Cell ss:StyleID="DataCell"><Data ss:Type="String">${escapeXml(ord)}</Data></Cell>\r\n` +
+          `    <Cell ss:StyleID="DataCell"><Data ss:Type="String">${escapeXml(cli)}</Data></Cell>\r\n` +
+          `    <Cell ss:StyleID="DataCell"><Data ss:Type="String">${escapeXml(eq)}</Data></Cell>\r\n` +
+          `    <Cell ss:StyleID="DataCell"><Data ss:Type="String">${escapeXml(clv)}</Data></Cell>\r\n` +
+          `    <Cell ss:StyleID="DataCell"><Data ss:Type="String">${escapeXml(l.accion)}</Data></Cell>\r\n` +
+          '   </Row>\r\n';
+      });
+      xml += '  </Table>\r\n </Worksheet>\r\n';
+
+      // Hoja 2: Movimientos del Sistema
+      xml += ' <Worksheet ss:Name="Movimientos_Sistema">\r\n' +
+        '  <Table>\r\n' +
+        '   <Column ss:Width="120"/>\r\n' +
+        '   <Column ss:Width="110"/>\r\n' +
+        '   <Column ss:Width="130"/>\r\n' +
+        '   <Column ss:Width="220"/>\r\n' +
+        '   <Column ss:Width="200"/>\r\n' +
+        '   <Row ss:Height="25">\r\n' +
+        '    <Cell ss:StyleID="Header"><Data ss:Type="String">Fecha y Hora</Data></Cell>\r\n' +
+        '    <Cell ss:StyleID="Header"><Data ss:Type="String">Usuario</Data></Cell>\r\n' +
+        '    <Cell ss:StyleID="Header"><Data ss:Type="String">Acción</Data></Cell>\r\n' +
+        '    <Cell ss:StyleID="Header"><Data ss:Type="String">Detalle / Módulo</Data></Cell>\r\n' +
+        '    <Cell ss:StyleID="Header"><Data ss:Type="String">Cambio Realizado</Data></Cell>\r\n' +
+        '   </Row>\r\n';
+
+      sysLogs.forEach(l => {
+        xml += '   <Row ss:Height="20">\r\n' +
+          `    <Cell ss:StyleID="DataCell"><Data ss:Type="String">${escapeXml(l.fecha)}</Data></Cell>\r\n` +
+          `    <Cell ss:StyleID="DataCell"><Data ss:Type="String">${escapeXml(l.usuario)}</Data></Cell>\r\n` +
+          `    <Cell ss:StyleID="DataCell"><Data ss:Type="String">${escapeXml(l.accion)}</Data></Cell>\r\n` +
+          `    <Cell ss:StyleID="DataCell"><Data ss:Type="String">${escapeXml(l.detalle)}</Data></Cell>\r\n` +
+          `    <Cell ss:StyleID="DataCell"><Data ss:Type="String">${escapeXml(l.cambio)}</Data></Cell>\r\n` +
+          '   </Row>\r\n';
+      });
+      xml += '  </Table>\r\n </Worksheet>\r\n';
+
+      xml += '</Workbook>';
+
+      const blob = new Blob([xml], { type: 'application/vnd.ms-excel;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `winpro_auditoria_${formatDate()}.xls`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('Reporte de Auditoría exportado en Excel (.xls).', 'success');
+    }
+
+    function exportActivityLogsToCsv() {
+      exportAuditToExcel();
     }
 
     // ==========================================================================
@@ -5147,15 +5654,64 @@
       });
     }
 
-    // Tabla de Logs de Auditoría con Buscador en Tiempo Real (SO****, Cliente, Técnico, Clave, Fecha)
-    async function renderActivityLogsTable() {
-      const tbody = document.getElementById('logs-table-body');
-      if (!tbody) return;
-      tbody.innerHTML = '';
+    // Meses para filtro de Auditoría
+    function populateAuditMonths(logs) {
+      const select = document.getElementById('filter-logs-month');
+      if (!select) return;
+      const currentVal = select.value || State.filterLogsMonth || 'all';
 
+      const monthsSet = new Set();
+      (logs || []).forEach(l => {
+        if (l.fecha && l.fecha.length >= 7) {
+          monthsSet.add(l.fecha.substring(0, 7)); // YYYY-MM
+        }
+      });
+
+      const monthNames = [
+        'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+        'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+      ];
+
+      const sortedMonths = Array.from(monthsSet).sort().reverse();
+      const currentYearMonth = formatDate().substring(0, 7);
+      if (!monthsSet.has(currentYearMonth)) {
+        sortedMonths.unshift(currentYearMonth);
+      }
+
+      let html = '<option value="all">📅 Todos los Meses</option>';
+      sortedMonths.forEach(m => {
+        const parts = m.split('-');
+        const year = parts[0];
+        const monthNum = parseInt(parts[1], 10);
+        const name = monthNames[monthNum - 1] || parts[1];
+        html += `<option value="${m}">${name} ${year}</option>`;
+      });
+
+      select.innerHTML = html;
+      if (currentVal && Array.from(select.options).some(o => o.value === currentVal)) {
+        select.value = currentVal;
+      }
+    }
+
+    // Tabla de Logs de Auditoría Separada (Instalaciones vs Movimientos del Sistema)
+    async function renderActivityLogsTable() {
       let logs = await DB_SERVICE.getActivityLogs();
       if (!logs) logs = [];
 
+      // Contador total en badge
+      const totalBadge = document.getElementById('audit-total-count-badge');
+      if (totalBadge) totalBadge.innerText = `${logs.length} registros`;
+
+      // Poblar dropdown de meses
+      populateAuditMonths(logs);
+
+      // Filtro por Mes
+      const selectedMonth = State.filterLogsMonth || 'all';
+      if (selectedMonth !== 'all') {
+        logs = logs.filter(l => (l.fecha || '').startsWith(selectedMonth));
+      }
+
+      // Buscador en tiempo real de Auditoría
       const query = (State.filterLogsSearch || '').trim().toLowerCase();
       const statsEl = document.getElementById('logs-filter-stats');
 
@@ -5166,7 +5722,12 @@
           const d = (log.detalle || '').toLowerCase();
           const c = (log.cambio || '').toLowerCase();
           const f = (log.fecha || '').toLowerCase();
-          return u.includes(query) || a.includes(query) || d.includes(query) || c.includes(query) || f.includes(query);
+          const w = (log.codigoWin || '').toLowerCase();
+          const o = (log.orden || '').toLowerCase();
+          const cli = (log.cliente || '').toLowerCase();
+          const eq = (log.equipo || '').toLowerCase();
+          return u.includes(query) || a.includes(query) || d.includes(query) || c.includes(query) ||
+                 f.includes(query) || w.includes(query) || o.includes(query) || cli.includes(query) || eq.includes(query);
         });
 
         if (statsEl) {
@@ -5178,21 +5739,118 @@
         if (statsEl) statsEl.style.display = 'none';
       }
 
-      if (logs.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 22px;">No se encontraron registros de auditoría${query ? ' que coincidan con la búsqueda' : ''}.</td></tr>`;
-        return;
+      // Separación en dos listas: Instalaciones vs Movimientos del Sistema
+      const instLogs = logs.filter(l => {
+        return l.tipo === 'instalacion' || 
+               (l.accion && (l.accion.includes('Instalación') || l.accion.includes('Edición de Equipo'))) ||
+               Boolean(l.codigoWin || l.orden);
+      });
+      const sysLogs = logs.filter(l => !instLogs.includes(l));
+
+      // Contadores de sub-pestañas
+      const badgeInst = document.getElementById('badge-count-inst');
+      if (badgeInst) badgeInst.innerText = instLogs.length;
+      const badgeSys = document.getElementById('badge-count-sys');
+      if (badgeSys) badgeSys.innerText = sysLogs.length;
+
+      // Render Tabla 1: Instalaciones de Windows
+      const tbodyInst = document.getElementById('logs-inst-table-body');
+      if (tbodyInst) {
+        tbodyInst.innerHTML = '';
+        if (instLogs.length === 0) {
+          tbodyInst.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 22px;">No se encontraron registros de instalaciones de Windows${query || selectedMonth !== 'all' ? ' para los filtros seleccionados' : ''}.</td></tr>`;
+        } else {
+          instLogs.slice(0, 100).forEach(log => {
+            const tr = document.createElement('tr');
+            const winCode = log.codigoWin || 'WIN-????';
+            const ord = log.orden || 'Sin Orden';
+            const cli = log.cliente || 'Sin Cliente';
+            const eq = log.equipo || 'Equipo';
+            const clv = log.clave || log.detalle || '';
+            tr.innerHTML = `
+              <td><strong style="color: var(--text);">${log.fecha}</strong></td>
+              <td><span style="font-weight: 600; color: var(--navy);">${log.usuario}</span></td>
+              <td><span class="badge-win-code">${winCode}</span></td>
+              <td><strong style="color: var(--navy);">${ord}</strong></td>
+              <td>${cli}</td>
+              <td style="font-size: 0.85rem;">${eq}</td>
+              <td style="font-family: var(--font-mono); font-size: 0.8rem;">${clv}</td>
+              <td style="text-align: center;">
+                <button type="button" class="btn-icon btn-delete-audit-log" data-log-id="${log.id}" title="Eliminar registro">
+                  <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                </button>
+              </td>
+            `;
+            tbodyInst.appendChild(tr);
+          });
+        }
       }
 
-      logs.slice(0, 100).forEach(log => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><strong style="color: var(--text);">${log.fecha}</strong></td>
-          <td><span style="font-weight: 600; color: var(--navy);">${log.usuario}</span></td>
-          <td><span class="badge" style="background: var(--blue-subtle); color: var(--navy); font-weight: 600;">${log.accion}</span></td>
-          <td style="font-family: var(--font-mono); font-size: 0.82rem;">${log.detalle}</td>
-          <td style="font-weight: 500;">${log.cambio}</td>
-        `;
-        tbody.appendChild(tr);
+      // Render Tabla 2: Movimientos del Sistema
+      const tbodySys = document.getElementById('logs-sys-table-body');
+      if (tbodySys) {
+        tbodySys.innerHTML = '';
+        if (sysLogs.length === 0) {
+          tbodySys.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 22px;">No se encontraron movimientos del sistema${query || selectedMonth !== 'all' ? ' para los filtros seleccionados' : ''}.</td></tr>`;
+        } else {
+          sysLogs.slice(0, 100).forEach(log => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td><strong style="color: var(--text);">${log.fecha}</strong></td>
+              <td><span style="font-weight: 600; color: var(--navy);">${log.usuario}</span></td>
+              <td><span class="badge" style="background: var(--blue-subtle); color: var(--navy); font-weight: 600;">${log.accion}</span></td>
+              <td style="font-family: var(--font-mono); font-size: 0.82rem;">${log.detalle}</td>
+              <td style="font-weight: 500;">${log.cambio}</td>
+              <td style="text-align: center;">
+                <button type="button" class="btn-icon btn-delete-audit-log" data-log-id="${log.id}" title="Eliminar registro">
+                  <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                </button>
+              </td>
+            `;
+            tbodySys.appendChild(tr);
+          });
+        }
+      }
+
+      // Event listeners para eliminar registros individuales
+      document.querySelectorAll('.btn-delete-audit-log').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const logId = btn.dataset.logId;
+          if (logId) confirmDeleteSingleLog(logId);
+        });
+      });
+    }
+
+    function confirmDeleteSingleLog(logId) {
+      if (State.currentRole !== 'Admin') return;
+      showConfirmModal({
+        title: '¿Eliminar registro de auditoría?',
+        message: 'Esta acción borrará de forma permanente este registro de la bitácora.',
+        proceedText: 'Eliminar Registro',
+        cancelText: 'Cancelar',
+        isDanger: true,
+        onProceed: async () => {
+          await DB_SERVICE.deleteActivityLog(logId);
+          showToast('Registro de auditoría eliminado.', 'success');
+          await renderActivityLogsTable();
+        }
+      });
+    }
+
+    function confirmClearAllTestLogs() {
+      if (State.currentRole !== 'Admin') return;
+      showConfirmModal({
+        title: '¿Limpiar bitácora de pruebas?',
+        message: 'Se borrarán todos los registros de auditoría para iniciar la bitácora desde 0. Las licencias y los usuarios no serán modificados.',
+        proceedText: 'Limpiar a 0',
+        cancelText: 'Cancelar',
+        isDanger: true,
+        onProceed: async () => {
+          await DB_SERVICE.clearAllActivityLogs();
+          showToast('Bitácora de auditoría reiniciada desde 0.', 'success');
+          await renderActivityLogsTable();
+        }
       });
     }
 
@@ -5512,6 +6170,8 @@ Sistema de Inventario - Activacion WinPro`;
       const label = isDark ? 'Modo Claro' : 'Modo Oscuro';
       const loginThemeText = document.getElementById('theme-text-login');
       if (loginThemeText) loginThemeText.innerText = label;
+      const settingsThemeLabel = document.getElementById('settings-theme-label');
+      if (settingsThemeLabel) settingsThemeLabel.innerText = label;
     }
 
     // ==========================================================================
@@ -5870,6 +6530,171 @@ Sistema de Inventario - Activacion WinPro`;
 
       const restoreBackupInp = document.getElementById('input-restore-backup-file');
       if (restoreBackupInp) restoreBackupInp.addEventListener('change', handleRestoreBackupFile);
+
+      // Sub-pestañas de Auditoría (Instalaciones vs Movimientos del Sistema)
+      const subtabInstBtn = document.getElementById('btn-subtab-inst');
+      const subtabSysBtn = document.getElementById('btn-subtab-sys');
+      const wrapInst = document.getElementById('wrap-table-audit-inst');
+      const wrapSys = document.getElementById('wrap-table-audit-sys');
+
+      if (subtabInstBtn && subtabSysBtn) {
+        subtabInstBtn.addEventListener('click', () => {
+          State.auditSubTab = 'instalaciones';
+          subtabInstBtn.classList.add('active');
+          subtabSysBtn.classList.remove('active');
+          if (wrapInst) wrapInst.style.display = 'block';
+          if (wrapSys) wrapSys.style.display = 'none';
+        });
+        subtabSysBtn.addEventListener('click', () => {
+          State.auditSubTab = 'sistema';
+          subtabSysBtn.classList.add('active');
+          subtabInstBtn.classList.remove('active');
+          if (wrapSys) wrapSys.style.display = 'block';
+          if (wrapInst) wrapInst.style.display = 'none';
+        });
+      }
+
+      // Filtro de Mes en Auditoría
+      const filterLogsMonthSel = document.getElementById('filter-logs-month');
+      if (filterLogsMonthSel) {
+        filterLogsMonthSel.addEventListener('change', (e) => {
+          State.filterLogsMonth = e.target.value;
+          renderActivityLogsTable();
+        });
+      }
+
+      // Limpiar registros de prueba de la Auditoría
+      const clearTestLogsBtn = document.getElementById('btn-clear-test-logs');
+      if (clearTestLogsBtn) {
+        clearTestLogsBtn.addEventListener('click', confirmClearAllTestLogs);
+      }
+
+      // Menú Desplegable de Configuración (Tuerquita)
+      const settingsToggleBtn = document.getElementById('btn-settings-toggle');
+      const settingsDropdownMenu = document.getElementById('menu-settings-dropdown');
+      if (settingsToggleBtn && settingsDropdownMenu) {
+        settingsToggleBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          settingsDropdownMenu.classList.toggle('active');
+        });
+        document.addEventListener('click', (e) => {
+          if (!e.target.closest('#settings-dropdown-wrapper')) {
+            settingsDropdownMenu.classList.remove('active');
+          }
+        });
+      }
+
+      // Cerrar Sesión desde el Menú de Configuración
+      const menuLogoutBtn = document.getElementById('btn-menu-logout-item');
+      if (menuLogoutBtn) {
+        menuLogoutBtn.addEventListener('click', () => {
+          if (settingsDropdownMenu) settingsDropdownMenu.classList.remove('active');
+          logoutUser();
+        });
+      }
+
+      // Modal de Cambio de Foto de Perfil (Propia)
+      const openChangePhotoBtn = document.getElementById('btn-open-change-photo-modal');
+      const modalChangePhoto = document.getElementById('modal-change-my-photo');
+      const closeChangePhotoBtn = document.getElementById('btn-close-change-my-photo');
+      const cancelChangePhotoBtn = document.getElementById('btn-cancel-my-photo');
+      const saveChangePhotoBtn = document.getElementById('btn-save-my-photo');
+      const inputChangePhoto = document.getElementById('input-my-photo-file');
+      const previewPhotoImg = document.getElementById('my-photo-preview');
+      const previewPhotoAvatar = document.getElementById('my-photo-avatar-text');
+
+      let currentPhotoDataUrl = null;
+
+      if (openChangePhotoBtn) {
+        openChangePhotoBtn.addEventListener('click', () => {
+          if (settingsDropdownMenu) settingsDropdownMenu.classList.remove('active');
+          currentPhotoDataUrl = null;
+          if (inputChangePhoto) inputChangePhoto.value = '';
+          if (State.currentUser && State.currentUser.foto) {
+            if (previewPhotoImg) {
+              previewPhotoImg.src = State.currentUser.foto;
+              previewPhotoImg.style.display = 'block';
+            }
+            if (previewPhotoAvatar) previewPhotoAvatar.style.display = 'none';
+          } else {
+            if (previewPhotoImg) previewPhotoImg.style.display = 'none';
+            if (previewPhotoAvatar) {
+              previewPhotoAvatar.style.display = 'block';
+              previewPhotoAvatar.innerText = (State.currentUser?.nombre || 'U').charAt(0).toUpperCase();
+            }
+          }
+          if (modalChangePhoto) modalChangePhoto.classList.add('active');
+        });
+      }
+
+      const closePhotoModal = () => {
+        if (modalChangePhoto) modalChangePhoto.classList.remove('active');
+      };
+      if (closeChangePhotoBtn) closeChangePhotoBtn.addEventListener('click', closePhotoModal);
+      if (cancelChangePhotoBtn) cancelChangePhotoBtn.addEventListener('click', closePhotoModal);
+
+      if (inputChangePhoto) {
+        inputChangePhoto.addEventListener('change', (e) => {
+          const file = e.target.files && e.target.files[0];
+          if (!file) return;
+          if (!file.type.startsWith('image/')) {
+            showToast('Por favor selecciona un archivo de imagen válido.', 'warning');
+            return;
+          }
+          const reader = new FileReader();
+          reader.onload = (re) => {
+            currentPhotoDataUrl = re.target.result;
+            if (previewPhotoImg) {
+              previewPhotoImg.src = currentPhotoDataUrl;
+              previewPhotoImg.style.display = 'block';
+            }
+            if (previewPhotoAvatar) previewPhotoAvatar.style.display = 'none';
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+
+      if (saveChangePhotoBtn) {
+        saveChangePhotoBtn.addEventListener('click', async () => {
+          if (!currentPhotoDataUrl) {
+            showToast('Selecciona una imagen primero.', 'info');
+            return;
+          }
+          if (!State.currentUser) return;
+          State.currentUser.foto = currentPhotoDataUrl;
+          if (State.currentUser.id && State.currentUser.id !== 'admin') {
+            const user = State.users.find(u => u.id === State.currentUser.id);
+            if (user) {
+              user.foto = currentPhotoDataUrl;
+              await DB_SERVICE.saveUser(user);
+            }
+          } else {
+            const data = DB_SERVICE.getLocalData() || {};
+            if (!data.config) data.config = {};
+            if (!data.config.admin) data.config.admin = {};
+            data.config.admin.foto = currentPhotoDataUrl;
+            DB_SERVICE.saveLocalData(data);
+            if (DB_SERVICE.isServerDb) await DB_SERVICE.syncLocalToServer();
+          }
+
+          const menuAvatar = document.getElementById('settings-menu-avatar');
+          if (menuAvatar) {
+            menuAvatar.innerHTML = `<img src="${currentPhotoDataUrl}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+          }
+
+          await DB_SERVICE.addActivityLog({
+            id: generateId('log'),
+            fecha: formatDateTime(),
+            usuario: State.currentUser.nombre,
+            accion: 'Perfil',
+            detalle: `Foto de perfil actualizada para ${State.currentUser.nombre}`,
+            cambio: 'Foto modificada'
+          });
+
+          closePhotoModal();
+          showToast('Foto de perfil actualizada con éxito.', 'success');
+        });
+      }
 
       console.log('✅ Activacion WinPro Inicializado con éxito. Versión Multi-Agente 2.0.');
     }
