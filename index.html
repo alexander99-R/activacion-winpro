@@ -1508,20 +1508,22 @@
 
     /* Adaptabilidad de Logotipos del Tiburón (Sharkoon) */
     .header-shark-logo {
-      height: 38px;
+      height: 42px;
       width: auto;
       object-fit: contain;
     }
     .login-shark-logo {
-      max-height: 85px;
+      max-height: 95px;
       width: auto;
       margin: 0 auto 12px auto;
-      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.12));
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.08));
     }
     [data-theme="light"] .logo-dark-variant { display: none !important; }
-    [data-theme="light"] .logo-light-variant { display: block !important; }
+    [data-theme="light"] .header-shark-logo.logo-light-variant { display: inline-block !important; }
+    [data-theme="light"] .login-shark-logo.logo-light-variant { display: block !important; }
     [data-theme="dark"] .logo-light-variant { display: none !important; }
-    [data-theme="dark"] .logo-dark-variant { display: block !important; }
+    [data-theme="dark"] .header-shark-logo.logo-dark-variant { display: inline-block !important; }
+    [data-theme="dark"] .login-shark-logo.logo-dark-variant { display: block !important; }
 
     /* Insignia de Código Único de Licencia (WIN****) */
     .badge-win-code {
@@ -1814,8 +1816,8 @@
   <div id="view-login">
     <div class="login-container">
       <div class="brand-logo-wrap" style="text-align: center; margin-bottom: 24px;">
-        <img src="logo-black.png" alt="Sharkoon Logo" class="login-shark-logo logo-light-variant" style="max-height: 85px; width: auto; margin: 0 auto 12px auto; display: block;">
-        <img src="logo-white.png" alt="Sharkoon Logo" class="login-shark-logo logo-dark-variant" style="max-height: 85px; width: auto; margin: 0 auto 12px auto; display: none;">
+        <img src="logo-black.png" alt="Sharkoon Logo" class="login-shark-logo logo-light-variant">
+        <img src="logo-white.png" alt="Sharkoon Logo" class="login-shark-logo logo-dark-variant">
         <div class="brand-title">
           Activacion WinPro
           <span class="brand-badge">WINDOWS 11 PRO</span>
@@ -1870,8 +1872,8 @@
     <header class="top-header">
       <div class="header-content">
         <div class="header-brand">
-          <img src="logo-black.png" alt="Logo Sharkoon" class="header-shark-logo logo-light-variant" style="height: 38px; width: auto; object-fit: contain;">
-          <img src="logo-white.png" alt="Logo Sharkoon" class="header-shark-logo logo-dark-variant" style="height: 38px; width: auto; object-fit: contain; display: none;">
+          <img src="logo-black.png" alt="Logo Sharkoon" class="header-shark-logo logo-light-variant">
+          <img src="logo-white.png" alt="Logo Sharkoon" class="header-shark-logo logo-dark-variant">
           <div class="header-titles">
             <h1>Activacion WinPro</h1>
             <span id="header-user-status">Cargando...</span>
