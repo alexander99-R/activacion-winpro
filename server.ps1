@@ -31,6 +31,30 @@ if ($isAdmin) {
     try {
         netsh http add urlacl url="http://+:${port}/" sddl="D:(A;;GX;;;WD)" >$null 2>&1
     } catch {}
+} else {
+    # Si no somos administrador, verificar si ya podemos escuchar en toda la red
+    $canBindNetwork = $false
+    try {
+        $testL = New-Object System.Net.HttpListener
+        $testL.Prefixes.Add("http://+:${port}/")
+        $testL.Start()
+        $testL.Stop()
+        $canBindNetwork = $true
+    } catch {}
+
+    # Si aún no tenemos permisos de red, solicitar elevación automáticamente si es interactivo
+    if (-not $canBindNetwork -and [Environment]::UserInteractive -and -not $env:WINPRO_NO_ELEVATE) {
+        try {
+            $scriptPath = $PSCommandPath
+            if (-not $scriptPath) { $scriptPath = Join-Path $baseDir "server.ps1" }
+            $proc = Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$scriptPath`"" -Verb RunAs -PassThru -ErrorAction Stop
+            if ($proc) {
+                exit 0
+            }
+        } catch {
+            # Si el usuario canceló el diálogo o no es interactivo, continúa normalmente en modo local
+        }
+    }
 }
 
 # 2. Obtener IPs locales de la máquina (priorizando Wi-Fi o Ethernet activa)
