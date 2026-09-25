@@ -29,9 +29,16 @@
       --red: #B91C1C;
       --red-light: #FEE2E2;
       --red-dark: #8b1313;
-      --orange: #C2690A;
-      --orange-light: #FEF3C7;
-      --orange-dark: #8c4904;
+      --orange: #CA8A04;
+      --orange-light: #FEF9C3;
+      --orange-dark: #854D0E;
+      --yellow: #CA8A04;
+      --yellow-light: #FEF9C3;
+      --yellow-dark: #854D0E;
+      --yellow-border: #FACC15;
+      --btn-mint: #B2F5E9;
+      --btn-mint-dark: #042F2E;
+      --btn-mint-border: #81E6D9;
       --gray: #5A6B7B;
       --gray-light: #F1F5F9;
       --gray-border: #CBD5E1;
@@ -57,38 +64,45 @@
     }
 
     [data-theme="dark"] {
-      --navy: #153960;
-      --navy-dark: #0b1d30;
-      --navy-light: #204d7d;
+      --navy: #18181A;
+      --navy-dark: #000000;
+      --navy-light: #242426;
       --blue: #5FB9E4;
       --blue-hover: #72c7f0;
-      --blue-subtle: rgba(95, 185, 228, 0.22);
-      --blue2: #0e2033;
+      --blue-subtle: rgba(255, 255, 255, 0.06);
+      --blue2: #141414;
       --green: #22C55E;
       --green-light: rgba(34, 197, 94, 0.18);
       --green-dark: #15803d;
       --red: #EF4444;
       --red-light: rgba(239, 68, 68, 0.18);
       --red-dark: #b91c1c;
-      --orange: #F59E0B;
-      --orange-light: rgba(245, 158, 11, 0.18);
-      --orange-dark: #b45309;
-      --gray: #94A3B8;
-      --gray-light: #1A283A;
-      --gray-border: #2D3E54;
+      --orange: #FACC15;
+      --orange-light: rgba(250, 204, 21, 0.16);
+      --orange-dark: #FEF08A;
+      --yellow: #FACC15;
+      --yellow-light: rgba(250, 204, 21, 0.16);
+      --yellow-dark: #FEF08A;
+      --yellow-border: #FACC15;
+      --btn-mint: #B2F5E9;
+      --btn-mint-dark: #042F2E;
+      --btn-mint-border: #81E6D9;
+      --gray: #A3A3A3;
+      --gray-light: #18181A;
+      --gray-border: #2C2C2E;
 
-      /* Tokens de Interfaz (Dark Mode) */
-      --bg: #09131F;
-      --surface: #101F33;
-      --surface-card: #14253C;
-      --text: #F1F5F9;
-      --text-muted: #94A3B8;
-      --text-inverse: #09131F;
-      --border: #1E334D;
-      --input-bg: #101F33;
-      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
-      --shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-      --shadow-lg: 0 14px 28px rgba(0, 0, 0, 0.6);
+      /* Tokens de Interfaz (Dark Mode - Pure Black & Neutral Gray) */
+      --bg: #000000;
+      --surface: #0E0E10;
+      --surface-card: #141416;
+      --text: #F3F4F6;
+      --text-muted: #9CA3AF;
+      --text-inverse: #000000;
+      --border: #262628;
+      --input-bg: #111113;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.8);
+      --shadow: 0 4px 10px rgba(0, 0, 0, 0.85);
+      --shadow-lg: 0 14px 28px rgba(0, 0, 0, 0.95);
     }
 
     /* Reset & Base */
@@ -155,13 +169,27 @@
       overflow: hidden;
     }
     .btn-primary {
-      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
-      color: white;
-      box-shadow: 0 2px 4px rgba(11, 42, 74, 0.25);
+      background: var(--btn-mint);
+      color: var(--btn-mint-dark);
+      border: 1px solid var(--btn-mint-border);
+      box-shadow: 0 2px 4px rgba(13, 148, 136, 0.18);
+      font-weight: 700;
     }
     .btn-primary:hover {
-      box-gradient: linear-gradient(135deg, var(--navy-light) 0%, var(--navy) 100%);
-      box-shadow: 0 4px 8px rgba(11, 42, 74, 0.35);
+      background: var(--btn-mint-border);
+      color: #021E1D;
+      box-shadow: 0 4px 8px rgba(13, 148, 136, 0.28);
+    }
+    [data-theme="dark"] .btn-primary {
+      background: var(--btn-mint);
+      color: var(--btn-mint-dark);
+      border: 1px solid var(--btn-mint-border);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+    }
+    [data-theme="dark"] .btn-primary:hover {
+      background: var(--btn-mint-border);
+      color: #000000;
+      box-shadow: 0 4px 12px rgba(178, 245, 233, 0.3);
     }
     .btn-accent {
       background: var(--blue);
@@ -354,12 +382,15 @@
       color: #86EFAC;
     }
     .badge-probar {
-      background: var(--orange-light);
-      color: var(--orange-dark);
-      border: 1px solid var(--orange);
+      background: var(--yellow-light);
+      color: var(--yellow-dark);
+      border: 1px solid var(--yellow-border);
+      font-weight: 700;
     }
     [data-theme="dark"] .badge-probar {
-      color: #FDE68A;
+      background: rgba(250, 204, 21, 0.16);
+      color: #FEF08A;
+      border: 1px solid #FACC15;
     }
     .badge-danada {
       background: var(--red-light);
@@ -475,7 +506,7 @@
     .admin-login-card {
       width: 100%;
       padding: 14px 18px;
-      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%);
+      background: #0B2A4A;
       color: white;
       border-radius: var(--radius-sm);
       display: flex;
@@ -490,6 +521,16 @@
       transform: translateY(-2px);
       box-shadow: 0 6px 14px rgba(11, 42, 74, 0.35);
       border-color: var(--blue);
+    }
+    [data-theme="dark"] .admin-login-card {
+      background: #141416;
+      border: 1px solid #28282B;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+    }
+    [data-theme="dark"] .admin-login-card:hover {
+      background: #1C1C1F;
+      border-color: #404044;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.8);
     }
     .admin-login-info {
       display: flex;
@@ -549,15 +590,15 @@
       height: 96px;
       border-radius: 16px;
       object-fit: cover;
-      background: linear-gradient(135deg, var(--navy) 0%, #164676 100%);
+      background: #1C1C1F;
       color: #ffffff;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 800;
       font-size: 2.2rem;
-      border: 3px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+      border: 2px solid #28282B;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
       transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s, box-shadow 0.25s;
     }
     [data-theme="light"] .user-avatar {
@@ -1032,14 +1073,25 @@
       background: var(--border);
     }
     .filter-pill.active {
-      background: var(--navy);
-      color: white;
-      border-color: var(--navy);
+      background: var(--btn-mint);
+      color: var(--btn-mint-dark);
+      border-color: var(--btn-mint-border);
+      font-weight: 700;
     }
     [data-theme="dark"] .filter-pill.active {
-      background: var(--blue);
-      color: var(--navy-dark);
-      border-color: var(--blue);
+      background: var(--btn-mint);
+      color: var(--btn-mint-dark);
+      border-color: var(--btn-mint-border);
+    }
+    .filter-pill[data-status="Probar otra vez"].active {
+      background: var(--yellow-light) !important;
+      color: var(--yellow-dark) !important;
+      border-color: var(--yellow-border) !important;
+    }
+    [data-theme="dark"] .filter-pill[data-status="Probar otra vez"].active {
+      background: rgba(250, 204, 21, 0.22) !important;
+      color: #FEF08A !important;
+      border-color: #FACC15 !important;
     }
 
     /* Banner de Métricas Resumen para Técnicos */
@@ -2367,12 +2419,23 @@
             </button>
           </div>
 
-          <div class="filters-row">
+          <div class="filters-row" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
             <div class="filter-pills" id="filter-status-pills">
               <button type="button" class="filter-pill active admin-only" data-status="ALL">Todas (<span id="count-all">0</span>)</button>
               <button type="button" class="filter-pill" data-status="Disponible">Disponibles (<span id="count-disp">0</span>)</button>
               <button type="button" class="filter-pill" data-status="Probar otra vez">Probar otra vez (<span id="count-retry">0</span>)</button>
               <button type="button" class="filter-pill admin-only" data-status="Dañada">Dañadas (<span id="count-damaged">0</span>)</button>
+            </div>
+
+            <!-- Selector de Ordenamiento (SOLO ADMINISTRADOR) -->
+            <div class="admin-only" style="display: flex; align-items: center; gap: 6px;">
+              <label for="select-license-sort" style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); white-space: nowrap;">Ordenar:</label>
+              <select id="select-license-sort" class="form-control" style="width: auto; min-width: 175px; padding: 4px 10px; font-size: 0.82rem; height: 32px; background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: var(--radius-sm);">
+                <option value="win_asc">🔢 WIN: Menor a Mayor</option>
+                <option value="win_desc">🔢 WIN: Mayor a Menor</option>
+                <option value="date_desc">📅 Más recientes primero</option>
+                <option value="date_asc">📅 Más antiguas primero</option>
+              </select>
             </div>
           </div>
         </div>
@@ -2431,7 +2494,7 @@
             <div class="kpi-label">Instaladas</div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-value" style="color: var(--orange);" id="kpi-retry">0</div>
+            <div class="kpi-value" style="color: var(--yellow);" id="kpi-retry">0</div>
             <div class="kpi-label">Probar Otra Vez</div>
           </div>
           <div class="kpi-card">
@@ -3790,6 +3853,7 @@
       filterLogsMonth: 'all',
       filterDate: 'ALL',
       sortOrder: 'date-desc',
+      licenseSort: 'win_asc',
 
       // Seguridad (Agente 3)
       adminPin: '3210',
@@ -4768,8 +4832,22 @@
         return true;
       });
 
-      // Ordenamiento predeterminado: más recientes primero
-      filtered.sort((a, b) => new Date(b.fechaSubida) - new Date(a.fechaSubida));
+      // Ordenamiento inteligente:
+      // Para Técnico / Visor: SIEMPRE 'win_asc' (el código WIN más bajo primero: WIN0001, WIN0002...)
+      // Para Administrador: Según State.licenseSort (predeterminado 'win_asc')
+      const sortMode = (State.currentRole === 'Admin') ? (State.licenseSort || 'win_asc') : 'win_asc';
+
+      filtered.sort((a, b) => {
+        if (sortMode === 'win_asc') {
+          return (a.codigoWin || '').localeCompare(b.codigoWin || '', undefined, { numeric: true, sensitivity: 'base' });
+        } else if (sortMode === 'win_desc') {
+          return (b.codigoWin || '').localeCompare(a.codigoWin || '', undefined, { numeric: true, sensitivity: 'base' });
+        } else if (sortMode === 'date_asc') {
+          return new Date(a.fechaSubida || 0) - new Date(b.fechaSubida || 0);
+        } else {
+          return new Date(b.fechaSubida || 0) - new Date(a.fechaSubida || 0);
+        }
+      });
 
       // Limpiar de la selección cualquier licencia que ya no exista
       const validIds = new Set(State.licenses.map(l => l.id));
@@ -7115,6 +7193,15 @@ Sistema de Inventario - Activacion WinPro`;
           renderLicenses();
         });
       });
+
+      // Selector de Ordenamiento (Solo Administrador)
+      const selectSort = document.getElementById('select-license-sort');
+      if (selectSort) {
+        selectSort.addEventListener('change', (e) => {
+          State.licenseSort = e.target.value;
+          renderLicenses();
+        });
+      }
 
       // Modal de Reporte para Proveedor (Licencias Dañadas)
       const openSupplierBtn = document.getElementById('btn-open-supplier-report-modal');
