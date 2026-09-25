@@ -1,4 +1,5 @@
-$lines = Get-Content -Path "C:\Users\alexa\.gemini\antigravity\scratch\macrotec\index.html"
+$targetPath = if (Test-Path ".\index.html") { ".\index.html" } else { "C:\Users\alexa\.gemini\antigravity\scratch\macrotec\index.html" }
+$lines = Get-Content -Path $targetPath
 $totalLines = $lines.Count
 
 Write-Host "=== VERIFICACIÓN ESTRICTA SISTEMA ACTIVACION WINPRO ==="

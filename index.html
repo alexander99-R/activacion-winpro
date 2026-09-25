@@ -47,9 +47,11 @@
       --bg: #F4F8FB;
       --surface: #FFFFFF;
       --surface-card: #FFFFFF;
+      --bg-card: #FFFFFF;
       --text: #0F172A;
       --text-muted: #5A6B7B;
       --text-inverse: #FFFFFF;
+      --navy-text: #0B2A4A;
       --border: #E2E8F0;
       --input-bg: #FFFFFF;
       --shadow-sm: 0 1px 3px rgba(11, 42, 74, 0.06);
@@ -67,6 +69,7 @@
       --navy: #18181A;
       --navy-dark: #000000;
       --navy-light: #242426;
+      --navy-text: #60A5FA;
       --blue: #5FB9E4;
       --blue-hover: #72c7f0;
       --blue-subtle: rgba(255, 255, 255, 0.06);
@@ -88,15 +91,16 @@
       --btn-mint-dark: #042F2E;
       --btn-mint-border: #81E6D9;
       --gray: #A3A3A3;
-      --gray-light: #18181A;
+      --gray-light: #161619;
       --gray-border: #2C2C2E;
 
       /* Tokens de Interfaz (Dark Mode - Pure Black & Neutral Gray) */
       --bg: #000000;
       --surface: #0E0E10;
       --surface-card: #141416;
+      --bg-card: #141416;
       --text: #F3F4F6;
-      --text-muted: #9CA3AF;
+      --text-muted: #A1A1AA;
       --text-inverse: #000000;
       --border: #262628;
       --input-bg: #111113;
@@ -207,6 +211,17 @@
     .btn-secondary:hover {
       background: var(--border);
     }
+    [data-theme="dark"] .btn-secondary {
+      background: #141416;
+      border: 1px solid #2C2C2E;
+      color: #F3F4F6;
+    }
+    [data-theme="dark"] .btn-secondary:hover {
+      background: #1C1C22;
+      border-color: #FFFFFF;
+      color: #FFFFFF;
+      box-shadow: 0 0 14px rgba(255, 255, 255, 0.35);
+    }
     .btn-danger {
       background: var(--red);
       color: white;
@@ -239,6 +254,17 @@
       color: var(--blue);
       border-color: var(--blue);
     }
+    [data-theme="dark"] .btn-icon {
+      background: #141416;
+      border: 1px solid #2C2C2E;
+      color: #FFFFFF;
+    }
+    [data-theme="dark"] .btn-icon:hover {
+      background: #1C1C22;
+      border-color: #FFFFFF;
+      color: #FFFFFF;
+      box-shadow: 0 0 14px rgba(255, 255, 255, 0.35);
+    }
 
     /* Estilos de Formularios y Textboxes con Alto Contraste */
     .form-group {
@@ -257,7 +283,7 @@
       gap: 6px;
     }
     [data-theme="dark"] .form-label {
-      color: #93C5FD;
+      color: #E2E8F0;
     }
     .form-control {
       width: 100%;
@@ -272,8 +298,8 @@
       font-weight: 600;
     }
     [data-theme="dark"] .form-control {
-      background: #0E1A29;
-      border: 1.5px solid #3E5E88;
+      background: #111113;
+      border: 1.5px solid #333338;
       color: #FFFFFF;
     }
     .form-control:focus {
@@ -282,7 +308,10 @@
     }
     [data-theme="dark"] .form-control:focus {
       border-color: #5FB9E4;
-      box-shadow: 0 0 0 3px rgba(95, 185, 228, 0.4);
+      box-shadow: 0 0 14px rgba(95, 185, 228, 0.45);
+    }
+    [data-theme="dark"] .form-control:hover {
+      border-color: #52525A;
     }
     .form-control::placeholder {
       color: #64748B;
@@ -290,7 +319,7 @@
       opacity: 1;
     }
     [data-theme="dark"] .form-control::placeholder {
-      color: #94A3B8;
+      color: #A1A1AA;
       font-weight: 400;
       opacity: 1;
     }
@@ -309,7 +338,7 @@
       padding: 10px;
     }
     [data-theme="dark"] select.form-control option {
-      background: #0E1A29;
+      background: #141416;
       color: #FFFFFF;
     }
     .file-upload-box {
@@ -411,9 +440,56 @@
       stroke-linejoin: round;
       fill: none;
       flex-shrink: 0;
+      transition: filter 0.25s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.2s ease, transform 0.2s ease;
     }
     .icon-sm { width: 15px; height: 15px; }
     .icon-lg { width: 24px; height: 24px; }
+
+    /* En Modo Oscuro: Iconos en Blanco Puro */
+    [data-theme="dark"] .icon {
+      stroke: #FFFFFF;
+      color: #FFFFFF;
+    }
+    [data-theme="dark"] .btn-primary .icon {
+      stroke: var(--btn-mint-dark);
+      color: var(--btn-mint-dark);
+    }
+    [data-theme="dark"] .btn-danger .icon {
+      stroke: #FFFFFF;
+    }
+    [data-theme="dark"] #btn-whatsapp-share svg,
+    [data-theme="dark"] .btn-whatsapp-share svg {
+      stroke: #25D366 !important;
+    }
+    [data-theme="dark"] .badge-instalada .icon {
+      stroke: #86EFAC !important;
+    }
+    [data-theme="dark"] .badge-probar .icon {
+      stroke: #FEF08A !important;
+    }
+    [data-theme="dark"] .badge-danada .icon {
+      stroke: #FCA5A5 !important;
+    }
+    [data-theme="dark"] .badge-disponible .icon {
+      stroke: #7DD3FC !important;
+    }
+
+    /* Iluminación / Glow de Iconos al pasar el cursor en modo oscuro */
+    [data-theme="dark"] button:hover .icon,
+    [data-theme="dark"] .btn:hover .icon,
+    [data-theme="dark"] .btn-icon:hover .icon,
+    [data-theme="dark"] .nav-tab-btn:hover .icon,
+    [data-theme="dark"] .mobile-nav-item:hover .icon,
+    [data-theme="dark"] .settings-menu-item:hover .icon,
+    [data-theme="dark"] .btn-header-backup:hover .icon,
+    [data-theme="dark"] .btn-copy-cmd:hover .icon,
+    [data-theme="dark"] .license-card:hover .icon,
+    [data-theme="dark"] .filter-pill:hover .icon,
+    [data-theme="dark"] .icon:hover {
+      stroke: #FFFFFF !important;
+      filter: drop-shadow(0 0 5px #FFFFFF) drop-shadow(0 0 12px rgba(95, 185, 228, 0.9));
+      transform: scale(1.12);
+    }
 
     /* ==========================================================================
        LOGIN & PANTALLA DE ACCESO (AGENTE 1 & AGENTE 3)
@@ -773,6 +849,17 @@
       border-color: var(--blue);
       color: var(--blue);
     }
+    [data-theme="dark"] .btn-header-backup {
+      background: #141416;
+      border: 1px solid #2C2C2E;
+      color: #FFFFFF;
+    }
+    [data-theme="dark"] .btn-header-backup:hover {
+      background: #1E1E24;
+      border-color: #FFFFFF;
+      color: #FFFFFF;
+      box-shadow: 0 0 14px rgba(255, 255, 255, 0.35);
+    }
     @media (max-width: 640px) {
       .btn-header-backup span {
         display: none;
@@ -838,14 +925,24 @@
       background: var(--gray-light);
       color: var(--text);
     }
+    [data-theme="dark"] .nav-tab-btn {
+      color: #A1A1AA;
+    }
+    [data-theme="dark"] .nav-tab-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #FFFFFF;
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.15);
+    }
     .nav-tab-btn.active {
       background: var(--blue-subtle);
       color: var(--navy);
       border-bottom: 2px solid var(--navy);
     }
     [data-theme="dark"] .nav-tab-btn.active {
-      color: var(--blue);
-      border-bottom-color: var(--blue);
+      background: rgba(95, 185, 228, 0.15);
+      color: #FFFFFF;
+      border-bottom: 2px solid #5FB9E4;
+      box-shadow: 0 2px 12px rgba(95, 185, 228, 0.3);
     }
     .nav-counter {
       background: var(--border);
@@ -855,13 +952,17 @@
       border-radius: 10px;
       font-weight: 700;
     }
+    [data-theme="dark"] .nav-counter {
+      background: #24242A;
+      color: #FFFFFF;
+    }
     .nav-tab-btn.active .nav-counter {
       background: var(--navy);
       color: white;
     }
     [data-theme="dark"] .nav-tab-btn.active .nav-counter {
-      background: var(--blue);
-      color: var(--navy-dark);
+      background: #5FB9E4;
+      color: #042F2E;
     }
 
     /* Bottom Nav Bar Fija Móvil (Agente 1) */
@@ -1023,9 +1124,12 @@
       transition: var(--transition);
     }
     [data-theme="dark"] .search-input {
-      background: #0E1A29;
-      border: 1.5px solid #3E5E88;
+      background: #111113;
+      border: 1.5px solid #333338;
       color: #FFFFFF;
+    }
+    [data-theme="dark"] .search-input:hover {
+      border-color: #55555C;
     }
     .search-input:focus {
       border-color: var(--blue);
@@ -1033,7 +1137,7 @@
     }
     [data-theme="dark"] .search-input:focus {
       border-color: #5FB9E4;
-      box-shadow: 0 0 0 3px rgba(95, 185, 228, 0.4);
+      box-shadow: 0 0 14px rgba(95, 185, 228, 0.45);
     }
     .search-input::placeholder {
       color: #64748B;
@@ -1041,7 +1145,7 @@
       opacity: 1;
     }
     [data-theme="dark"] .search-input::placeholder {
-      color: #94A3B8;
+      color: #A1A1AA;
       font-weight: 400;
       opacity: 1;
     }
@@ -1071,6 +1175,17 @@
     }
     .filter-pill:hover {
       background: var(--border);
+    }
+    [data-theme="dark"] .filter-pill {
+      background: #141416;
+      color: #D1D5DB;
+      border-color: #2C2C2E;
+    }
+    [data-theme="dark"] .filter-pill:hover {
+      background: #1E1E24;
+      border-color: #FFFFFF;
+      color: #FFFFFF;
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.25);
     }
     .filter-pill.active {
       background: var(--btn-mint);
@@ -1181,6 +1296,15 @@
       border-color: var(--blue);
       box-shadow: var(--shadow);
     }
+    [data-theme="dark"] .license-card {
+      background: #121214;
+      border: 1px solid #28282B;
+    }
+    [data-theme="dark"] .license-card:hover {
+      border-color: #5FB9E4 !important;
+      box-shadow: 0 0 16px rgba(95, 185, 228, 0.35), 0 8px 24px rgba(0, 0, 0, 0.9) !important;
+      transform: translateY(-2px);
+    }
     .license-card.selected {
       border-color: var(--blue);
       background: var(--blue-subtle);
@@ -1201,7 +1325,7 @@
       gap: 5px;
     }
     [data-theme="dark"] .card-edition {
-      color: var(--blue);
+      color: #7DD3FC;
     }
     .card-batch-select {
       display: flex;
@@ -1221,6 +1345,10 @@
       justify-content: space-between;
       gap: 8px;
     }
+    [data-theme="dark"] .key-box-wrap {
+      background: #0A0A0C;
+      border-color: #28282C;
+    }
     .key-code {
       font-family: var(--font-mono);
       font-size: 0.95rem;
@@ -1230,6 +1358,9 @@
       word-break: break-all;
       user-select: all;
       cursor: pointer;
+    }
+    [data-theme="dark"] .key-code {
+      color: #FFFFFF;
     }
     .cmd-prefix {
       color: #0284C7;
@@ -1251,16 +1382,27 @@
       box-shadow: var(--shadow-sm);
     }
     [data-theme="dark"] .btn-copy-cmd {
-      color: var(--blue);
+      background: #18181C;
+      color: #FFFFFF;
+      border: 1px solid #333338;
     }
     .btn-copy-cmd:hover {
       background: var(--blue-subtle);
       border-color: var(--blue);
     }
+    [data-theme="dark"] .btn-copy-cmd:hover {
+      background: #1C2430;
+      border-color: #5FB9E4;
+      color: #FFFFFF;
+      box-shadow: 0 0 12px rgba(95, 185, 228, 0.45);
+    }
     .btn-copy-cmd.copied {
       background: var(--green);
       color: white;
       border-color: var(--green);
+    }
+    [data-theme="dark"] .card-details-info strong {
+      color: #F3F4F6;
     }
 
     .card-details-info {
@@ -1389,13 +1531,35 @@
       background: var(--blue-subtle);
       font-weight: 700;
     }
+    [data-theme="dark"] .equipment-type-option {
+      background: #141416;
+      border-color: #2C2C2E;
+      color: #FFFFFF;
+    }
+    [data-theme="dark"] .equipment-type-option:hover {
+      border-color: #FFFFFF;
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.25);
+    }
+    [data-theme="dark"] .equipment-type-option.selected {
+      border-color: #5FB9E4;
+      background: rgba(95, 185, 228, 0.15);
+      box-shadow: 0 0 14px rgba(95, 185, 228, 0.35);
+    }
     .act-edit-equipment {
       background: var(--surface);
       color: var(--navy);
       border: 1px solid var(--border);
     }
     [data-theme="dark"] .act-edit-equipment {
-      color: var(--blue);
+      background: #18181C;
+      color: #5FB9E4;
+      border-color: #333338;
+    }
+    [data-theme="dark"] .act-edit-equipment:hover {
+      background: #24242A;
+      border-color: #5FB9E4;
+      color: #FFFFFF;
+      box-shadow: 0 0 12px rgba(95, 185, 228, 0.35);
     }
 
     /* Botones de Acción de Estado */
@@ -1417,6 +1581,7 @@
       align-items: center;
       justify-content: center;
       gap: 5px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .act-installed {
       background: var(--green);
@@ -1426,6 +1591,11 @@
       background: var(--orange);
       color: white;
     }
+    [data-theme="dark"] .act-retry {
+      background: #FACC15 !important;
+      color: #000000 !important;
+      font-weight: 800 !important;
+    }
     .act-damaged {
       background: var(--red);
       color: white;
@@ -1433,6 +1603,27 @@
     .act-revert {
       background: var(--navy);
       color: white;
+    }
+    [data-theme="dark"] .act-revert {
+      background: #24242A;
+      color: #FFFFFF;
+      border: 1px solid #3E3E46;
+    }
+    [data-theme="dark"] .btn-status-act:hover {
+      transform: translateY(-1px);
+    }
+    [data-theme="dark"] .act-installed:hover {
+      box-shadow: 0 0 14px rgba(34, 197, 94, 0.75) !important;
+    }
+    [data-theme="dark"] .act-retry:hover {
+      box-shadow: 0 0 14px rgba(250, 204, 21, 0.85) !important;
+    }
+    [data-theme="dark"] .act-damaged:hover {
+      box-shadow: 0 0 14px rgba(239, 68, 68, 0.75) !important;
+    }
+    [data-theme="dark"] .act-revert:hover {
+      box-shadow: 0 0 14px rgba(255, 255, 255, 0.35) !important;
+      border-color: #FFFFFF !important;
     }
     .act-print-label {
       background: #0f172a;
@@ -1470,15 +1661,30 @@
       transition: var(--transition);
       gap: 10px;
     }
+    [data-theme="dark"] .global-search-box {
+      background: #111113 !important;
+      border: 2px solid #333338 !important;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
+    }
+    [data-theme="dark"] .global-search-box:hover {
+      border-color: #55555C !important;
+    }
     .global-search-box:focus-within {
       border-color: var(--blue);
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    }
+    [data-theme="dark"] .global-search-box:focus-within {
+      border-color: #5FB9E4 !important;
+      box-shadow: 0 0 16px rgba(95, 185, 228, 0.45) !important;
     }
     .global-search-icon-wrap {
       display: flex;
       align-items: center;
       color: var(--text-muted);
       flex-shrink: 0;
+    }
+    [data-theme="dark"] .global-search-icon-wrap {
+      color: #FFFFFF !important;
     }
     .global-search-field {
       flex: 1;
@@ -1840,6 +2046,45 @@
     .data-table tr:hover {
       background: var(--blue-subtle);
     }
+    [data-theme="dark"] .data-table th {
+      background: #141416;
+      color: #E2E8F0;
+      border-bottom: 1px solid #262628;
+    }
+    [data-theme="dark"] .data-table td {
+      color: #F3F4F6;
+      border-bottom: 1px solid #1E1E22;
+    }
+    [data-theme="dark"] .data-table tr:hover {
+      background: rgba(255, 255, 255, 0.04);
+      box-shadow: inset 0 0 10px rgba(95, 185, 228, 0.12);
+    }
+    .audit-log-user {
+      font-weight: 600;
+      color: var(--navy);
+    }
+    [data-theme="dark"] .audit-log-user {
+      color: #7DD3FC !important;
+      font-weight: 700;
+    }
+    .audit-log-order {
+      font-family: var(--font-mono);
+      color: var(--navy);
+    }
+    [data-theme="dark"] .audit-log-order {
+      color: #FFFFFF !important;
+      font-weight: 800;
+    }
+    .audit-action-badge {
+      background: var(--blue-subtle);
+      color: var(--navy);
+      font-weight: 600;
+    }
+    [data-theme="dark"] .audit-action-badge {
+      background: rgba(95, 185, 228, 0.18) !important;
+      color: #BAE6FD !important;
+      border: 1px solid rgba(95, 185, 228, 0.35) !important;
+    }
 
     /* Gestión de Usuarios (Agente 3) */
     .user-manage-item {
@@ -1893,9 +2138,9 @@
       letter-spacing: 0.5px;
     }
     [data-theme="dark"] .badge-win-code {
-      background: #312E81;
-      color: #E0E7FF;
-      border-color: #4338CA;
+      background: rgba(95, 185, 228, 0.18);
+      color: #7DD3FC;
+      border-color: rgba(95, 185, 228, 0.35);
     }
 
     /* Menú Desplegable de Configuración (Tuerquita) */
@@ -1918,6 +2163,11 @@
       overflow: hidden;
       animation: fadeInScale 0.18s cubic-bezier(0.16, 1, 0.3, 1);
     }
+    [data-theme="dark"] .settings-dropdown-menu {
+      background: #111113;
+      border: 1px solid #2C2C2E;
+      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.95);
+    }
     .settings-dropdown-menu.active {
       display: block;
     }
@@ -1928,6 +2178,10 @@
       align-items: center;
       gap: 10px;
       background: var(--gray-light);
+    }
+    [data-theme="dark"] .settings-user-header {
+      background: #161619;
+      border-bottom: 1px solid #262628;
     }
     .settings-user-avatar {
       width: 40px;
@@ -1944,6 +2198,11 @@
       color: var(--navy);
       flex-shrink: 0;
       overflow: hidden;
+    }
+    [data-theme="dark"] .settings-user-avatar {
+      background: #24242A;
+      color: #FFFFFF;
+      border-color: #5FB9E4;
     }
     .settings-user-info {
       flex: 1;
@@ -1967,6 +2226,10 @@
       border-radius: 4px;
       margin-top: 2px;
     }
+    [data-theme="dark"] .settings-user-role {
+      background: rgba(95, 185, 228, 0.18);
+      color: #7DD3FC;
+    }
     .settings-menu-item {
       display: flex;
       align-items: center;
@@ -1986,11 +2249,21 @@
       background: var(--gray-light);
       color: var(--navy);
     }
+    [data-theme="dark"] .settings-menu-item {
+      color: #F3F4F6;
+    }
+    [data-theme="dark"] .settings-menu-item:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #FFFFFF;
+    }
     .settings-menu-item svg {
       width: 17px;
       height: 17px;
       stroke: var(--navy);
       flex-shrink: 0;
+    }
+    [data-theme="dark"] .settings-menu-item svg {
+      stroke: #FFFFFF !important;
     }
     .settings-menu-divider {
       height: 1px;
@@ -2007,6 +2280,10 @@
       border-radius: var(--radius-sm);
       border: 1px solid var(--border);
     }
+    [data-theme="dark"] .audit-subtabs {
+      background: #121214;
+      border-color: #262628;
+    }
     .audit-subtab-btn {
       padding: 6px 14px;
       font-size: 0.82rem;
@@ -2021,10 +2298,21 @@
       gap: 6px;
       transition: var(--transition);
     }
+    [data-theme="dark"] .audit-subtab-btn {
+      color: #9CA3AF;
+    }
     .audit-subtab-btn.active {
       background: var(--surface);
       color: var(--navy);
       box-shadow: var(--shadow-sm);
+    }
+    [data-theme="dark"] .audit-subtab-btn.active {
+      background: #24242A !important;
+      color: #FFFFFF !important;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.15);
+    }
+    [data-theme="dark"] .audit-subtab-btn:hover {
+      color: #FFFFFF;
     }
     .btn-delete-audit-log {
       color: var(--red);
@@ -2070,6 +2358,11 @@
       padding: 24px;
       animation: fadeInScale 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
+    [data-theme="dark"] .modal-box {
+      background: #0E0E10;
+      border-color: #262628;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.95);
+    }
     .modal-header {
       display: flex;
       align-items: center;
@@ -2082,7 +2375,36 @@
       color: var(--navy);
     }
     [data-theme="dark"] .modal-title {
-      color: var(--blue);
+      color: #FFFFFF !important;
+    }
+    .modal-box-subtitle {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+    [data-theme="dark"] .modal-box-subtitle {
+      color: #FFFFFF !important;
+    }
+    .modal-info-banner {
+      background: var(--blue-subtle);
+      border-radius: var(--radius-sm);
+      padding: 8px 12px;
+      font-size: 0.82rem;
+      color: var(--navy);
+      line-height: 1.4;
+      margin-bottom: 12px;
+    }
+    [data-theme="dark"] .modal-info-banner {
+      background: #141416 !important;
+      border: 1px solid #2C2C2E !important;
+      color: #E5E7EB !important;
+    }
+    .modal-avatar-text {
+      color: var(--navy);
+    }
+    [data-theme="dark"] .modal-avatar-text {
+      color: #FFFFFF !important;
     }
     .modal-footer {
       display: flex;
@@ -2872,7 +3194,7 @@
       </div>
 
       <div id="import-preview-box" style="display: none; background: var(--gray-light); padding: 12px; border-radius: var(--radius-sm); margin-bottom: 14px; font-size: 0.85rem;">
-        <div style="font-weight: 700; color: var(--navy); margin-bottom: 6px;">Previsualización del lote:</div>
+        <div class="modal-box-subtitle" style="margin-bottom: 6px;">Previsualización del lote:</div>
         <div>✅ Claves válidas a agregar: <strong id="preview-valid-count" style="color: var(--green);">0</strong></div>
         <div>⚠️ Claves duplicadas / ya existentes: <strong id="preview-dups-count" style="color: var(--orange);">0</strong></div>
         <div style="margin-top: 6px; font-size: 0.78rem; color: var(--text-muted);" id="preview-sample-keys"></div>
@@ -2916,8 +3238,8 @@
         </button>
       </div>
 
-      <div style="background: var(--blue2); padding: 14px; border-radius: var(--radius-sm); margin-bottom: 16px;">
-        <div style="font-size: 0.88rem; font-weight: 700; color: var(--navy); margin-bottom: 8px;">Estado actual de licencias:</div>
+      <div class="modal-info-banner" style="margin-bottom: 16px;">
+        <div class="modal-box-subtitle" style="margin-bottom: 8px;">Estado actual de licencias:</div>
         <div style="display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 0.85rem;">
           <span>Instaladas Hoy:</span>
           <strong id="daily-installed-today">0</strong>
@@ -3099,7 +3421,7 @@
         <input type="hidden" id="install-modal-license-id">
         <input type="hidden" id="install-modal-is-editing" value="0">
 
-        <p style="font-size: 0.82rem; color: var(--navy); background: var(--blue-subtle); padding: 6px 10px; border-radius: var(--radius-sm); margin-bottom: 12px; font-weight: 500;">
+        <p class="modal-info-banner">
           ℹ️ Para validar la instalación debes ingresar al menos uno de los tres datos: <strong>Orden SO</strong>, <strong>Equipo</strong> o <strong>Cliente</strong>.
         </p>
 
@@ -3178,7 +3500,7 @@
       </div>
 
       <div style="padding: 10px 0;">
-        <p style="font-size: 0.95rem; color: var(--text-main); margin-bottom: 8px; line-height: 1.5;" id="missing-fields-prompt-text">
+        <p style="font-size: 0.95rem; color: var(--text); margin-bottom: 8px; line-height: 1.5;" id="missing-fields-prompt-text">
           <!-- Mensaje dinámico -->
         </p>
         <p style="font-size: 0.82rem; color: var(--text-muted); margin: 0; line-height: 1.4;">
@@ -3247,7 +3569,7 @@
         </div>
 
         <!-- Pasos Informativos -->
-        <div style="background: var(--blue2); border-radius: 8px; padding: 10px 14px; text-align: left; font-size: 0.8rem; color: var(--navy); line-height: 1.4;">
+        <div class="modal-info-banner" style="text-align: left;">
           <div style="font-weight: 700; margin-bottom: 4px;">💡 ¿Cómo conectar tus dispositivos?</div>
           <div>1. Conecta tu celular o laptop a la misma red Wi-Fi del taller.</div>
           <div>2. Abre la cámara del celular y apunta al código QR arriba, o abre el enlace en tu navegador.</div>
@@ -3273,7 +3595,7 @@
       <div style="text-align: center; margin-bottom: 20px;">
         <div style="width: 90px; height: 90px; border-radius: 50%; overflow: hidden; margin: 0 auto 12px; border: 3px solid var(--blue); box-shadow: var(--shadow); background: var(--gray-light); display: flex; align-items: center; justify-content: center;">
           <img id="my-photo-preview" src="" alt="Previsualización" style="width: 100%; height: 100%; object-fit: cover; display: none;">
-          <span id="my-photo-avatar-text" style="font-size: 2rem; font-weight: 700; color: var(--navy);">?</span>
+          <span id="my-photo-avatar-text" class="modal-avatar-text" style="font-size: 2rem; font-weight: 700;">?</span>
         </div>
         <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">Selecciona una foto cuadrada desde tu dispositivo (PNG o JPG).</p>
       </div>
@@ -6117,7 +6439,7 @@
       const categories = [
         { label: 'Disponible', val: disp, color: '#5FB9E4' },
         { label: 'Instalada', val: inst, color: '#1E7E4E' },
-        { label: 'Probar', val: retry, color: '#C2690A' },
+        { label: 'Probar', val: retry, color: '#FACC15' },
         { label: 'Dañada', val: dam, color: '#B91C1C' }
       ];
 
@@ -6164,7 +6486,7 @@
         const y = 150 - (val / maxMonth) * 100;
         linePoints.push(`${x},${y}`);
 
-        circlesSvg += `<circle cx="${x}" cy="${y}" r="5" fill="var(--navy)" stroke="var(--blue)" stroke-width="2.5"><title>${m}: ${val}</title></circle>`;
+        circlesSvg += `<circle cx="${x}" cy="${y}" r="5" fill="var(--surface-card)" stroke="var(--blue)" stroke-width="2.5"><title>${m}: ${val}</title></circle>`;
         circlesSvg += `<text x="${x}" y="${y - 8}" font-size="11" font-weight="700" fill="var(--text)" text-anchor="middle">${val}</text>`;
         labelsSvg += `<text x="${x}" y="175" font-size="10" fill="var(--text-muted)" text-anchor="middle">${m.slice(5)}/${m.slice(2, 4)}</text>`;
       });
@@ -6677,9 +6999,9 @@
             const clv = log.clave || log.detalle || '';
             tr.innerHTML = `
               <td><strong style="color: var(--text);">${log.fecha}</strong></td>
-              <td><span style="font-weight: 600; color: var(--navy);">${log.usuario}</span></td>
+              <td><span class="audit-log-user">${log.usuario}</span></td>
               <td><span class="badge-win-code">${winCode}</span></td>
-              <td><strong style="color: var(--navy);">${ord}</strong></td>
+              <td><strong class="audit-log-order">${ord}</strong></td>
               <td>${cli}</td>
               <td style="font-size: 0.85rem;">${eq}</td>
               <td style="font-family: var(--font-mono); font-size: 0.8rem;">${clv}</td>
@@ -6708,8 +7030,8 @@
             const tr = document.createElement('tr');
             tr.innerHTML = `
               <td><strong style="color: var(--text);">${log.fecha}</strong></td>
-              <td><span style="font-weight: 600; color: var(--navy);">${log.usuario}</span></td>
-              <td><span class="badge" style="background: var(--blue-subtle); color: var(--navy); font-weight: 600;">${log.accion}</span></td>
+              <td><span class="audit-log-user">${log.usuario}</span></td>
+              <td><span class="badge audit-action-badge">${log.accion}</span></td>
               <td style="font-family: var(--font-mono); font-size: 0.82rem;">${log.detalle}</td>
               <td style="font-weight: 500;">${log.cambio}</td>
               <td style="text-align: center;">
