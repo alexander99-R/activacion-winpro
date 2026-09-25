@@ -712,6 +712,35 @@
       gap: 8px;
     }
 
+    .btn-header-backup {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      cursor: pointer;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+    .btn-header-backup:hover {
+      background: var(--blue-subtle);
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+    @media (max-width: 640px) {
+      .btn-header-backup span {
+        display: none;
+      }
+      .btn-header-backup {
+        padding: 6px 8px;
+      }
+    }
+
     /* Indicador dinámico de stock (Agente 4) */
     .stock-badge-header {
       display: inline-flex;
@@ -2125,12 +2154,21 @@
         <span>Bloqueo de seguridad: Reintenta en <strong id="lockout-timer-sec">30</strong>s</span>
       </div>
 
-      <!-- Toggle de Tema en Login -->
-      <div style="margin-top: 24px; display: flex; justify-content: center; gap: 8px;">
+      <!-- Toggle de Tema y Respaldo en Login -->
+      <div style="margin-top: 24px; display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
         <button type="button" class="btn btn-secondary btn-sm" id="btn-theme-login">
           <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
           <span id="theme-text-login">Modo Oscuro</span>
         </button>
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-login-backup" title="Descargar Copia de Seguridad completa (.json)">
+          <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span>Descargar Respaldo</span>
+        </button>
+        <label class="btn btn-secondary btn-sm" style="cursor: pointer; margin: 0; display: inline-flex; align-items: center; gap: 6px;" title="Restaurar Copia de Seguridad (.json)">
+          <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <span>Cargar Respaldo</span>
+          <input type="file" id="input-restore-login-file" accept=".json" style="display: none;">
+        </label>
       </div>
     </div>
   </div>
@@ -2186,6 +2224,12 @@
             <span style="font-size: 0.8rem;">🟢</span> Taller Local
           </div>
 
+          <!-- Botón Directo: Copia de Seguridad Rápida (Visible siempre en el Header) -->
+          <button type="button" class="btn-header-backup" id="btn-header-quick-backup" title="Descargar Copia de Seguridad completa (.json)">
+            <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>Copia de Seguridad</span>
+          </button>
+
           <!-- Botón Conectar Celulares / Acceso en Red Wi-Fi (SOLO ADMINISTRADOR) -->
           <button type="button" class="btn-network-badge admin-only" id="btn-share-network-access" title="Conectar celulares y otras laptops por Wi-Fi" style="display: none; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 9999px; background: #E0F2FE; border: 1px solid #BAE6FD; color: #0369A1; font-weight: 700; font-size: 0.78rem; cursor: pointer; transition: var(--transition);">
             <span style="font-size: 0.85rem;">📱</span>
@@ -2230,6 +2274,17 @@
                   <svg class="icon" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
                   <span>Cambiar Foto de Perfil</span>
                 </button>
+                <div class="settings-menu-divider"></div>
+                <!-- Opciones de Copia de Seguridad en Menú -->
+                <button type="button" class="settings-menu-item" id="btn-menu-download-backup">
+                  <svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  <span>Descargar Copia de Seguridad</span>
+                </button>
+                <label class="settings-menu-item" style="cursor: pointer; margin: 0; display: flex; align-items: center; gap: 8px;">
+                  <svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                  <span>Cargar Copia de Seguridad</span>
+                  <input type="file" id="input-restore-backup-menu" accept=".json" style="display: none;">
+                </label>
                 <div class="settings-menu-divider"></div>
                 <button type="button" class="settings-menu-item" id="btn-menu-logout-item" style="color: var(--red);">
                   <svg class="icon" viewBox="0 0 24 24" style="stroke: var(--red);"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
@@ -2417,6 +2472,31 @@
            ========================================================== -->
       <section id="tab-admin" class="panel-view admin-only">
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px;">
+          <!-- Copia de Seguridad y Migración del Sistema (Banner Superior Destacado) -->
+          <div class="admin-card" style="grid-column: 1 / -1; border-left: 4px solid var(--blue); background: linear-gradient(135deg, var(--surface) 0%, var(--blue-subtle) 100%);">
+            <div class="admin-card-title">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" style="stroke: var(--blue);"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                <span>Copia de Seguridad y Migración del Sistema</span>
+              </div>
+              <span class="badge badge-success" style="font-size: 0.75rem;">Protección de Datos</span>
+            </div>
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 14px;">
+              Descarga un archivo <strong>.json</strong> completo con todo tu inventario de licencias, usuarios, registros de auditoría y clientes registrados. Úsalo como respaldo antes de realizar mantenimiento o actualizaciones, o para transferir los datos a otra PC o laptop del taller.
+            </p>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <button type="button" class="btn btn-primary" id="btn-download-full-backup">
+                <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                <span>Descargar Copia de Seguridad (.json)</span>
+              </button>
+              <label class="btn btn-secondary" style="cursor: pointer; margin: 0; display: inline-flex; align-items: center; gap: 6px;">
+                <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <span>Cargar Copia de Seguridad (.json)</span>
+                <input type="file" id="input-restore-backup-file" accept=".json" style="display: none;">
+              </label>
+            </div>
+          </div>
+
           <!-- Crear Usuario Nuevo -->
           <div class="admin-card">
             <div class="admin-card-title">Crear Nuevo Usuario / Técnico</div>
@@ -2545,28 +2625,6 @@
                 <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
                 <span>Generar Reporte de Dañadas para Proveedor</span>
               </button>
-            </div>
-          <!-- Copia de Seguridad y Migración del Sistema (Laptop / Taller) -->
-          <div class="admin-card" style="margin-top: 16px;">
-            <div class="admin-card-title">
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                <span>Copia de Seguridad y Migración del Sistema</span>
-              </div>
-            </div>
-            <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 14px;">
-              Descarga un archivo completo <strong>.json</strong> con todas tus licencias, técnicos, clientes y órdenes registradas. Puedes transferirlo por USB a la PC del taller y cargarlo con 1 clic para tener exactamente los mismos datos.
-            </p>
-            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-              <button type="button" class="btn btn-primary" id="btn-download-full-backup">
-                <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                <span>Descargar Copia de Seguridad (.json)</span>
-              </button>
-              <label class="btn btn-secondary" style="cursor: pointer; margin: 0; display: inline-flex; align-items: center; gap: 6px;">
-                <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                <span>Cargar Copia de Seguridad (.json)</span>
-                <input type="file" id="input-restore-backup-file" accept=".json" style="display: none;">
-              </label>
             </div>
           </div>
         </div>
@@ -5752,12 +5810,32 @@
     // RESPALDO Y MIGRACIÓN (.JSON) ENTRE LAPTOP Y TALLER
     // ==========================================================================
     function downloadFullDatabaseBackup() {
-      const data = DB_SERVICE.getLocalData();
-      if (!data || !data.licenses || data.licenses.length === 0) {
+      const localData = DB_SERVICE.getLocalData() || {};
+      const licenses = (State.licenses && State.licenses.length > 0) ? State.licenses : (localData.licenses || []);
+      const users = (State.users && State.users.length > 0) ? State.users : (localData.users || []);
+      const activity_logs = (State.activity_logs && State.activity_logs.length > 0) ? State.activity_logs : (localData.activity_logs || []);
+      
+      const config = localData.config || {};
+      if (!config.admin) config.admin = {};
+      if (State.adminPin) config.admin.pin = State.adminPin;
+
+      if (licenses.length === 0 && users.length === 0 && activity_logs.length === 0) {
         showToast('No hay datos en el sistema para respaldar.', 'warning');
         return;
       }
-      const jsonContent = JSON.stringify(data, null, 2);
+
+      const backupObj = {
+        version: "2.0",
+        exportDate: new Date().toISOString(),
+        licenses: licenses,
+        users: users,
+        activity_logs: activity_logs,
+        config: config
+      };
+
+      DB_SERVICE.saveLocalData(backupObj);
+
+      const jsonContent = JSON.stringify(backupObj, null, 2);
       const blob = new Blob([jsonContent], { type: 'application/json;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
@@ -5768,7 +5846,7 @@
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
-      showToast(`Copia de seguridad descargada: ${filename}`, 'success');
+      showToast(`Copia de seguridad descargada: ${filename} (${licenses.length} licencias, ${users.length} usuarios)`, 'success');
     }
 
     async function handleRestoreBackupFile(event) {
@@ -5791,6 +5869,7 @@
 
           State.licenses = parsed.licenses || [];
           State.users = parsed.users || [];
+          State.activity_logs = parsed.activity_logs || [];
           if (parsed.config && parsed.config.admin && parsed.config.admin.pin) {
             State.adminPin = parsed.config.admin.pin;
           }
@@ -7314,6 +7393,36 @@ Sistema de Inventario - Activacion WinPro`;
 
       const restoreBackupInp = document.getElementById('input-restore-backup-file');
       if (restoreBackupInp) restoreBackupInp.addEventListener('change', handleRestoreBackupFile);
+
+      // Botón directo en Header (Accesible en todo momento para todos los usuarios)
+      const headerQuickBackupBtn = document.getElementById('btn-header-quick-backup');
+      if (headerQuickBackupBtn) headerQuickBackupBtn.addEventListener('click', downloadFullDatabaseBackup);
+
+      // Botón en Menú Desplegable de Configuración (Tuerquita)
+      const menuDownloadBackupBtn = document.getElementById('btn-menu-download-backup');
+      if (menuDownloadBackupBtn) {
+        menuDownloadBackupBtn.addEventListener('click', () => {
+          const menuDropdown = document.getElementById('menu-settings-dropdown');
+          if (menuDropdown) menuDropdown.classList.remove('show');
+          downloadFullDatabaseBackup();
+        });
+      }
+
+      const menuRestoreBackupInp = document.getElementById('input-restore-backup-menu');
+      if (menuRestoreBackupInp) {
+        menuRestoreBackupInp.addEventListener('change', (e) => {
+          const menuDropdown = document.getElementById('menu-settings-dropdown');
+          if (menuDropdown) menuDropdown.classList.remove('show');
+          handleRestoreBackupFile(e);
+        });
+      }
+
+      // Botones en Pantalla de Login (Para respaldar o restaurar antes de iniciar sesión)
+      const loginBackupBtn = document.getElementById('btn-login-backup');
+      if (loginBackupBtn) loginBackupBtn.addEventListener('click', downloadFullDatabaseBackup);
+
+      const loginRestoreInp = document.getElementById('input-restore-login-file');
+      if (loginRestoreInp) loginRestoreInp.addEventListener('change', handleRestoreBackupFile);
 
       // Sub-pestañas de Auditoría (Instalaciones vs Movimientos del Sistema)
       const subtabInstBtn = document.getElementById('btn-subtab-inst');
