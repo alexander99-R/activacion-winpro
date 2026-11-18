@@ -1627,58 +1627,94 @@
       justify-content: center;
       gap: 5px;
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
     }
-    .act-installed {
-      background: var(--green);
-      color: white;
-    }
-    .act-retry {
-      background: var(--orange);
-      color: white;
-    }
-    [data-theme="dark"] .act-retry {
-      background: #FACC15 !important;
-      color: #000000 !important;
-      font-weight: 800 !important;
-    }
-    .act-damaged {
-      background: var(--red);
-      color: white;
-    }
+    /* Botones de acción: Instalada, Probar y Revertir en verde menta transparente */
+    .act-installed,
+    .act-retry,
     .act-revert {
-      background: var(--navy);
-      color: white;
+      background: rgba(178, 245, 233, 0.45);
+      color: #0F766E;
+      border: 1px solid rgba(15, 118, 110, 0.35);
+      font-weight: 700;
     }
-    [data-theme="dark"] .act-revert {
-      background: #24242A;
-      color: #FFFFFF;
-      border: 1px solid #3E3E46;
-    }
-    [data-theme="dark"] .btn-status-act:hover {
+    .act-installed:hover,
+    .act-retry:hover,
+    .act-revert:hover {
+      background: rgba(178, 245, 233, 0.85);
+      border-color: #0D9488;
+      color: #042F2E;
+      box-shadow: 0 2px 10px rgba(15, 118, 110, 0.2);
       transform: translateY(-1px);
     }
-    [data-theme="dark"] .act-installed:hover {
-      box-shadow: 0 0 14px rgba(34, 197, 94, 0.75) !important;
+    [data-theme="dark"] .act-installed,
+    [data-theme="dark"] .act-retry,
+    [data-theme="dark"] .act-revert {
+      background: rgba(178, 245, 233, 0.12) !important;
+      color: #B2F5E9 !important;
+      border: 1px solid rgba(178, 245, 233, 0.35) !important;
+      font-weight: 700 !important;
     }
-    [data-theme="dark"] .act-retry:hover {
-      box-shadow: 0 0 14px rgba(250, 204, 21, 0.85) !important;
+    [data-theme="dark"] .act-installed:hover,
+    [data-theme="dark"] .act-retry:hover,
+    [data-theme="dark"] .act-revert:hover {
+      background: rgba(178, 245, 233, 0.25) !important;
+      border-color: #5EEAD4 !important;
+      color: #FFFFFF !important;
+      box-shadow: 0 0 14px rgba(178, 245, 233, 0.5) !important;
+      transform: translateY(-1px);
+    }
+    .act-damaged {
+      background: rgba(239, 68, 68, 0.12);
+      color: #DC2626;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      font-weight: 700;
+    }
+    .act-damaged:hover {
+      background: rgba(239, 68, 68, 0.22);
+      border-color: #DC2626;
+      box-shadow: 0 2px 8px rgba(220, 38, 38, 0.2);
+      transform: translateY(-1px);
+    }
+    [data-theme="dark"] .act-damaged {
+      background: rgba(239, 68, 68, 0.12) !important;
+      color: #FCA5A5 !important;
+      border: 1px solid rgba(239, 68, 68, 0.35) !important;
+      font-weight: 700 !important;
     }
     [data-theme="dark"] .act-damaged:hover {
-      box-shadow: 0 0 14px rgba(239, 68, 68, 0.75) !important;
+      background: rgba(239, 68, 68, 0.25) !important;
+      box-shadow: 0 0 14px rgba(239, 68, 68, 0.5) !important;
+      color: #FFFFFF !important;
+      transform: translateY(-1px);
     }
-    [data-theme="dark"] .act-revert:hover {
-      box-shadow: 0 0 14px rgba(255, 255, 255, 0.35) !important;
-      border-color: #FFFFFF !important;
+    .act-print-label,
+    .act-edit-equipment {
+      background: rgba(95, 185, 228, 0.12);
+      color: var(--blue);
+      border: 1px solid rgba(95, 185, 228, 0.3);
+      font-weight: 700;
     }
-    .act-print-label {
-      background: #0f172a;
-      color: #38bdf8;
-      border: 1px solid rgba(56, 189, 248, 0.3);
+    .act-print-label:hover,
+    .act-edit-equipment:hover {
+      background: rgba(95, 185, 228, 0.22);
+      color: #FFFFFF;
+      border-color: var(--blue);
+      box-shadow: 0 0 12px rgba(95, 185, 228, 0.35);
+      transform: translateY(-1px);
     }
-    .act-print-label:hover {
-      background: #1e293b;
-      color: #7dd3fc;
-      border-color: #38bdf8;
+    [data-theme="dark"] .act-print-label,
+    [data-theme="dark"] .act-edit-equipment {
+      background: rgba(95, 185, 228, 0.12) !important;
+      color: #7DD3FC !important;
+      border: 1px solid rgba(95, 185, 228, 0.35) !important;
+    }
+    [data-theme="dark"] .act-print-label:hover,
+    [data-theme="dark"] .act-edit-equipment:hover {
+      background: rgba(95, 185, 228, 0.25) !important;
+      color: #FFFFFF !important;
+      box-shadow: 0 0 14px rgba(95, 185, 228, 0.5) !important;
+      transform: translateY(-1px);
     }
     .btn-print-audit-sticker {
       color: var(--blue);
@@ -2559,6 +2595,169 @@
       transition: width 0.2s ease;
     }
 
+    /* Indicador de estado en punto limpio (sin emojis) */
+    .status-indicator-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10B981;
+      box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+      flex-shrink: 0;
+    }
+
+    /* Badges limpios de posición para Técnicos más activos */
+    .leader-rank-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      font-size: 0.76rem;
+      font-weight: 800;
+      color: #ffffff;
+      background: #64748B;
+    }
+    .leader-rank-badge.rank-1 {
+      background: #EAB308;
+      box-shadow: 0 0 8px rgba(234, 179, 8, 0.5);
+    }
+    .leader-rank-badge.rank-2 {
+      background: #94A3B8;
+      box-shadow: 0 0 8px rgba(148, 163, 184, 0.5);
+    }
+    .leader-rank-badge.rank-3 {
+      background: #D97706;
+      box-shadow: 0 0 8px rgba(217, 119, 6, 0.5);
+    }
+
+    /* Animación de Celebración al Instalar Licencia */
+    .installed-celebration-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(6px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .installed-celebration-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .installed-celebration-box {
+      background: var(--surface);
+      border: 1px solid rgba(45, 212, 191, 0.4);
+      border-radius: 20px;
+      padding: 32px 36px;
+      text-align: center;
+      max-width: 380px;
+      width: 90%;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(45, 212, 191, 0.3);
+      transform: scale(0.85) translateY(20px);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .installed-celebration-overlay.active .installed-celebration-box {
+      transform: scale(1) translateY(0);
+    }
+    .celebration-check-icon {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 16px auto;
+      position: relative;
+    }
+    .celebration-checkmark {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      display: block;
+      stroke-width: 3;
+      stroke: #14B8A6;
+      stroke-miterlimit: 10;
+      box-shadow: inset 0px 0px 0px #14B8A6;
+      animation: fillCheck 0.4s ease-in-out 0.4s forwards, scaleCheck 0.3s ease-in-out 0.9s both;
+    }
+    .celebration-checkmark-circle {
+      stroke-dasharray: 166;
+      stroke-dashoffset: 166;
+      stroke-width: 3;
+      stroke-miterlimit: 10;
+      stroke: #14B8A6;
+      fill: none;
+      animation: strokeCircle 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+    }
+    .celebration-checkmark-check {
+      transform-origin: 50% 50%;
+      stroke-dasharray: 48;
+      stroke-dashoffset: 48;
+      stroke-width: 3.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke: #0D9488;
+      animation: strokeCheck 0.35s cubic-bezier(0.65, 0, 0.45, 1) 0.5s forwards;
+    }
+    [data-theme="dark"] .celebration-checkmark {
+      stroke: #2DD4BF;
+    }
+    [data-theme="dark"] .celebration-checkmark-circle {
+      stroke: #2DD4BF;
+    }
+    [data-theme="dark"] .celebration-checkmark-check {
+      stroke: #B2F5E9;
+    }
+    @keyframes strokeCircle {
+      100% { stroke-dashoffset: 0; }
+    }
+    @keyframes strokeCheck {
+      100% { stroke-dashoffset: 0; }
+    }
+    @keyframes scaleCheck {
+      0%, 100% { transform: none; }
+      50% { transform: scale3d(1.1, 1.1, 1); }
+    }
+    .celebration-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .celebration-subtitle {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #0D9488;
+      font-family: var(--font-mono);
+      letter-spacing: 0.5px;
+    }
+    [data-theme="dark"] .celebration-subtitle {
+      color: #2DD4BF;
+    }
+
+    /* Brillo de instalación en tarjeta */
+    .card-just-installed {
+      animation: justInstalledGlow 1.8s ease-out;
+    }
+    @keyframes justInstalledGlow {
+      0% {
+        box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.9), 0 0 25px rgba(45, 212, 191, 0.6);
+        transform: scale(1.02);
+      }
+      50% {
+        box-shadow: 0 0 0 2px rgba(45, 212, 191, 0.6), 0 0 15px rgba(45, 212, 191, 0.3);
+      }
+      100% {
+        box-shadow: none;
+        transform: scale(1);
+      }
+    }
+
     /* Media Queries para Responsive */
     @media (min-width: 768px) {
       .desktop-nav {
@@ -2678,8 +2877,8 @@
           <div class="stock-badge-header" id="stock-badge-header" title="Existencias actuales de licencias Disponibles">
             <span id="stock-indicator-text">Disponibles: 0</span>
           </div>
-          <div id="server-status-badge" style="display: none; font-size: 0.75rem; padding: 4px 8px; border-radius: 9999px; background: #D1FAE5; color: #125934; font-weight: 700; align-items: center; gap: 4px;">
-            <span style="font-size: 0.8rem;">🟢</span> Taller Local
+          <div id="server-status-badge" style="display: none; font-size: 0.75rem; padding: 4px 8px; border-radius: 9999px; background: #D1FAE5; color: #125934; font-weight: 700; align-items: center; gap: 6px;">
+            <span class="status-indicator-dot"></span> Taller Local
           </div>
 
           <!-- Botón Directo: Copia de Seguridad Rápida (SOLO ADMINISTRADOR) -->
@@ -2690,7 +2889,7 @@
 
           <!-- Botón Conectar Celulares / Acceso en Red Wi-Fi (SOLO ADMINISTRADOR) -->
           <button type="button" class="btn-network-badge admin-only" id="btn-share-network-access" title="Conectar celulares y otras laptops por Wi-Fi" style="display: none; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 9999px; background: #E0F2FE; border: 1px solid #BAE6FD; color: #0369A1; font-weight: 700; font-size: 0.78rem; cursor: pointer; transition: var(--transition);">
-            <span style="font-size: 0.85rem;">📱</span>
+            <svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
             <span id="badge-network-text">Conectar Celulares (Wi-Fi)</span>
           </button>
 
@@ -2762,7 +2961,7 @@
           <div class="global-search-icon-wrap">
             <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           </div>
-          <input type="text" id="global-barcode-search-input" class="global-search-field" placeholder="🔍 Escanear Código de Barras WIN**** o buscar por Orden SO****, Cliente, Equipo..." autocomplete="off">
+          <input type="text" id="global-barcode-search-input" class="global-search-field" placeholder="Escanear Código de Barras WIN**** o buscar por Orden SO****, Cliente, Equipo..." autocomplete="off">
           <button type="button" class="btn btn-primary" id="btn-trigger-global-search">
             <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
             <span>Buscar Todo</span>
@@ -2826,10 +3025,10 @@
             <div class="admin-only" style="display: flex; align-items: center; gap: 6px;">
               <label for="select-license-sort" style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); white-space: nowrap;">Ordenar:</label>
               <select id="select-license-sort" class="form-control" style="width: auto; min-width: 175px; padding: 4px 10px; font-size: 0.82rem; height: 32px; background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: var(--radius-sm);">
-                <option value="win_asc">🔢 WIN: Menor a Mayor</option>
-                <option value="win_desc">🔢 WIN: Mayor a Menor</option>
-                <option value="date_desc">📅 Más recientes primero</option>
-                <option value="date_asc">📅 Más antiguas primero</option>
+                <option value="win_asc">WIN: Menor a Mayor</option>
+                <option value="win_desc">WIN: Mayor a Menor</option>
+                <option value="date_desc">Más recientes primero</option>
+                <option value="date_asc">Más antiguas primero</option>
               </select>
             </div>
           </div>
@@ -2850,7 +3049,7 @@
             <span>Licencias Instaladas Exitosamente</span>
             <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
               <select id="select-export-month" class="form-control admin-only" style="width: auto; min-width: 165px; padding: 4px 10px; font-size: 0.82rem; height: 32px; background: var(--bg-card); color: var(--text);">
-                <option value="ALL">📅 Todos los Meses</option>
+                <option value="ALL">Todos los Meses</option>
               </select>
               <button type="button" class="btn btn-primary btn-sm admin-only" id="btn-export-monthly-excel" title="Descargar reporte mensual para Microsoft Excel">
                 <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -2858,10 +3057,19 @@
               </button>
             </div>
           </div>
-          <div class="search-row" style="margin-bottom: 16px;">
-            <div class="search-input-wrap">
+          <div class="search-row" style="margin-bottom: 16px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; justify-content: space-between;">
+            <div class="search-input-wrap" style="flex: 1; min-width: 260px;">
               <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
               <input type="text" id="filter-installed-search-input" class="search-input" placeholder="Buscar por WIN****, Cliente, Orden SO****, Equipo o Clave...">
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <label for="select-installed-sort" style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); white-space: nowrap;">Ordenar:</label>
+              <select id="select-installed-sort" class="form-control" style="width: auto; min-width: 175px; padding: 4px 10px; font-size: 0.82rem; height: 36px; background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: var(--radius-sm);">
+                <option value="win_desc" selected>WIN: Mayor a Menor</option>
+                <option value="date_desc">Más recientes primero</option>
+                <option value="win_asc">WIN: Menor a Mayor</option>
+                <option value="date_asc">Más antiguas primero</option>
+              </select>
             </div>
           </div>
           <div class="licenses-grid" id="installed-cards-container">
@@ -2918,7 +3126,7 @@
 
         <!-- Técnicos Más Activos con más instalaciones -->
         <div class="admin-card" style="margin-top: 16px;">
-          <div class="admin-card-title">🏆 Técnicos Más Activos (Licencias Instaladas)</div>
+          <div class="admin-card-title">Técnicos Más Activos (Licencias Instaladas)</div>
           <div class="leaderboard-list" id="leaderboard-container">
             <!-- Render dinámico -->
           </div>
@@ -3129,7 +3337,7 @@
             <div style="display: flex; align-items: center; gap: 8px;">
               <label for="filter-logs-month" style="font-size: 0.82rem; font-weight: 600; color: var(--text-muted); margin: 0;">Filtrar por Mes:</label>
               <select id="filter-logs-month" class="form-control" style="font-size: 0.82rem; padding: 5px 10px; width: auto; min-width: 170px;">
-                <option value="all">📅 Todos los Meses</option>
+                <option value="all">Todos los Meses</option>
               </select>
             </div>
           </div>
@@ -3288,8 +3496,8 @@
 
       <div id="import-preview-box" style="display: none; background: var(--gray-light); padding: 12px; border-radius: var(--radius-sm); margin-bottom: 14px; font-size: 0.85rem;">
         <div class="modal-box-subtitle" style="margin-bottom: 6px;">Previsualización del lote:</div>
-        <div>✅ Claves válidas a agregar: <strong id="preview-valid-count" style="color: var(--green);">0</strong></div>
-        <div>⚠️ Claves duplicadas / ya existentes: <strong id="preview-dups-count" style="color: var(--orange);">0</strong></div>
+        <div>Claves válidas a agregar: <strong id="preview-valid-count" style="color: var(--green);">0</strong></div>
+        <div>Claves duplicadas / ya existentes: <strong id="preview-dups-count" style="color: var(--orange);">0</strong></div>
         <div style="margin-top: 6px; font-size: 0.78rem; color: var(--text-muted);" id="preview-sample-keys"></div>
       </div>
 
@@ -3515,7 +3723,7 @@
         <input type="hidden" id="install-modal-is-editing" value="0">
 
         <p class="modal-info-banner">
-          ℹ️ Para validar la instalación debes ingresar al menos uno de los tres datos: <strong>Orden SO</strong>, <strong>Equipo</strong> o <strong>Cliente</strong>.
+          Para validar la instalación debes ingresar al menos uno de los tres datos: <strong>Orden SO</strong>, <strong>Equipo</strong> o <strong>Cliente</strong>.
         </p>
 
         <!-- Campo Cliente -->
@@ -3538,11 +3746,11 @@
           <label class="form-label">Tipo de Equipo</label>
           <div class="equipment-type-selector">
             <div class="equipment-type-option selected" id="opt-type-mtek" data-type="Combo M-TEK">
-              <div style="font-size: 1.2rem; margin-bottom: 4px;">🖥️</div>
+              <svg class="icon" viewBox="0 0 24 24" style="width: 22px; height: 22px; margin-bottom: 4px;"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
               <div style="font-size: 0.85rem;">Combo PC M-TEK</div>
             </div>
             <div class="equipment-type-option" id="opt-type-laptop" data-type="Laptop">
-              <div style="font-size: 1.2rem; margin-bottom: 4px;">💻</div>
+              <svg class="icon" viewBox="0 0 24 24" style="width: 22px; height: 22px; margin-bottom: 4px;"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M2 18h20v2H2z"/></svg>
               <div style="font-size: 0.85rem;">Laptop</div>
             </div>
           </div>
@@ -3584,7 +3792,7 @@
     <div class="modal-box" style="max-width: 440px;">
       <div class="modal-header">
         <div style="display: flex; align-items: center; gap: 8px;">
-          <span style="font-size: 1.3rem;">⚠️</span>
+          <svg class="icon icon-sm" style="color: #b45309;" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
           <h3 class="modal-title" style="color: #b45309; font-weight: 700;">Campos Incompletos</h3>
         </div>
         <button type="button" class="btn-icon" id="btn-close-missing-modal">
@@ -3613,7 +3821,7 @@
     <div class="modal-box" style="max-width: 480px; text-align: center;">
       <div class="modal-header">
         <div style="display: flex; align-items: center; gap: 8px;">
-          <span style="font-size: 1.4rem;">📱</span>
+          <svg class="icon icon-sm" viewBox="0 0 24 24" style="color: var(--blue);"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
           <h3 class="modal-title" style="font-weight: 700;">Conectar Celulares y Laptops</h3>
         </div>
         <button type="button" class="btn-icon" id="btn-close-share-network">
@@ -3622,8 +3830,8 @@
       </div>
 
       <div style="padding: 16px 8px 8px 8px;">
-        <div style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 9999px; background: #D1FAE5; color: #125934; font-size: 0.82rem; font-weight: 700; margin-bottom: 12px;">
-          <span style="font-size: 0.9rem;">🟢</span> Servidor Activo en Red Local
+        <div style="display: inline-flex; align-items: center; gap: 8px; padding: 4px 12px; border-radius: 9999px; background: #D1FAE5; color: #125934; font-size: 0.82rem; font-weight: 700; margin-bottom: 12px;">
+          <span class="status-indicator-dot"></span> Servidor Activo en Red Local
         </div>
 
         <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 16px; line-height: 1.4;">
@@ -3663,7 +3871,7 @@
 
         <!-- Pasos Informativos -->
         <div class="modal-info-banner" style="text-align: left;">
-          <div style="font-weight: 700; margin-bottom: 4px;">💡 ¿Cómo conectar tus dispositivos?</div>
+          <div style="font-weight: 700; margin-bottom: 4px;">¿Cómo conectar tus dispositivos?</div>
           <div>1. Conecta tu celular o laptop a la misma red Wi-Fi del taller.</div>
           <div>2. Abre la cámara del celular y apunta al código QR arriba, o abre el enlace en tu navegador.</div>
           <div>3. Todas las licencias que instales se guardarán directamente en esta computadora central.</div>
@@ -3742,7 +3950,7 @@
     <div class="modal-box" style="max-width: 650px;">
       <div class="modal-header">
         <div style="display: flex; align-items: center; gap: 8px;">
-          <span style="font-size: 1.25rem;">🔍</span>
+          <svg class="icon" viewBox="0 0 24 24" style="width: 20px; height: 20px; color: var(--blue);"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           <h3 class="modal-title" id="search-modal-title">Ficha Integral de Consulta</h3>
         </div>
         <button type="button" class="btn-icon" id="btn-close-search-modal">
@@ -3757,6 +3965,20 @@
       <div class="modal-footer" style="padding-top: 14px;">
         <button type="button" class="btn btn-secondary" id="btn-dismiss-search-modal" style="width: 100%;">Cerrar Consulta</button>
       </div>
+    </div>
+  </div>
+
+  <!-- Overlay Animado de Celebración al Instalar Licencia -->
+  <div id="license-installed-celebration-overlay" class="installed-celebration-overlay">
+    <div class="installed-celebration-box">
+      <div class="celebration-check-icon">
+        <svg viewBox="0 0 52 52" class="celebration-checkmark">
+          <circle class="celebration-checkmark-circle" cx="26" cy="26" r="24" fill="none"/>
+          <path class="celebration-checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+        </svg>
+      </div>
+      <div class="celebration-title">¡Licencia Instalada con Éxito!</div>
+      <div class="celebration-subtitle" id="celebration-details">WIN0001 — Sin Orden</div>
     </div>
   </div>
 
@@ -3839,7 +4061,7 @@
           if (resp.ok) {
             const data = await resp.json();
             this.isServerDb = true;
-            console.log('🟢 Conectado al Servidor Local del Taller (/api/db)');
+            console.log('[Servidor] Conectado al Servidor Local del Taller (/api/db)');
 
             const badgeServ = document.getElementById('server-status-badge');
             if (badgeServ) {
@@ -4249,6 +4471,7 @@
       filterDate: 'ALL',
       sortOrder: 'date-desc',
       licenseSort: 'win_asc',
+      installedSort: 'win_desc',
 
       // Seguridad (Agente 3)
       adminPin: '3210',
@@ -5251,9 +5474,13 @@
       });
 
       // Ordenamiento inteligente:
+      // Para Licencias Instaladas: siempre por defecto 'win_desc' (de mayor a menor)
       // Para Técnico / Visor: SIEMPRE 'win_asc' (el código WIN más bajo primero: WIN0001, WIN0002...)
       // Para Administrador: Según State.licenseSort (predeterminado 'win_asc')
-      const sortMode = (State.currentRole === 'Admin') ? (State.licenseSort || 'win_asc') : 'win_asc';
+      let sortMode = (State.currentRole === 'Admin') ? (State.licenseSort || 'win_asc') : 'win_asc';
+      if (State.filterStatus === 'Instalada') {
+        sortMode = State.installedSort || 'win_desc';
+      }
 
       filtered.sort((a, b) => {
         if (sortMode === 'win_asc') {
@@ -5332,11 +5559,11 @@
         // El administrador puede cambiar a cualquier estado, revertir a Disponible o imprimir etiqueta
         actionButtonsHtml = `
           <div class="card-actions-row">
-            ${lic.estado === 'Instalada' ? `<button type="button" class="btn-status-act act-print-label btn-card-print-label" data-id="${lic.id}">🖨️ Etiqueta WIN</button>` : ''}
-            ${lic.estado !== 'Instalada' ? `<button type="button" class="btn-status-act act-installed" data-action="Instalada">✅ Instalada</button>` : `<button type="button" class="btn-status-act act-edit-equipment btn-card-edit-equip" data-id="${lic.id}">✏️ Editar Datos</button>`}
-            ${lic.estado !== 'Probar otra vez' ? `<button type="button" class="btn-status-act act-retry" data-action="Probar otra vez">🔄 Probar</button>` : ''}
-            ${lic.estado !== 'Dañada' ? `<button type="button" class="btn-status-act act-damaged" data-action="Dañada">❌ Dañada</button>` : ''}
-            ${lic.estado !== 'Disponible' ? `<button type="button" class="btn-status-act act-revert" data-action="Disponible">↩ Revertir</button>` : ''}
+            ${lic.estado === 'Instalada' ? `<button type="button" class="btn-status-act act-print-label btn-card-print-label" data-id="${lic.id}">Etiqueta WIN</button>` : ''}
+            ${lic.estado !== 'Instalada' ? `<button type="button" class="btn-status-act act-installed" data-action="Instalada">Instalada</button>` : `<button type="button" class="btn-status-act act-edit-equipment btn-card-edit-equip" data-id="${lic.id}">Editar Datos</button>`}
+            ${lic.estado !== 'Probar otra vez' ? `<button type="button" class="btn-status-act act-retry" data-action="Probar otra vez">Probar</button>` : ''}
+            ${lic.estado !== 'Dañada' ? `<button type="button" class="btn-status-act act-damaged" data-action="Dañada">Dañada</button>` : ''}
+            ${lic.estado !== 'Disponible' ? `<button type="button" class="btn-status-act act-revert" data-action="Disponible">Revertir</button>` : ''}
           </div>
         `;
       } else if (State.currentRole === 'Técnico') {
@@ -5344,15 +5571,15 @@
         if (lic.estado === 'Disponible' || lic.estado === 'Probar otra vez') {
           actionButtonsHtml = `
             <div class="card-actions-row">
-              <button type="button" class="btn-status-act act-installed" data-action="Instalada">✅ Instalada</button>
-              <button type="button" class="btn-status-act act-retry" data-action="Probar otra vez">🔄 Probar otra vez</button>
-              <button type="button" class="btn-status-act act-damaged" data-action="Dañada">❌ Dañada</button>
+              <button type="button" class="btn-status-act act-installed" data-action="Instalada">Instalada</button>
+              <button type="button" class="btn-status-act act-retry" data-action="Probar otra vez">Probar otra vez</button>
+              <button type="button" class="btn-status-act act-damaged" data-action="Dañada">Dañada</button>
             </div>
           `;
         } else if (lic.estado === 'Instalada') {
           actionButtonsHtml = `
             <div class="card-actions-row">
-              <button type="button" class="btn-status-act act-print-label btn-card-print-label" data-id="${lic.id}">🖨️ Imprimir Etiqueta WIN</button>
+              <button type="button" class="btn-status-act act-print-label btn-card-print-label" data-id="${lic.id}">Imprimir Etiqueta</button>
             </div>
           `;
         }
@@ -5361,7 +5588,7 @@
         if (lic.estado === 'Instalada') {
           actionButtonsHtml = `
             <div class="card-actions-row">
-              <button type="button" class="btn-status-act act-print-label btn-card-print-label" data-id="${lic.id}">🖨️ Imprimir Etiqueta WIN</button>
+              <button type="button" class="btn-status-act act-print-label btn-card-print-label" data-id="${lic.id}">Imprimir Etiqueta</button>
             </div>
           `;
         } else {
@@ -5404,9 +5631,9 @@
           <div class="equipment-meta-box">
             <div class="equipment-meta-header">
               <span class="equipment-type-pill ${lic.tipoEquipo === 'Laptop' ? 'pill-laptop' : 'pill-mtek'}">
-                ${lic.tipoEquipo === 'Laptop' ? '💻 Laptop' : '🖥️ Combo PC'}
+                ${lic.tipoEquipo === 'Laptop' ? 'Laptop' : 'Combo PC'}
               </span>
-              <span class="order-code-pill" title="Número de orden">📋 ${lic.orden || 'Sin Orden'}</span>
+              <span class="order-code-pill" title="Número de orden">${lic.orden || 'Sin Orden'}</span>
             </div>
             <div class="equipment-meta-row">
               <span class="meta-field-label">Cliente:</span>
@@ -5504,7 +5731,24 @@
         });
       }
 
-      installed.sort((a, b) => new Date(b.instaladoEl || b.fechaSubida) - new Date(a.instaladoEl || a.fechaSubida));
+      const sortMode = State.installedSort || 'win_desc';
+      const selSort = document.getElementById('select-installed-sort');
+      if (selSort && selSort.value !== sortMode) {
+        selSort.value = sortMode;
+      }
+
+      installed.sort((a, b) => {
+        if (sortMode === 'win_desc') {
+          return (b.codigoWin || '').localeCompare(a.codigoWin || '', undefined, { numeric: true, sensitivity: 'base' });
+        } else if (sortMode === 'win_asc') {
+          return (a.codigoWin || '').localeCompare(b.codigoWin || '', undefined, { numeric: true, sensitivity: 'base' });
+        } else if (sortMode === 'date_asc') {
+          return new Date(a.instaladoEl || a.fechaSubida || 0) - new Date(b.instaladoEl || b.fechaSubida || 0);
+        } else {
+          // date_desc (recientes)
+          return new Date(b.instaladoEl || b.fechaSubida || 0) - new Date(a.instaladoEl || a.fechaSubida || 0);
+        }
+      });
 
       if (installed.length === 0) {
         container.innerHTML = `
@@ -5864,13 +6108,18 @@
 
       closeMissingFieldsConfirmModal();
       closeInstallEquipmentModal();
-      showToast(isEditing ? `Datos actualizados: ${license.orden}` : `Licencia instalada con éxito (${license.orden})`, 'success');
 
-      // Si es una instalación nueva, abrir vista previa para imprimir la etiqueta adhesiva física para el equipo
+      if (!isEditing) {
+        triggerInstallCelebration(license);
+      } else {
+        showToast(`Datos actualizados: ${license.orden}`, 'success');
+      }
+
+      // Si es una instalación nueva, abrir vista previa para imprimir la etiqueta tras la animación de celebración
       if (!isEditing) {
         setTimeout(() => {
           openPrintStickerModal(license.id);
-        }, 320);
+        }, 1300);
       }
 
       renderLicenses();
@@ -5881,6 +6130,23 @@
         renderAdminAlerts();
         renderStatsCharts();
         renderActivityLogsTable();
+      }
+    }
+
+    function triggerInstallCelebration(license) {
+      const overlay = document.getElementById('license-installed-celebration-overlay');
+      const details = document.getElementById('celebration-details');
+      if (details) {
+        const winCode = (license.codigoWin ? String(license.codigoWin).replace(/-/g, '') : 'WIN');
+        const order = license.orden || 'Sin Orden';
+        const client = license.cliente || 'Cliente Taller';
+        details.innerText = `${winCode} • ${order} • ${client}`;
+      }
+      if (overlay) {
+        overlay.classList.add('active');
+        setTimeout(() => {
+          overlay.classList.remove('active');
+        }, 1200);
       }
     }
 
@@ -6215,7 +6481,7 @@
         sortedMonths.unshift(currentYearMonth);
       }
 
-      let html = '<option value="ALL">📅 Todos los Meses</option>';
+      let html = '<option value="ALL">Todos los Meses</option>';
       sortedMonths.forEach(m => {
         const parts = m.split('-');
         const year = parts[0];
@@ -6628,13 +6894,12 @@
       if (sortedTechs.length === 0) {
         leaderboardEl.innerHTML = `<div style="font-size: 0.85rem; color: var(--text-muted); text-align: center; padding: 12px;">Aún no hay instalaciones registradas por técnicos.</div>`;
       } else {
-        const medals = ['🥇', '🥈', '🥉'];
         sortedTechs.forEach(([techName, count], idx) => {
           const row = document.createElement('div');
           row.className = 'leader-row';
           row.innerHTML = `
             <div class="leader-info">
-              <span class="leader-medal">${medals[idx] || '🎖️'}</span>
+              <span class="leader-rank-badge rank-${idx + 1}">#${idx + 1}</span>
               <strong style="font-size: 0.92rem;">${techName}</strong>
             </div>
             <div class="leader-count">${count} instaladas</div>
@@ -7024,7 +7289,7 @@
         sortedMonths.unshift(currentYearMonth);
       }
 
-      let html = '<option value="all">📅 Todos los Meses</option>';
+      let html = '<option value="all">Todos los Meses</option>';
       sortedMonths.forEach(m => {
         const parts = m.split('-');
         const year = parts[0];
@@ -7492,7 +7757,7 @@ Sistema de Inventario - Activacion WinPro`;
             State.licenses = freshLicenses;
             renderLicenses();
             updateStockBadge();
-            showToast('🔔 Se detectaron actualizaciones externas en el inventario.', 'info');
+            showToast('Se detectaron actualizaciones externas en el inventario.', 'info');
           }
           State.lastSyncFingerprint = freshFingerprint;
         } catch (e) {}
@@ -7861,6 +8126,15 @@ Sistema de Inventario - Activacion WinPro`;
         });
       }
 
+      // Selector de Ordenamiento de Licencias Instaladas
+      const selectInstSort = document.getElementById('select-installed-sort');
+      if (selectInstSort) {
+        selectInstSort.addEventListener('change', (e) => {
+          State.installedSort = e.target.value;
+          renderInstalledLicenses();
+        });
+      }
+
       // Exportación de Instalaciones por Mes (Microsoft Excel)
       const exportMonthlyExcelBtn = document.getElementById('btn-export-monthly-excel');
       if (exportMonthlyExcelBtn) {
@@ -8114,7 +8388,7 @@ Sistema de Inventario - Activacion WinPro`;
         }
       });
 
-      console.log('✅ Activacion WinPro Inicializado con éxito. Versión Multi-Agente 2.0.');
+      console.log('[Sistema] Activacion WinPro Inicializado con éxito. Versión Multi-Agente 2.0.');
     }
 
     // Arrancar la aplicación al cargar el DOM

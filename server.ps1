@@ -116,49 +116,27 @@ try {
 }
 
 Clear-Host
-Write-Host "======================================================================" -ForegroundColor Cyan
-Write-Host "   SISTEMA ACTIVACION WINPRO - SERVIDOR DEL TALLER (ACTIVO)           " -ForegroundColor Green
-Write-Host "======================================================================" -ForegroundColor Cyan
+$serverDisplayUrl = if ($networkMode -and $primaryIp -ne "localhost") { "http://${primaryIp}:${port}/" } else { "http://localhost:${port}/" }
 
-if ($networkMode -and $primaryIp -ne "localhost") {
-    Write-Host " [MODO RED LOCAL WI-FI ACTIVADO CON ÉXITO]" -ForegroundColor Green
-    Write-Host ""
-    Write-Host " >>> ENLACE PARA CELULARES Y OTRAS COMPUTADORAS (WI-FI) <<<" -ForegroundColor Yellow
-    Write-Host "     http://${primaryIp}:${port}/" -ForegroundColor Yellow
-    Write-Host ""
-    if ($ipList.Count -gt 1) {
-        Write-Host " Otras IPs de red disponibles:" -ForegroundColor Gray
-        foreach ($otherIp in $ipList) {
-            if ($otherIp -ne $primaryIp) {
-                Write-Host "   - http://${otherIp}:${port}/" -ForegroundColor Gray
-            }
-        }
-        Write-Host ""
-    }
-    Write-Host " En esta computadora ingresa a: " -NoNewline
-    Write-Host "http://${primaryIp}:${port}/" -ForegroundColor Yellow
-} else {
-    Write-Host " [MODO LOCAL ACTIVO]: Sistema funcionando al 100% en esta PC." -ForegroundColor Yellow
-    Write-Host " En esta computadora ingresa a: http://localhost:${port}/" -ForegroundColor Yellow
-    Write-Host ""
-    Write-Host " Si deseas conectar otras computadoras o celulares en el Wi-Fi:" -ForegroundColor DarkYellow
-    Write-Host " Haz clic derecho en 'iniciar-servidor.bat' y elige 'Ejecutar como administrador'." -ForegroundColor DarkYellow
-}
-
-Write-Host "======================================================================" -ForegroundColor Cyan
-Write-Host " Base de datos central: $dbFile" -ForegroundColor Gray
-Write-Host " [Mantén esta ventanita abierta mientras usen el sistema en el taller]" -ForegroundColor DarkGreen
-Write-Host " Para detener el servidor: Cierra esta ventana." -ForegroundColor Gray
-Write-Host "======================================================================" -ForegroundColor Cyan
+Write-Host ""
+Write-Host " ============================================================" -ForegroundColor Cyan
+Write-Host "             SISTEMA ACTIVACION WINPRO - TALLER             " -ForegroundColor Green
+Write-Host " ============================================================" -ForegroundColor Cyan
+Write-Host ""
+Write-Host "   Direccion IP:  " -NoNewline -ForegroundColor White
+Write-Host "$serverDisplayUrl" -ForegroundColor Yellow
+Write-Host ""
+Write-Host "   Base de datos: " -NoNewline -ForegroundColor White
+Write-Host "$dbFile" -ForegroundColor Gray
+Write-Host ""
+Write-Host " ============================================================" -ForegroundColor Cyan
+Write-Host "   Servidor activo. Mantenga esta ventana abierta.           " -ForegroundColor DarkGreen
+Write-Host " ============================================================" -ForegroundColor Cyan
 Write-Host ""
 
 # Abrir el navegador automáticamente en esta máquina
 try {
-    if ($networkMode -and $primaryIp -ne "localhost") {
-        Start-Process "http://${primaryIp}:${port}/"
-    } else {
-        Start-Process "http://localhost:${port}/"
-    }
+    Start-Process "$serverDisplayUrl"
 } catch {}
 
 while ($listener.IsListening) {
@@ -276,3 +254,7 @@ while ($listener.IsListening) {
         # Manejar desconexiones de clientes
     }
 }
+
+Write-Host ""
+Write-Host "El servidor se ha detenido." -ForegroundColor Yellow
+Read-Host "Presione Enter para salir..."
