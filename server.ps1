@@ -10,8 +10,21 @@ $OutputEncoding = [System.Text.Encoding]::UTF8
 $baseDir = $PSScriptRoot
 if (-not $baseDir) { $baseDir = Get-Location }
 
-$port = 8080
 $dbFile = Join-Path $baseDir "database.json"
+
+$port = 8080
+if (Test-Path $dbFile) {
+    try {
+        $dbRaw = [System.IO.File]::ReadAllText($dbFile, [System.Text.Encoding]::UTF8)
+        $dbObj = $dbRaw | ConvertFrom-Json
+        if ($dbObj.config -and $dbObj.config.serverPort) {
+            $parsedPort = [int]$dbObj.config.serverPort
+            if ($parsedPort -ge 80 -and $parsedPort -le 65535) {
+                $port = $parsedPort
+            }
+        }
+    } catch {}
+}
 
 # 1. Comprobar si se ejecuta con permisos de Administrador
 $isAdmin = $false
@@ -23,9 +36,9 @@ try {
 # Si somos Administrador, abrir Firewall y registrar URL ACL para permitir conexiones de celulares
 if ($isAdmin) {
     try {
-        netsh advfirewall firewall show rule name="WinPro Taller 8080" >$null 2>&1
+        netsh advfirewall firewall show rule name="WinPro Taller $port" >$null 2>&1
         if ($LASTEXITCODE -ne 0) {
-            netsh advfirewall firewall add rule name="WinPro Taller 8080" dir=in action=allow protocol=TCP localport=$port profile=any >$null 2>&1
+            netsh advfirewall firewall add rule name="WinPro Taller $port" dir=in action=allow protocol=TCP localport=$port profile=any >$null 2>&1
         }
     } catch {}
     try {
@@ -117,14 +130,16 @@ try {
 
 Clear-Host
 $serverDisplayUrl = if ($networkMode -and $primaryIp -ne "localhost") { "http://${primaryIp}:${port}/" } else { "http://localhost:${port}/" }
+$displayHost = if ($primaryIp -ne "localhost") { "${primaryIp}:${port}" } else { "localhost:${port}" }
 
 Write-Host ""
 Write-Host " ============================================================" -ForegroundColor Cyan
 Write-Host "             SISTEMA ACTIVACION WINPRO - TALLER             " -ForegroundColor Green
 Write-Host " ============================================================" -ForegroundColor Cyan
 Write-Host ""
-Write-Host "   Direccion IP:  " -NoNewline -ForegroundColor White
-Write-Host "$serverDisplayUrl" -ForegroundColor Yellow
+Write-Host "   Escribe esta direccion en tu PC:" -ForegroundColor White
+Write-Host "   $displayHost" -ForegroundColor Yellow -NoNewline
+Write-Host "  (o $serverDisplayUrl)" -ForegroundColor DarkGray
 Write-Host ""
 Write-Host "   Base de datos: " -NoNewline -ForegroundColor White
 Write-Host "$dbFile" -ForegroundColor Gray
